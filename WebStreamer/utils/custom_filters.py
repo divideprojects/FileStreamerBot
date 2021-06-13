@@ -31,6 +31,16 @@ db = Database(Var.DATABASE_URL, "filestreambot")
 
 async def user_check_filter(_, c: Client, m: Message):
     user_id = m.from_user.id
+    # To check if user is new
+    if not await db.is_user_exist(user_id):
+        await db.add_user(user_id)
+        await c.send_message(
+            Var.LOG_CHANNEL,
+            f"#NEW_USER: \n\nNew User [{m.from_user.first_name}](tg://user?id={user_id}) started bot!!",
+            reply_markup=ban_kb(user_id),
+        )
+
+
     # if user is dev or owner, return true
     if user_id in DEV_LEVEL:
         LOGGER.info("Dev User detected, skipping check")
@@ -55,14 +65,6 @@ async def user_check_filter(_, c: Client, m: Message):
             )
             return
         if user_member:
-            # To check if user is new
-            if not await db.is_user_exist(user_id):
-                await db.add_user(user_id)
-                await c.send_message(
-                    Var.LOG_CHANNEL,
-                    f"#NEW_USER: \n\nNew User [{m.from_user.first_name}](tg://user?id={user_id}) started bot!!",
-                    reply_markup=ban_kb(user_id),
-                )
             LOGGER.info(f"User {user_id} already a member of chat, passing check!")
             return True
 
