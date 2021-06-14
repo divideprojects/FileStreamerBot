@@ -40,13 +40,11 @@ async def user_check_filter(_, c: Client, m: Message):
             reply_markup=ban_kb(user_id),
         )
 
-
     # if user is dev or owner, return true
     if user_id in DEV_LEVEL:
         LOGGER.info("Dev User detected, skipping check")
         return True
 
-    invite_link = None
     try:
         invite_link = await c.create_chat_invite_link(int(Var.AUTH_CHANNEL))
     except FloodWait as e:

@@ -5,7 +5,7 @@ from random import choice
 from string import ascii_letters
 from time import time
 
-from aiofiles import open as opena
+from aiofiles import open as open_aiofiles
 from pyrogram import filters
 from pyrogram.types import Message
 
@@ -61,7 +61,7 @@ async def broadcast_(_, m: Message):
         failed=failed,
         success=success,
     )
-    async with opena("broadcast.txt", "w") as broadcast_log_file:
+    async with open_aiofiles("broadcast.txt", "w") as broadcast_log_file:
         async for user in all_users:
             sts, msg = await send_msg(user_id=int(user["id"]), message=broadcast_msg)
             if msg is not None:

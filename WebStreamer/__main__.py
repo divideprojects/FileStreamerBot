@@ -21,11 +21,8 @@ loop = get_event_loop()
 
 
 async def start_services():
-    LOGGER.info("\n")
     LOGGER.info("------------------- Initalizing Telegram Bot -------------------")
-    await StreamBot.start()
     LOGGER.info("----------------------------- DONE -----------------------------")
-    LOGGER.info("\n")
     LOGGER.info("--------------------------- Importing ---------------------------")
     for name in files:
         with open(name) as a:
@@ -40,7 +37,6 @@ async def start_services():
             LOGGER.info(f"Imported => {plugin_name}")
     if Var.ON_HEROKU:
         LOGGER.info("------------------ Starting Keep Alive Service ------------------")
-        LOGGER.info("\n")
         scheduler = BackgroundScheduler()
         scheduler.add_job(ping_server, "interval", seconds=1200)
         scheduler.start()
@@ -50,7 +46,6 @@ async def start_services():
     bind_address = "0.0.0.0" if Var.ON_HEROKU else Var.FQDN
     await web.TCPSite(app, bind_address, Var.PORT).start()
     LOGGER.info("----------------------------- DONE -----------------------------")
-    LOGGER.info("\n")
     LOGGER.info("----------------------- Service Started -----------------------")
     LOGGER.info(f"bot =>> {(await StreamBot.get_me()).first_name}")
     LOGGER.info(f"server ip =>> {bind_address}:{Var.PORT}")

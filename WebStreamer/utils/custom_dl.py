@@ -21,11 +21,10 @@ async def offset_fix(offset, chunksize):
 
 class TGCustomYield:
     def __init__(self):
-        """A custom method to stream files from telegram.
-        functions:
-            generate_file_properties: returns the properties for a media on a specific message contained in FileId class.
-            generate_media_session: returns the media session for the DC that contains the media file on the message.
-            yield_file: yield a file from telegram servers for streaming.
+        """A custom method to stream files from telegram. functions: generate_file_properties: returns the properties
+        for a media on a specific message contained in FileId class. generate_media_session: returns the media
+        session for the DC that contains the media file on the message. yield_file: yield a file from telegram
+        servers for streaming.
         """
         self.main_bot = StreamBot
 
@@ -54,11 +53,7 @@ class TGCustomYield:
         else:
             media = msg
 
-        if isinstance(media, str):
-            file_id_str = media
-        else:
-            file_id_str = media.file_id
-
+        file_id_str = media if isinstance(media, str) else media.file_id
         file_id_obj = FileId.decode(file_id_str)
 
         # The below lines are added to avoid a break in routes.py
@@ -170,7 +165,7 @@ class TGCustomYield:
         first_part_cut: int,
         last_part_cut: int,
         part_count: int,
-        chunk_size: int,
+        chunk_size_int: int,
     ) -> Union[str, None]:  # pylint: disable=unsubscriptable-object
         client = self.main_bot
         data = await self.generate_file_properties(media_msg)
@@ -184,7 +179,7 @@ class TGCustomYield:
             raw.functions.upload.GetFile(
                 location=location,
                 offset=offset,
-                limit=chunk_size,
+                limit=chunk_size_int,
             ),
         )
 
@@ -193,7 +188,7 @@ class TGCustomYield:
                 chunk = r.bytes
                 if not chunk:
                     break
-                offset += chunk_size
+                offset += chunk_size_int
                 if part_count == 1:
                     yield chunk[first_part_cut:last_part_cut]
                     break
@@ -206,7 +201,7 @@ class TGCustomYield:
                     raw.functions.upload.GetFile(
                         location=location,
                         offset=offset,
-                        limit=chunk_size,
+                        limit=chunk_size_int,
                     ),
                 )
 

@@ -34,9 +34,9 @@ msg_text = """
     group=4,
 )
 async def private_receive_handler(c: Client, m: Message):
+    user_id = m.from_user.id
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
-        user_id = m.from_user.id
         stream_link = (
             f"https://{Var.FQDN}/{log_msg.message_id}"
             if Var.ON_HEROKU or Var.NO_PORT
@@ -45,7 +45,6 @@ async def private_receive_handler(c: Client, m: Message):
         await db.add_download(user_id, stream_link)
 
         doc = m.document or m.audio or m.video
-        file_size, file_name = None, None
         file_size = f"{humanbytes(doc.file_size)}"
         file_name = doc.file_name
 
@@ -69,6 +68,7 @@ async def private_receive_handler(c: Client, m: Message):
         await sleep(e.x)
         await c.send_message(
             chat_id=Var.LOG_CHANNEL,
-            text=f"FloodWait {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={user_id})\n\n<b>User ID:</b> <code>{str(user_id)}</code>",
+            text=f"FloodWait {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={user_id})\n\n<b>User ID:</b> "
+                 f"<code>{str(user_id)}</code>",
             disable_web_page_preview=True,
         )
