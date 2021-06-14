@@ -26,11 +26,12 @@ broadcast_ids = {}
 async def status(_, m: Message):
     dl = Downloads()
     total_users = await Users().total_users_count()
-    _, num_downloads = await dl.valid_downloads_list()
+    _, num_downloads, expired_downloads = await dl.valid_downloads_list()
     await m.reply_text(
         (
             f"<b>Total Users:</b> <code>{total_users}</code>\n"
-            f"<b>Total Downloads:</b> <code>{num_downloads}</code>"
+            f"<b>Total Downloads:</b> <code>{num_downloads}</code>\n"
+            f"<b>Expired Downloads:</b> <code>{expired_downloads}</code>"
         ),
         quote=True,
     )

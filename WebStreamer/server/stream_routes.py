@@ -34,7 +34,7 @@ async def stream_handler(request):
         random_link = request.match_info["random_link"]
         message_id, valid, valid_upto = await Downloads().get_msg_id(random_link)
         if not valid:
-            if message_id == 0:
+            if int(message_id) == 0:
                 return web.json_response(
                     {
                         "status": "not found",

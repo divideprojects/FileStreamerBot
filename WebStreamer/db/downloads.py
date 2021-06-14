@@ -23,13 +23,12 @@ class Downloads(MongoDB):
         return
 
     async def get_msg_id(self, message_id: int):
-        valid = False
         document = await self.find_one({"message_id": message_id})
+        print(document)
         if not document:
             return 0, False, datetime.now()
         valid_upto = document["valid_upto"]
-        if valid_upto > datetime.now():
-            valid = True
+        valid = True if valid_upto > datetime.now() else False
         return document["message_id"], valid, valid_upto
 
     async def total_downloads(self):
@@ -40,4 +39,4 @@ class Downloads(MongoDB):
         valid_count = [
             document for document in all_data if document["valid_upto"] > datetime.now()
         ]
-        return valid_count, len(valid_count)
+        return valid_count, len(valid_count), len(all_data) - len(valid_count)
