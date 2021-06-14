@@ -22,6 +22,7 @@ loop = get_event_loop()
 
 async def start_services():
     LOGGER.info("------------------- Initalizing Telegram Bot -------------------")
+    await StreamBot.start()
     LOGGER.info("----------------------------- DONE -----------------------------")
     LOGGER.info("--------------------------- Importing ---------------------------")
     for name in files:
