@@ -25,6 +25,8 @@ class Downloads(MongoDB):
     async def get_msg_id(self, message_id: int):
         valid = False
         document = await self.find_one({"message_id": message_id})
+        if not document:
+            return 0, False, datetime.now()
         valid_upto = document["valid_upto"]
         if valid_upto > datetime.now():
             valid = True
