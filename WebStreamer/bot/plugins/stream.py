@@ -1,4 +1,5 @@
 from asyncio import sleep
+from secrets import token_urlsafe
 
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
@@ -6,13 +7,11 @@ from pyrogram.types import Message
 from pyromod.helpers import ikb
 
 from WebStreamer.bot import StreamBot
+from WebStreamer.db import Downloads
 from WebStreamer.logger import LOGGER
 from WebStreamer.utils.custom_filters import user_check
-from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.vars import Var
-
-db = Database(Var.DATABASE_URL, "filestreambot")
 
 msg_text = """
 <b><i><u>Link Generated!!</u></i></b>
@@ -37,12 +36,14 @@ async def private_receive_handler(c: Client, m: Message):
     user_id = m.from_user.id
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
+        random_url = token_urlsafe(log_msg.message_id)
         stream_link = (
-            f"https://{Var.FQDN}/{log_msg.message_id}"
+            f"https://{Var.FQDN}/{random_url}"
             if Var.ON_HEROKU or Var.NO_PORT
-            else f"http://{Var.FQDN}:{Var.PORT}/{log_msg.message_id}"
+            else f"https://{Var.FQDN}:{Var.PORT}/{random_url}"
         )
-        await db.add_download(user_id, stream_link)
+
+        await Downloads().add_download(log_msg.message_id, random_url, user_id)
 
         doc = m.document or m.audio or m.video
         file_size = f"{humanbytes(doc.file_size)}"

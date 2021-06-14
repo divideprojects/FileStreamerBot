@@ -1,0 +1,12 @@
+from WebStreamer.db.downloads import Downloads
+from WebStreamer.db.mongo import MongoDB
+from WebStreamer.db.users import Users
+from WebStreamer.logger import LOGGER
+
+
+def __connect_first():
+    _ = MongoDB("test")
+    LOGGER.info("Initialized Database!")
+
+
+__connect_first()

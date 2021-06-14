@@ -7,6 +7,7 @@ from aiohttp import web
 
 from WebStreamer import StartTime
 from WebStreamer.bot import StreamBot
+from WebStreamer.db import Downloads
 from WebStreamer.logger import LOGGER
 from WebStreamer.utils.custom_dl import TGCustomYield, chunk_size, offset_fix
 from WebStreamer.utils.time_format import get_readable_time
@@ -27,13 +28,14 @@ async def root_route_handler(_):
     )
 
 
-@routes.get("/{message_id}")
+@routes.get("/{random_link}")
 async def stream_handler(request):
     try:
-        message_id = int(request.match_info["message_id"])
+        random_link = request.match_info["random_link"]
+        message_id = await Downloads().get_msg_id(random_link)
         return await media_streamer(request, message_id)
-    except ValueError as e:
-        LOGGER.error(e)
+    except ValueError as ef:
+        LOGGER.error(ef)
         raise web.HTTPNotFound
 
 

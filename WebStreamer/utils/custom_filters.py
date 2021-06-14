@@ -5,9 +5,11 @@ from pyrogram.errors import FloodWait, UserNotParticipant
 from pyrogram.types import Message
 from pyromod.helpers import ikb
 
+from WebStreamer.db import Users
 from WebStreamer.logger import LOGGER
-from WebStreamer.utils.database import Database
 from WebStreamer.vars import Var
+
+support_group = "https://t.me/DivideProjectsDiscussion"
 
 
 def ban_kb(user_id: int):
@@ -26,14 +28,14 @@ all users will be logged.
 # -- Constants --  #
 
 DEV_LEVEL = [int(Var.OWNER_ID)]
-db = Database(Var.DATABASE_URL, "filestreambot")
 
 
 async def user_check_filter(_, c: Client, m: Message):
+    db = Users()
     user_id = m.from_user.id
-    # To check if user is new
-    if not await db.is_user_exist(user_id):
-        await db.add_user(user_id)
+
+    # To check if user is new or old
+    if not await db.user_exists(user_id):
         await c.send_message(
             Var.LOG_CHANNEL,
             f"#NEW_USER: \n\nNew User [{m.from_user.first_name}](tg://user?id={user_id}) started bot!!",
@@ -58,8 +60,9 @@ async def user_check_filter(_, c: Client, m: Message):
             await m.reply_text(
                 (
                     "Sorry, You are Banned!\n"
-                    f"Contact my [Support Group](https://t.me/DivideProjectsDiscussion) to know more."
+                    f"Contact my [Support Group]({support_group}) to know more."
                 ),
+                reply_markup=ikb([[("Support Group", support_group, "url")]]),
             )
             return
         if user_member:
@@ -77,7 +80,7 @@ async def user_check_filter(_, c: Client, m: Message):
     except Exception as ef:
         LOGGER.error(f"Error: {ef}")
         await m.reply_text(
-            f"Something went Wrong. Contact my [Support Group](https://t.me/DivideProjectsDiscussion).",
+            f"Something went Wrong. Contact my [Support Group]({support_group}).",
             disable_web_page_preview=True,
         )
         return

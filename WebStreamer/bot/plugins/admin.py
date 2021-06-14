@@ -10,11 +10,10 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from WebStreamer.bot import StreamBot
+from WebStreamer.db import Downloads, Users
 from WebStreamer.utils.broadcast_helper import send_msg
-from WebStreamer.utils.database import Database
 from WebStreamer.vars import Var
 
-db = Database(Var.DATABASE_URL, "filestreambot")
 broadcast_ids = {}
 
 
@@ -24,10 +23,15 @@ broadcast_ids = {}
     & filters.user(Var.OWNER_ID)
     & ~filters.edited,
 )
-async def sts(_, m: Message):
-    total_users = await db.total_users_count()
+async def status(_, m: Message):
+    dl = Downloads()
+    total_users = await Users().total_users_count()
+    _, num_downloads = await dl.valid_downloads_list()
     await m.reply_text(
-        text=f"<b>Total Users in DB:</b> <code>{total_users}</code>",
+        (
+            f"<b>Total Users:</b> <code>{total_users}</code>\n"
+            f"<b>Total Downloads:</b> <code>{num_downloads}</code>"
+        ),
         quote=True,
     )
     return
@@ -41,7 +45,7 @@ async def sts(_, m: Message):
     & ~filters.edited,
 )
 async def broadcast_(_, m: Message):
-    all_users = await db.get_all_users()
+    all_users = await Users().get_all_users()
     broadcast_msg = m.reply_to_message
     while True:
         broadcast_id = "".join([choice(ascii_letters) for _ in range(3)])
@@ -51,10 +55,8 @@ async def broadcast_(_, m: Message):
         "Broadcast initiated! You will be notified with log file when all the users are notified.",
     )
     start_time = time()
-    total_users = await db.total_users_count()
-    done = 0
-    failed = 0
-    success = 0
+    total_users = len(all_users)
+    done, failed, success = 0, 0, 0
     broadcast_ids[broadcast_id] = dict(
         total=total_users,
         current=done,
@@ -71,7 +73,7 @@ async def broadcast_(_, m: Message):
             else:
                 failed += 1
             if sts == 400:
-                await db.delete_user(user["id"])
+                await Users().delete_user(user["id"])
             done += 1
             if broadcast_ids.get(broadcast_id) is None:
                 break
@@ -86,13 +88,21 @@ async def broadcast_(_, m: Message):
     await out.delete()
     if failed == 0:
         await m.reply_text(
-            text=f"broadcast completed in <code>{completed_in}</code>\n\nTotal users {total_users}.\nTotal done {done}, {success} success and {failed} failed.",
+            text=(
+                f"broadcast completed in <code>{completed_in}</code>\n\n"
+                f"Total users {total_users}.\n"
+                f"Total done {done}, {success} success and {failed} failed."
+            ),
             quote=True,
         )
     else:
         await m.reply_document(
             document="broadcast.txt",
-            caption=f"broadcast completed in <code>{completed_in}</code>\n\nTotal users {total_users}.\nTotal done {done}, {success} success and {failed} failed.",
+            caption=(
+                f"broadcast completed in <code>{completed_in}</code>\n\n"
+                f"Total users {total_users}.\n"
+                f"Total done {done}, {success} success and {failed} failed."
+            ),
             quote=True,
         )
     remove("broadcast.txt")

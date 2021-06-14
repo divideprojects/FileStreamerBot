@@ -2,8 +2,8 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from WebStreamer.bot import StreamBot
+from WebStreamer.db.users import Database
 from WebStreamer.utils.custom_filters import user_check
-from WebStreamer.utils.database import Database
 from WebStreamer.vars import Var
 
 db = Database(Var.DATABASE_URL, "filestreambot")
