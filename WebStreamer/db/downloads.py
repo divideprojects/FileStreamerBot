@@ -22,9 +22,8 @@ class Downloads(MongoDB):
         )
         return
 
-    async def get_msg_id(self, message_id: int):
-        document = await self.find_one({"message_id": message_id})
-        print(document)
+    async def get_msg_id(self, link: str):
+        document = await self.find_one({"link": link})
         if not document:
             return 0, False, datetime.now()
         valid_upto = document["valid_upto"]
