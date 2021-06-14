@@ -23,8 +23,12 @@ class Downloads(MongoDB):
         return
 
     async def get_msg_id(self, message_id: int):
-        full_url = await self.find_one({"message_id": message_id})
-        return full_url["message_id"]
+        valid = False
+        document = await self.find_one({"message_id": message_id})
+        valid_upto = document["valid_upto"]
+        if valid_upto > datetime.now():
+            valid = True
+        return document["message_id"], valid, valid_upto
 
     async def total_downloads(self):
         return await self.count()

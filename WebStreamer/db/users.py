@@ -9,7 +9,6 @@ def new_user(uid):
 
 
 class Users(MongoDB):
-
     db_name = "users"
 
     def __init__(self):
@@ -21,7 +20,7 @@ class Users(MongoDB):
     async def get_all_users(self):
         return await self.find_all({})
 
-    def user_exists(self, user_id: int):
+    async def user_exists(self, user_id: int):
         user = await self.find_one({"id": user_id})
         if not user:
             user_data = {

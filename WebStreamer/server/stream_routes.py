@@ -32,7 +32,17 @@ async def root_route_handler(_):
 async def stream_handler(request):
     try:
         random_link = request.match_info["random_link"]
-        message_id = await Downloads().get_msg_id(random_link)
+        message_id, valid, valid_upto = await Downloads().get_msg_id(random_link)
+        if not valid:
+            return web.json_response(
+                {
+                    "status": "download_link_expired",
+                    "expired_time": valid_upto,
+                    "maintained_by": "@DivideProjects",
+                    "telegram_bot": "@" + (await StreamBot.get_me()).username,
+                },
+                status=410,
+            )
         return await media_streamer(request, message_id)
     except ValueError as ef:
         LOGGER.error(ef)

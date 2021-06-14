@@ -23,6 +23,6 @@ class Var:
         if not ON_HEROKU or getenv("FQDN")
         else APP_NAME + ".herokuapp.com"
     )
-    URL = f"https://{FQDN}/" if ON_HEROKU or NO_PORT else f"http://{FQDN}:{PORT}/"
+    URL = f"https://{FQDN}/" if ON_HEROKU or NO_PORT else f"https://{FQDN}:{PORT}/"
     DATABASE_URL = str(getenv("DATABASE_URL"))
     AUTH_CHANNEL = str(getenv("AUTH_CHANNEL", None))
