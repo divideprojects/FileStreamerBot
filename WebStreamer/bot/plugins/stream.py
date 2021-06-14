@@ -3,6 +3,7 @@ from asyncio import sleep
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
+from pyromod.helpers import ikb
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.logger import LOGGER
@@ -10,7 +11,6 @@ from WebStreamer.utils.custom_filters import user_check
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.vars import Var
-from pyromod.helpers import ikb
 
 db = Database(Var.DATABASE_URL, "filestreambot")
 
@@ -69,6 +69,6 @@ async def private_receive_handler(c: Client, m: Message):
         await c.send_message(
             chat_id=Var.LOG_CHANNEL,
             text=f"FloodWait {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={user_id})\n\n<b>User ID:</b> "
-                 f"<code>{str(user_id)}</code>",
+            f"<code>{str(user_id)}</code>",
             disable_web_page_preview=True,
         )
