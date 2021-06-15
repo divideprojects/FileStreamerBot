@@ -5,9 +5,9 @@ from WebStreamer.utils.custom_filters import user_check
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 PMTEXT = """
-    <i>Hi, [{}](tg://user?id={}) </i>\n\n
+    Hi, [{}](tg://user?id={}) !!\n\n
     <i>I'm File Streamer Bot</i>\n
-    <i>Click on the below buttons to learn more</i>\n
+    <b>Click on the below buttons to learn more</b>\n
     <b>WARNING:</b> <b>NSFW Content will lead to ban.</b>
 """
 
