@@ -102,3 +102,4 @@ async def button(_, cmd: CallbackQuery):
                 ]
             )
         )
+    await cmd.answer()
