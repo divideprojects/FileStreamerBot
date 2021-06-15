@@ -15,7 +15,6 @@
     "repository": "https://github.com/DivideProjects/FileStreamBot/",
     "success_url": "https://t.me/DivideProjects",
     "website": "https://t.me/DivideProjects",
-    "stack": "container",
     "env": {
         "ENV": {
             "description": "Set this to True if you want bot to run on heroku",
@@ -72,6 +71,15 @@
             "required": false
         }
     },
+    "buildpacks": [
+    {
+      "url": "heroku/go"
+    },
+
+    {
+      "url": "https://github.com/Divkix/python-poetry-buildpack.git"
+    }
+  ],
     "formation": {
         "web": {
             "quantity": 1,
