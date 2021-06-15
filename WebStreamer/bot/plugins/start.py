@@ -5,7 +5,7 @@ from WebStreamer.utils.custom_filters import user_check
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 PMTEXT = """
-Hi, [{}](tg://user?id={}) !!\n\n
+Hi, {} !!\n\n
 <i>I'm File streamer Bot</i>\n
 <b>Click on the below buttons to learn more</b>\n
 <b>WARNING:</b> <b>NSFW Content will lead to ban.</b>
@@ -26,7 +26,7 @@ Thanks for using it !!
 )
 async def start(_, m: Message):
     await m.reply_text(
-        text=PMTEXT.format(m.chat.first_name, m.chat.id),
+        text=PMTEXT.format(m.chat.first_name),
         parse_mode="HTML",
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
@@ -86,7 +86,7 @@ async def button(_, cmd: CallbackQuery):
         )
     elif "gotohome" in cb_data:
         await cmd.message.edit(
-            text=PMTEXT.format(cmd.message.chat.first_name, cmd.message.chat.id),
+            text=PMTEXT.format(cmd.message.chat.first_name),
             parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(
