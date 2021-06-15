@@ -5,20 +5,20 @@ from WebStreamer.utils.custom_filters import user_check
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 PMTEXT = """
-    Hi, [{}](tg://user?id={}) !!\n\n
-    <i>I'm File Streamer Bot</i>\n
-    <b>Click on the below buttons to learn more</b>\n
-    <b>WARNING:</b> <b>NSFW Content will lead to ban.</b>
+Hi, [{}](tg://user?id={}) !!\n\n
+<i>I'm File streamer Bot</i>\n
+<b>Click on the below buttons to learn more</b>\n
+<b>WARNING:</b> <b>NSFW Content will lead to ban.</b>
 """
 
-HELPTEXT = "<i>Send or Forward me any file or media, I'll give you a direct download link for it!</i>"
+HELPTEXT = "Just Send or Forward me any file or media, I'll give you a direct download link for it !"
 
 ABOUT = """
- Hi there i am a advanced, fast file streamer bot !\n
- I can give you temp downloading links !\n
- i am currently hosted in heruko !\n\n
- You can Contact My devs or if you need any help or find any bugs at @DivideProjectsDiscussion\n\n
- Thanks for using it !!
+Hi there i am an advanced and fast file streamer bot !
+I can give you temp downloading links !
+I am currently hosted at heruko !\n
+You can Contact My devs or if you need any help or find any bugs at @DivideProjectsDiscussion\n\n
+Thanks for using it !!
  """
 
 @StreamBot.on_message(
@@ -26,7 +26,7 @@ ABOUT = """
 )
 async def start(_, m: Message):
     await m.reply_text(
-        text=PMTEXT,
+        text=PMTEXT.format(m.chat.first_name, m.chat.id),
         parse_mode="HTML",
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
@@ -79,7 +79,7 @@ async def button(_, cmd: CallbackQuery):
                 [
                     [
                         InlineKeyboardButton("About Me", callback_data="aboutbot"),
-                        InlineKeyboardButton("Help", callback_data="gotohome")
+                        InlineKeyboardButton("Back", callback_data="gotohome")
                     ]
                 ]
             )
