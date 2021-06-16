@@ -34,24 +34,18 @@ async def stream_handler(request):
         random_link = request.match_info["random_link"]
         message_id, valid, valid_upto = await Downloads().get_msg_id(random_link)
         if not valid:
-            if int(message_id) == 0:
+            if int(message_id) != 0:
                 return web.json_response(
                     {
-                        "status": "not found",
+                        "status": "download_link_expired",
+                        "expired_time": str(valid_upto),
                         "maintained_by": "@DivideProjects",
                         "telegram_bot": "@" + (await StreamBot.get_me()).username,
                     },
-                    status=404,
+                    status=410,
                 )
-            return web.json_response(
-                {
-                    "status": "download_link_expired",
-                    "expired_time": valid_upto,
-                    "maintained_by": "@DivideProjects",
-                    "telegram_bot": "@" + (await StreamBot.get_me()).username,
-                },
-                status=410,
-            )
+            else:
+                return web.HTTPNotFound
         return await media_streamer(request, message_id)
     except ValueError as ef:
         LOGGER.error(ef)
@@ -88,16 +82,8 @@ async def media_streamer(request, message_id: int):
         new_chunk_size,
     )
 
-    file_name = (
-        file_properties.file_name
-        if file_properties.file_name
-        else f"{token_hex(2)}.jpeg"
-    )
-    mime_type = (
-        file_properties.mime_type
-        if file_properties.mime_type
-        else f"{guess_type(file_name)}"
-    )
+    file_name = file_properties.file_name or f"{token_hex(2)}.jpeg"
+    mime_type = file_properties.mime_type or f"{guess_type(file_name)}"
 
     return_resp = web.Response(
         status=206 if range_header else 200,
