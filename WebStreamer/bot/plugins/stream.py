@@ -15,9 +15,10 @@ from WebStreamer.vars import Var
 
 msg_text = """
 <b><i><u>Link Generated!!</u></i></b>
-<b>📂 Name:</b> <i>{}</i>
-<b>📦 Size:</b> <i>{}</i>
-<b>📥 Download:</b> <i>{}</i>
+
+<b><u>📂 Name:</u></b> <i>{}</i>\n
+<b><u>📦 Size:</u></b> <i>{}</i>\n
+<b><u>📥 Download link:</u></b> <i>{}</i>
 
 <b>🚸 Note: This link will expire in 24 hours!</b>
 
@@ -34,6 +35,8 @@ msg_text = """
 )
 async def private_receive_handler(c: Client, m: Message):
     user_id = m.from_user.id
+    
+    wait = await m.reply_text("Please wait while i process the file...")
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
         random_url = token_urlsafe(log_msg.message_id)
@@ -58,6 +61,7 @@ async def private_receive_handler(c: Client, m: Message):
             disable_web_page_preview=True,
             quote=True,
         )
+        await wait.delete()
         await m.reply_text(
             text=msg_text.format(file_name, file_size, stream_link),
             disable_web_page_preview=True,
