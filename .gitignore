@@ -4,6 +4,7 @@
 .vscode/
 WebStreamer/local_vars.py
 .env
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
