@@ -73,12 +73,11 @@
     },
     "buildpacks": [
     {
+      "url": "https://github.com/moneymeets/python-poetry-buildpack.git"
+    },
+    {
       "url": "heroku/go"
     },
-
-    {
-      "url": "https://github.com/Divkix/python-poetry-buildpack.git"
-    }
   ],
     "formation": {
         "web": {
