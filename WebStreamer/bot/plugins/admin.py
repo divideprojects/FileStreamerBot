@@ -49,7 +49,7 @@ async def broadcast_(_, m: Message):
     all_users = await Users().get_all_users()
     broadcast_msg = m.reply_to_message
     while True:
-        broadcast_id = "".join([choice(ascii_letters) for _ in range(3)])
+        broadcast_id = "".join(choice(ascii_letters) for _ in range(3))
         if not broadcast_ids.get(broadcast_id):
             break
     out = await m.reply_text(

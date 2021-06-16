@@ -30,7 +30,6 @@ class TGCustomYield:
 
     @staticmethod
     async def generate_file_properties(msg: Message):
-        error_message = "This message doesn't contain any downloadable media"
         available_media = (
             "audio",
             "document",
@@ -43,6 +42,7 @@ class TGCustomYield:
         )
 
         if isinstance(msg, Message):
+            error_message = "This message doesn't contain any downloadable media"
             for kind in available_media:
                 media = getattr(msg, kind, None)
 
@@ -126,37 +126,34 @@ class TGCustomYield:
                     user_id=file_id.chat_id,
                     access_hash=file_id.chat_access_hash,
                 )
+            elif file_id.chat_access_hash == 0:
+                peer = raw.types.InputPeerChat(chat_id=-file_id.chat_id)
             else:
-                if file_id.chat_access_hash == 0:
-                    peer = raw.types.InputPeerChat(chat_id=-file_id.chat_id)
-                else:
-                    peer = raw.types.InputPeerChannel(
-                        channel_id=utils.get_channel_id(file_id.chat_id),
-                        access_hash=file_id.chat_access_hash,
-                    )
+                peer = raw.types.InputPeerChannel(
+                    channel_id=utils.get_channel_id(file_id.chat_id),
+                    access_hash=file_id.chat_access_hash,
+                )
 
-            location = raw.types.InputPeerPhotoFileLocation(
+            return raw.types.InputPeerPhotoFileLocation(
                 peer=peer,
                 volume_id=file_id.volume_id,
                 local_id=file_id.local_id,
                 big=file_id.thumbnail_source == ThumbnailSource.CHAT_PHOTO_BIG,
             )
         elif file_type == FileType.PHOTO:
-            location = raw.types.InputPhotoFileLocation(
+            return raw.types.InputPhotoFileLocation(
                 id=file_id.media_id,
                 access_hash=file_id.access_hash,
                 file_reference=file_id.file_reference,
                 thumb_size=file_id.thumbnail_size,
             )
         else:
-            location = raw.types.InputDocumentFileLocation(
+            return raw.types.InputDocumentFileLocation(
                 id=file_id.media_id,
                 access_hash=file_id.access_hash,
                 file_reference=file_id.file_reference,
                 thumb_size=file_id.thumbnail_size,
             )
-
-        return location
 
     async def yield_file(
         self,
@@ -171,8 +168,6 @@ class TGCustomYield:
         data = await self.generate_file_properties(media_msg)
         media_session = await self.generate_media_session(client, media_msg)
 
-        current_part = 1
-
         location = await self.get_location(data)
 
         r = await media_session.send(
@@ -184,6 +179,8 @@ class TGCustomYield:
         )
 
         if isinstance(r, raw.types.upload.File):
+            current_part = 1
+
             while current_part <= part_count:
                 chunk = r.bytes
                 if not chunk:

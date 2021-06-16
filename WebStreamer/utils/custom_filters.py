@@ -13,8 +13,7 @@ support_group = "https://t.me/DivideProjectsDiscussion"
 
 
 def ban_kb(user_id: int):
-    kb = ikb([[("Ban User", f"ban_{user_id}")]]) if user_id != Var.OWNER_ID else None
-    return kb
+    return ikb([[("Ban User", f"ban_{user_id}")]]) if user_id != Var.OWNER_ID else None
 
 
 # -- Constants --  #

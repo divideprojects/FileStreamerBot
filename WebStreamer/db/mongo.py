@@ -28,8 +28,7 @@ class MongoDB:
     async def find_all(self, query=None):
         if query is None:
             query = {}
-        findall_res = [document async for document in self.collection.find(query)]
-        return findall_res
+        return [document async for document in self.collection.find(query)]
 
     # Count entries from collection
     async def count(self, query=None):

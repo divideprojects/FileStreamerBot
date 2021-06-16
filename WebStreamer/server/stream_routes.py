@@ -34,18 +34,24 @@ async def stream_handler(request):
         random_link = request.match_info["random_link"]
         message_id, valid, valid_upto = await Downloads().get_msg_id(random_link)
         if not valid:
-            if int(message_id) != 0:
+            if int(message_id) == 0:
                 return web.json_response(
                     {
-                        "status": "download_link_expired",
-                        "expired_time": str(valid_upto),
+                        "status": "not found",
                         "maintained_by": "@DivideProjects",
                         "telegram_bot": "@" + (await StreamBot.get_me()).username,
                     },
-                    status=410,
+                    status=404,
                 )
-            else:
-                return web.HTTPNotFound
+            return web.json_response(
+                {
+                    "status": "download_link_expired",
+                    "expired_time": str(valid_upto),
+                    "maintained_by": "@DivideProjects",
+                    "telegram_bot": "@" + (await StreamBot.get_me()).username,
+                },
+                status=410,
+            )
         return await media_streamer(request, message_id)
     except ValueError as ef:
         LOGGER.error(ef)

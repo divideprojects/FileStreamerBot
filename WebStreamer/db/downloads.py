@@ -27,7 +27,7 @@ class Downloads(MongoDB):
         if not document:
             return 0, False, datetime.now()
         valid_upto = document["valid_upto"]
-        valid = True if valid_upto > datetime.now() else False
+        valid = valid_upto > datetime.now()
         return document["message_id"], valid, valid_upto
 
     async def total_downloads(self):
