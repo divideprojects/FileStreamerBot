@@ -1,10 +1,6 @@
 from pyrogram import filters
-from pyrogram.types import (
-    CallbackQuery,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    Message,
-)
+from pyrogram.types import Message, CallbackQuery
+from pyromod.helpers import ikb
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.custom_filters import user_check
@@ -35,21 +31,9 @@ async def start(_, m: Message):
         text=PMTEXT.format(m.chat.first_name),
         parse_mode="HTML",
         disable_web_page_preview=True,
-        reply_markup=InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        "Support Group",
-                        url="https://t.me/DivideProjectsDiscussion",
-                    ),
-                    InlineKeyboardButton("Channel", url="https://t.me/DivideProjects"),
-                ],
-                [
-                    InlineKeyboardButton("About Me", callback_data="aboutbot"),
-                    InlineKeyboardButton("Help", callback_data="helptext"),
-                ],
-            ],
-        ),
+        reply_markup=ikb([[("Support Group", "https://t.me/DivideProjectsDiscussion", "url"),
+                           ("Channel", "https://t.me/DivideProjects", "url")],
+                          [("About Me", "aboutbot"), ("Help", "helptext")]]),
     )
 
 
@@ -71,13 +55,13 @@ async def button(_, cmd: CallbackQuery):
             text=ABOUT,
             parse_mode="MARKDOWN",
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup(
+            reply_markup=ikb(
                 [
                     [
-                        InlineKeyboardButton("Go to Home", callback_data="gotohome"),
-                        InlineKeyboardButton("Help", callback_data="helptext"),
-                    ],
-                ],
+                        ("Go to Home", "gotohome"),
+                        ("Help", "helptext"),
+                    ]
+                ]
             ),
         )
     elif "helptext" in cb_data:
@@ -85,13 +69,13 @@ async def button(_, cmd: CallbackQuery):
             text=HELPTEXT,
             parse_mode="HTML",
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup(
+            reply_markup=ikb(
                 [
                     [
-                        InlineKeyboardButton("About Me", callback_data="aboutbot"),
-                        InlineKeyboardButton("Back", callback_data="gotohome"),
-                    ],
-                ],
+                        ("About Me", "aboutbot"),
+                        ("Back", "gotohome"),
+                    ]
+                ]
             ),
         )
     elif "gotohome" in cb_data:
@@ -99,23 +83,23 @@ async def button(_, cmd: CallbackQuery):
             text=PMTEXT.format(cmd.message.chat.first_name),
             parse_mode="HTML",
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup(
+            reply_markup=ikb(
                 [
                     [
-                        InlineKeyboardButton(
+                        (
                             "Support Group",
-                            url="https://t.me/DivideProjectsDiscussion",
+                            "https://t.me/DivideProjectsDiscussion", "url"
                         ),
-                        InlineKeyboardButton(
+                        (
                             "Channel",
-                            url="https://t.me/DivideProjects",
-                        ),
+                            "https://t.me/DivideProjects", "url"
+                        )
                     ],
                     [
-                        InlineKeyboardButton("About Me", callback_data="aboutbot"),
-                        InlineKeyboardButton("Help", callback_data="helptext"),
-                    ],
-                ],
+                        ("About Me", "aboutbot"),
+                        ("Help", "helptext")
+                    ]
+                ]
             ),
         )
     await cmd.answer()
