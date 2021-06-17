@@ -14,14 +14,6 @@ category = "main"
 optional = false
 python-versions = ">=3.6"
 
-[[package]]
-name = "pyshorteners"
-version = "1.0.1"
-description = "A Python lib to wrap and consume the most used shorteners APIs"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
 [package.dependencies]
 async-timeout = ">=3.0,<4.0"
 attrs = ">=17.3.0"
@@ -417,6 +409,21 @@ reference = "master"
 resolved_reference = "2d71f19a821355ff9a4e1cd9fdbbf2a0990b482a"
 
 [[package]]
+name = "pyshorteners"
+version = "1.0.1"
+description = "A Python lib to wrap and consume the most used shorteners APIs"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+requests = "*"
+
+[package.extras]
+dev = ["pre-commit"]
+docs = ["sphinx"]
+
+[[package]]
 name = "pysocks"
 version = "1.7.1"
 description = "A Python SOCKS client module. See https://github.com/Anorov/PySocks for more information."
@@ -585,7 +592,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "7769fad48df04ce95ca77dd3daabc8f9a722ea6b4303a9922c2c18fc9685aeca"
+content-hash = "508071157cfb6bae771eceab65300bdf058cfa60c74ddeb00672548870b884f5"
 
 [metadata.files]
 aiofiles = [
@@ -875,6 +882,9 @@ pyrogram = [
     {file = "Pyrogram-1.2.9.tar.gz", hash = "sha256:0f207cac92f4a4d204037214a1ebb54ba272a9557a22633427880fdef844c012"},
 ]
 pyromod = []
+pyshorteners = [
+    {file = "pyshorteners-1.0.1.tar.gz", hash = "sha256:22045c997c4283124768c165623a267cf9ba2a7d416101e2e5fccfc244d34544"},
+]
 pysocks = [
     {file = "PySocks-1.7.1-py27-none-any.whl", hash = "sha256:08e69f092cc6dbe92a0fdd16eeb9b9ffbc13cadfe5ca4c7bd92ffb078b293299"},
     {file = "PySocks-1.7.1-py3-none-any.whl", hash = "sha256:2725bd0a9925919b9b51739eea5f9e2bae91e83288108a9ad338b2e3a4435ee5"},
