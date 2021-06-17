@@ -1,6 +1,8 @@
 from asyncio import sleep
 from secrets import token_urlsafe
 
+from pyshorteners import Shortener
+
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
@@ -25,7 +27,6 @@ msg_text = """
 <i>@DivideProjects </i>
 """
 
-
 @StreamBot.on_message(
     filters.private
     & (filters.document | filters.video | filters.audio)
@@ -36,7 +37,7 @@ msg_text = """
 async def private_receive_handler(c: Client, m: Message):
     user_id = m.from_user.id
     
-    wait = await m.reply_text("Please wait while i process the file...")
+    wait = await m.reply_text("Please wait, While i process your file...")
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
         random_url = token_urlsafe(log_msg.message_id)
@@ -61,11 +62,15 @@ async def private_receive_handler(c: Client, m: Message):
             disable_web_page_preview=True,
             quote=True,
         )
+        
+        s = Shortener()
+        short_link = s.dagd.short(stream_link)
+        
         await wait.delete()
         await m.reply_text(
-            text=msg_text.format(file_name, file_size, stream_link),
+            text=msg_text.format(file_name, file_size, short_link),
             disable_web_page_preview=True,
-            reply_markup=ikb([[("Download 📥", stream_link, "url")]]),
+            reply_markup=ikb([[("Download 📥", short_link, "url")]]),
             quote=True,
         )
     except FloodWait as e:
