@@ -14,6 +14,14 @@ category = "main"
 optional = false
 python-versions = ">=3.6"
 
+[[package]]
+name = "pyshorteners"
+version = "1.0.1"
+description = "A Python lib to wrap and consume the most used shorteners APIs"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
 [package.dependencies]
 async-timeout = ">=3.0,<4.0"
 attrs = ">=17.3.0"
