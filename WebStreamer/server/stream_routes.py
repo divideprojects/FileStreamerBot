@@ -34,12 +34,13 @@ async def stream_handler(request):
         random_link = request.match_info["random_link"]
         message_id, valid, valid_upto = await Downloads().get_msg_id(random_link)
         if not valid:
+            mybot = await StreamBot.get_me()
             if int(message_id) == 0:
                 return web.json_response(
                     {
                         "status": "not found",
                         "maintained_by": "@DivideProjects",
-                        "telegram_bot": "@" + (await StreamBot.get_me()).username,
+                        "telegram_bot": f"@{mybot.username}",
                     },
                     status=404,
                 )
@@ -48,7 +49,7 @@ async def stream_handler(request):
                     "status": "download_link_expired",
                     "expired_time": str(valid_upto),
                     "maintained_by": "@DivideProjects",
-                    "telegram_bot": "@" + (await StreamBot.get_me()).username,
+                    "telegram_bot": f"@{mybot.username}",
                 },
                 status=410,
             )

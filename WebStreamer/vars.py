@@ -9,7 +9,7 @@ class Var:
     WORKERS = int(getenv("WORKERS", "8"))
     LOG_CHANNEL = int(getenv("LOG_CHANNEL"))
     PORT = int(getenv("PORT", 8080))
-    BIND_ADRESS = str(getenv("WEB_SERVER_BIND_ADDRESS", "0.0.0.0"))
+    BIND_ADDRESS = str(getenv("WEB_SERVER_BIND_ADDRESS", "0.0.0.0"))
     OWNER_ID = int(getenv("OWNER_ID", 1198820588))
     NO_PORT = bool(getenv("NO_PORT", False))
     APP_NAME = None
@@ -19,7 +19,7 @@ class Var:
     else:
         ON_HEROKU = False
     FQDN = (
-        str(getenv("FQDN", BIND_ADRESS))
+        str(getenv("FQDN", BIND_ADDRESS))
         if not ON_HEROKU or getenv("FQDN")
         else APP_NAME + ".herokuapp.com"
     )
