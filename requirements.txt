@@ -1,0 +1,10 @@
+Pyrogram~=1.2.9
+aiohttp~=3.7.4
+TgCrypto~=1.2.2
+aiofiles~=0.7.0
+APScheduler~=3.7.0
+dnspython~=2.1.0
+requests~=2.25.1
+motor~=2.4.0
+pyshorteners~=1.0.1
+git+https://github.com/usernein/pyromod.git@2d71f19a821355ff9a4e1cd9fdbbf2a0990b482a
