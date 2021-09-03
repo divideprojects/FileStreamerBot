@@ -9,7 +9,7 @@ def new_user(uid):
 
 
 class Users(MongoDB):
-    db_name = "users"
+    db_name = "FileStreamerBot_users"
 
     def __init__(self):
         super().__init__(self.db_name)

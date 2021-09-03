@@ -5,7 +5,7 @@ from WebStreamer.logger import LOGGER
 
 
 class Downloads(MongoDB):
-    db_name = "downloads"
+    db_name = "FileStreamerBot_downloads"
 
     def __init__(self):
         super().__init__(self.db_name)
