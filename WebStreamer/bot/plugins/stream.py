@@ -22,14 +22,14 @@ msg_text = """
 <b><u>📦 Size:</u></b> <i>{}</i>\n
 <b><u>📥 Download link:</u></b> <i>{}</i>
 
-<b>🚸 Note: This link will expire in 24 hours!</b>
+<b>🚸 Note: This link will expire after 24 hours!</b>
 
 <i>@DivideProjects </i>
 """
 
 @StreamBot.on_message(
     filters.private
-    & (filters.document | filters.video | filters.audio)
+    & (filters.document | filters.video | filters.audio | filters.photo)
     & ~filters.edited
     & user_check,
     group=4,
@@ -37,7 +37,7 @@ msg_text = """
 async def private_receive_handler(c: Client, m: Message):
     user_id = m.from_user.id
     
-    wait = await m.reply_text("Please wait, While i process your file...")
+    wait = await m.reply_text("Please wait while I process your file...")
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
         random_url = token_urlsafe(log_msg.message_id)
@@ -56,7 +56,7 @@ async def private_receive_handler(c: Client, m: Message):
         await log_msg.reply_text(
             text=(
                 f"<b>Requested By:</b> [{m.from_user.first_name}](tg://user?id={user_id})\n"
-                f"<b>User ID:</b> <code>{user_id}<code>\n"
+                f"<b>User ID:</b> <code>{user_id}</code>\n"
                 f"<b>Download Link:</b> {stream_link}"
             ),
             disable_web_page_preview=True,

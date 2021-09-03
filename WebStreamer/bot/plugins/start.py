@@ -9,18 +9,19 @@ PMTEXT = """
 Hi, {} !!\n\n
 <i>I'm File streamer Bot</i>\n
 <b>Click on the below buttons to learn more</b>\n
-<b>WARNING:</b> <b>NSFW Content will lead to ban.</b>
+<b>WARNING:</b> <b><u>NSFW Content will lead to ban.</u></b>
 """
 
-HELPTEXT = "Just Send or Forward me any file or media, I'll give you a direct download link for it !"
+HELPTEXT = "Just Send or Forward me any file or media, I'll give you a direct download link for it!"
 
 ABOUT = """
-Hi there i'm an advanced and fast file streamer bot !
-I can give you temporary downloading links !
-I'm currently hosted on Heruko !\n
-You can Contact My devs or if you need any help or find any bugs at @DivideProjectsDiscussion\n\n
-Thanks for using it !!
- """
+Hi there I'm an Advanced and Fast File Streamer Bot!
+
+I can give you a direct link to telegram files for upto 24 hours!
+
+You can Contact My devs or if you need any help or find any bugs at @DivideProjectsDiscussion
+Thanks for using me!!
+"""
 
 
 @StreamBot.on_message(
