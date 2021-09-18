@@ -9,7 +9,7 @@ PMTEXT = """
 Hi, {} !
 I'm File streamer Bot!
 
-<i>Click on the below buttons to learn more.</i>
+<i>Click on the below buttons to learn more!</i>
 
 <b><u><i>WARNING:</i></u></b> <i>NSFW Content will lead to ban!</i>
 """
@@ -23,25 +23,23 @@ Just Send or Forward me any file or media, I'll give you a direct download link 
 """
 
 ABOUT = """
-Hi there, I'm an Advanced and Fast File Streamer Bot!
-Made with love from @DivideProjectsDiscussion using pyrogram :)
+Hi there, I'm an Advanced and Fast File Streamer Bot! Made with love from @DivideProjectsDiscussion using pyrogram :)
 
-<b><u>Here are the few questions that are answered:-</u></b>
+<b><u>Here are the few questions that are answered:</u></b>
 
 <b>1) The direct link given by me is valid for how much time ?</b>
-<u>Ans)</u> <i>The direct link to telegram files are valid for upto 24 hours!</i>
+<u>Ans</u>) <i>The direct link to telegram files are valid for upto 24 hours!</i>
 
 <b>2) How to use me ?</b>
-<u>Ans)</u> <i>Read /help and if you get some issues join @DivideProjectsDiscussion and tell what issues are you facing to use me :)</i>
+<u>Ans</u>) <i>Read /help and if you get some issues join @DivideProjectsDiscussion and tell what issues are you facing to use me :)</i>
 
 <b>3) Is NSFW allowed ?</b>
-<u>Ans)</u> <i>NOOOOOOO !!</i>
+<u>Ans</u>) <i>NOOOOOOO !!</i>
 
 <b>4) You want to contact support for something ?</b>
-<u>Ans)</u> <i>You can Contact My devs or if you need any help or found any bugs report it at @DivideProjectsDiscussion asap !</i>
+<u>Ans</u>) <i>You can Contact My devs or if you need any help or found any bugs report it at @DivideProjectsDiscussion asap !</i>
 
-<i><u>Atlast,
-Thanks for using me!!</u></i>
+<i><u>Atlast, Thanks for using me!!</u></i>
 """
 
 
