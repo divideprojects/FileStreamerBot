@@ -71,12 +71,10 @@ Please wait while I process your file ...
         s = Shortener()
         short_link = s.dagd.short(stream_link)
         
-        await wait.delete()
-        await m.reply_text(
+        await wait.edit_text(
             text=msg_text.format(file_name, file_size, short_link),
             disable_web_page_preview=True,
             reply_markup=ikb([[("Download 📥", short_link, "url")]]),
-            quote=True,
         )
     except FloodWait as e:
         LOGGER.info(f"Sleeping for {str(e.x)}s")
