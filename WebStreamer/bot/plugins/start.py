@@ -7,16 +7,17 @@ from WebStreamer.utils.custom_filters import user_check
 
 PMTEXT = """
 Hi, {} !
-<i>I'm File streamer Bot!</i>
-<b>Click on the below buttons to learn more.</b>
+I'm File streamer Bot!
 
-<b>WARNING:</b> <b><u>NSFW Content will lead to ban!</u></b>
+<i>Click on the below buttons to learn more.</i>
+
+<b><u><i>WARNING:</i></u></b> <i>NSFW Content will lead to ban!</i>
 """
 
 HELPTEXT = """
 <b>Commands:</b>
-/start: Start the bot.
-/help: Show this message again.
+/start: <i>Start the bot.</i>
+/help: <i>Show this message again.</i>
 
 Just Send or Forward me any file or media, I'll give you a direct download link for it!
 """
@@ -28,19 +29,19 @@ Made with love from @DivideProjectsDiscussion using pyrogram :)
 <b><u>Here are the few questions that are answered:-</u></b>
 
 <b>1) The direct link given by me is valid for how much time ?</b>
-<i>Ans)</i> The direct link to telegram files are valid for upto 24 hours!
+<u>Ans)</u> <i>The direct link to telegram files are valid for upto 24 hours!</i>
 
 <b>2) How to use me ?</b>
-<i>Ans)</i> Read /help and if you get some issues join @DivideProjectsDiscussion and tell what issues are you facing to use me :)
+<u>Ans)</u> <i>Read /help and if you get some issues join @DivideProjectsDiscussion and tell what issues are you facing to use me :)</i>
 
 <b>3) Is NSFW allowed ?</b>
-<i>Ans)</i> NOOOOOOO !!!
+<u>Ans)</u> <i>NOOOOOOO !!</i>
 
 <b>4) You want to contact support for something ?</b>
-<i>Ans)</i> You can Contact My devs or if you need any help or found any bugs report it at @DivideProjectsDiscussion asap !
+<u>Ans)</u> <i>You can Contact My devs or if you need any help or found any bugs report it at @DivideProjectsDiscussion asap !</i>
 
-Atlast,
-Thanks for using me!!
+<i><u>Atlast,
+Thanks for using me!!</u></i>
 """
 
 
@@ -48,7 +49,7 @@ Thanks for using me!!
     filters.command("start") & filters.private & ~filters.edited & user_check,
 )
 async def start(_, m: Message):
-    await m.reply_text(
+    return await m.reply_text(
         text=PMTEXT.format(m.chat.first_name),
         parse_mode="HTML",
         disable_web_page_preview=True,
@@ -62,8 +63,8 @@ async def start(_, m: Message):
     filters.command("help") & filters.private & ~filters.edited & user_check,
 )
 async def help_handler(_, m: Message):
-    await m.reply_text(
-        "<i>Send or Forward me any file or media, I'll give you a direct download link for it!</i>",
+    return await m.reply_text(
+        HELPTEXT,
         parse_mode="HTML",
     )
 
