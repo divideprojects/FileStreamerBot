@@ -38,8 +38,11 @@ async def private_receive_handler(c: Client, m: Message):
     user_id = m.from_user.id
     
     wait = await m.reply_text("""
-Please wait while I process your file ...\n<b>Do not send any other media file till i give you the link for the current given file !</b>
-"""
+Please wait while I process your file ...
+<b>Do not send any other media file till i give you the link for the current given file !</b>
+""",
+                              quote=True,
+                             )
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
         random_url = token_urlsafe(log_msg.message_id)
