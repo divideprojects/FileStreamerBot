@@ -28,7 +28,7 @@ async def status(_, m: Message):
     total_users = await Users().total_users_count()
     valid_downloads, num_downloads, expired_downloads = await dl.valid_downloads_list()
     async with open_aiofiles("download_list.txt", "w") as valid_dl_list:
-        await valid_dl_list.write("\n".join(valid_downloads))
+        await valid_dl_list.write(str(valid_downloads))
     await m.reply_document(
         "download_list.txt",
         caption=(
