@@ -26,9 +26,12 @@ broadcast_ids = {}
 async def status(_, m: Message):
     dl = Downloads()
     total_users = await Users().total_users_count()
-    _, num_downloads, expired_downloads = await dl.valid_downloads_list()
-    await m.reply_text(
-        (
+    valid_downloads, num_downloads, expired_downloads = await dl.valid_downloads_list()
+    async with open_aiofiles("download_list.txt", "w") as valid_dl_list:
+        await valid_dl_list.write(f"{dl}\n" for dl in [valid_downloads])
+    await m.reply_document(
+        "download_list.txt",
+        caption=(
             f"<b>Total Users:</b> <code>{total_users}</code>\n"
             f"<b>Total Downloads:</b> <code>{num_downloads}</code>\n"
             f"<b>Expired Downloads:</b> <code>{expired_downloads}</code>"
