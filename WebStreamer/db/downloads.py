@@ -38,4 +38,9 @@ class Downloads(MongoDB):
         valid_count = [
             document for document in all_data if document["valid_upto"] > datetime.now()
         ]
-        return valid_count, len(valid_count), len(all_data) - len(valid_count)
+        return (
+            valid_count,
+            len(all_data),
+            len(all_data) - len(valid_count),
+            len(valid_count),
+        )

@@ -30,6 +30,7 @@ async def status(_, m: Message):
         valid_downloads_list,
         num_downloads,
         expired_downloads,
+        valid_num_downloads,
     ) = await dl.valid_downloads_list()
     async with open_aiofiles("download_list.txt", "w") as valid_dl_list:
         valid_downloads = ""
@@ -45,7 +46,8 @@ async def status(_, m: Message):
         caption=(
             f"<b>Total Users:</b> <code>{total_users}</code>\n"
             f"<b>Total Downloads:</b> <code>{num_downloads}</code>\n"
-            f"<b>Expired Downloads:</b> <code>{expired_downloads}</code>"
+            f"<b>Expired Downloads:</b> <code>{expired_downloads}</code>\n"
+            f"<b>Active Downloads:</b> <code>{valid_num_downloads}</code>"
         ),
         quote=True,
     )
