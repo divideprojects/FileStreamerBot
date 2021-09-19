@@ -36,8 +36,8 @@ async def status(_, m: Message):
         valid_downloads = ""
         for dl in valid_downloads_list:
             valid_downloads += (
-                f"Link: {dl['link']}\n"
                 f"UserID: {dl['user_id']}\n"
+                f"Link: {dl['link']}\n"
                 f"Expire: {dl['valid_upto'].strftime('%m/%d/%Y, %H:%M:%S')}\n\n"
             )
         await valid_dl_list.write(valid_downloads)
@@ -46,8 +46,8 @@ async def status(_, m: Message):
         caption=(
             f"<b>Total Users:</b> <code>{total_users}</code>\n"
             f"<b>Total Downloads:</b> <code>{num_downloads}</code>\n"
-            f"<b>Expired Downloads:</b> <code>{expired_downloads}</code>\n"
-            f"<b>Active Downloads:</b> <code>{valid_num_downloads}</code>"
+            f"<b>Active Downloads:</b> <code>{valid_num_downloads}</code>\n"
+            f"<b>Expired Downloads:</b> <code>{expired_downloads}</code>"
         ),
         quote=True,
     )
