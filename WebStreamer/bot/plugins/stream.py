@@ -27,6 +27,7 @@ msg_text = """
 <i>@DivideProjects </i>
 """
 
+
 @StreamBot.on_message(
     filters.private
     & (filters.document | filters.video | filters.audio | filters.photo)
@@ -36,13 +37,14 @@ msg_text = """
 )
 async def private_receive_handler(c: Client, m: Message):
     user_id = m.from_user.id
-    
-    wait = await m.reply_text("""
+
+    wait = await m.reply_text(
+        """
 Please wait while I process your file ...
 <b>Do not send any other media file till i give you the link for the current given file !</b>
 """,
-                              quote=True,
-                             )
+        quote=True,
+    )
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
         random_url = token_urlsafe(log_msg.message_id)
@@ -66,11 +68,12 @@ Please wait while I process your file ...
             ),
             disable_web_page_preview=True,
             quote=True,
+            reply_markup=ikb([["Ban User" f"ban_{user_id}"]]),
         )
-        
+
         s = Shortener()
         short_link = s.dagd.short(stream_link)
-        
+
         await wait.edit_text(
             text=msg_text.format(file_name, file_size, short_link),
             disable_web_page_preview=True,
