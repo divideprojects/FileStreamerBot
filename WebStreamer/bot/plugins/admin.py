@@ -1,5 +1,5 @@
 from asyncio import sleep
-from datetime import datetime, timedelta
+from datetime import timedelta
 from os import remove
 from random import choice
 from string import ascii_letters
@@ -25,6 +25,7 @@ broadcast_ids = {}
 )
 async def status(_, m: Message):
     dl = Downloads()
+    filename = "downloadList.txt"
     total_users = await Users().total_users_count()
     (
         valid_downloads_list,
@@ -32,7 +33,7 @@ async def status(_, m: Message):
         expired_downloads,
         valid_num_downloads,
     ) = await dl.valid_downloads_list()
-    async with open_aiofiles("download_list.txt", "w") as valid_dl_list:
+    async with open_aiofiles(filename, "w") as valid_dl_list:
         valid_downloads = ""
         for dl in valid_downloads_list:
             valid_downloads += (
@@ -42,7 +43,7 @@ async def status(_, m: Message):
             )
         await valid_dl_list.write(valid_downloads)
     await m.reply_document(
-        "download_list.txt",
+        filename,
         caption=(
             f"<b>Total Users:</b> <code>{total_users}</code>\n"
             f"<b>Total Downloads:</b> <code>{num_downloads}</code>\n"
