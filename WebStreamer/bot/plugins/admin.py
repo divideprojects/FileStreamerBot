@@ -34,7 +34,11 @@ async def status(_, m: Message):
     async with open_aiofiles("download_list.txt", "w") as valid_dl_list:
         valid_downloads = ""
         for dl in valid_downloads_list:
-            valid_downloads += f"Link: {dl['link']}\nUserID: {dl['user_id']}\nExpire: {type(dl['valid_upto'])}\n\n"
+            valid_downloads += (
+                f"Link: {dl['link']}\n"
+                f"UserID: {dl['user_id']}\n"
+                f"Expire: {dl['valid_upto'].strftime('%m/%d/%Y, %H:%M:%S')}\n\n"
+            )
         await valid_dl_list.write(valid_downloads)
     await m.reply_document(
         "download_list.txt",
