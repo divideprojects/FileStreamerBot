@@ -68,7 +68,7 @@ Please wait while I process your file ...
             ),
             disable_web_page_preview=True,
             quote=True,
-            reply_markup=ikb([["Ban User" f"ban_{user_id}"]]),
+            reply_markup=ikb([[("Ban User" f"ban_{user_id}")]]),
         )
 
         s = Shortener()
