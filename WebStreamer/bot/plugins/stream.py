@@ -56,9 +56,14 @@ Please wait while I process your file ...
 
         await Downloads().add_download(log_msg.message_id, random_url, user_id)
 
+        # Only get file size if it's a file
         doc = m.document or m.audio or m.video
-        file_size = f"{humanbytes(doc.file_size)}"
-        file_name = doc.file_name
+        if doc:
+            file_size = humanbytes(doc.file_size)
+            file_name = doc.file_name
+        else:
+            file_size = humanbytes(m.photo[-1].file_size)
+            file_name = m.photo[-1].file_name
 
         await log_msg.reply_text(
             text=(
