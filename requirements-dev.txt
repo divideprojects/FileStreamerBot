@@ -1,5 +1,5 @@
 black~=21.6b0
-pre-commit~=2.13.0
+pre-commit~=2.15.0
 isort~=5.8.0
 pylint~=2.8.3
 pyclean~=2.0.0
