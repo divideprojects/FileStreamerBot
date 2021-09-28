@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "filestreamerbot"
+version = "1.0.0"
+description = ""
+authors = ["Divanshu Chauhan <23524935+Divkix@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Pyrogram = "~=1.2.9"
+aiohttp = "~=3.7.4"
+TgCrypto = "~=1.2.2"
+aiofiles = "~=0.7.0"
+APScheduler = "~=3.8.0"
+dnspython = "~=2.1.0"
+requests = "~=2.26.0"
+motor = "~=2.5.1"
+pyshorteners = "~=1.0.1"
+pyromod = {git = "https://github.com/usernein/pyromod.git", rev = "2d71f19a821355ff9a4e1cd9fdbbf2a0990b482a"}
+
+[tool.poetry.dev-dependencies]
+black = "~=21.9b0"
+pre-commit = "~=2.15.0"
+isort = "~=5.9.3"
+pylint = "~=2.11.1"
+pyclean = "~=2.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
