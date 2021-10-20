@@ -1,9 +1,9 @@
 from pyrogram import filters
-from pyrogram.types import Message, CallbackQuery
-from WebStreamer.utils.ikb import ikb
+from pyrogram.types import CallbackQuery, Message
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.custom_filters import user_check
+from WebStreamer.utils.ikb import ikb
 
 PMTEXT = """
 Hi, {} !
@@ -51,9 +51,15 @@ async def start(_, m: Message):
         text=PMTEXT.format(m.chat.first_name),
         parse_mode="HTML",
         disable_web_page_preview=True,
-        reply_markup=ikb([[("Support Group", "https://t.me/DivideProjectsDiscussion", "url"),
-                           ("Channel", "https://t.me/DivideProjects", "url")],
-                          [("About Me", "aboutbot"), ("Help", "helptext")]]),
+        reply_markup=ikb(
+            [
+                [
+                    ("Support Group", "https://t.me/DivideProjectsDiscussion", "url"),
+                    ("Channel", "https://t.me/DivideProjects", "url"),
+                ],
+                [("About Me", "aboutbot"), ("Help", "helptext")],
+            ],
+        ),
     )
 
 
@@ -80,8 +86,8 @@ async def button(_, cmd: CallbackQuery):
                     [
                         ("Go to Home", "gotohome"),
                         ("Help", "helptext"),
-                    ]
-                ]
+                    ],
+                ],
             ),
         )
     elif "helptext" in cb_data:
@@ -94,8 +100,8 @@ async def button(_, cmd: CallbackQuery):
                     [
                         ("About Me", "aboutbot"),
                         ("Back", "gotohome"),
-                    ]
-                ]
+                    ],
+                ],
             ),
         )
     elif "gotohome" in cb_data:
@@ -108,18 +114,13 @@ async def button(_, cmd: CallbackQuery):
                     [
                         (
                             "Support Group",
-                            "https://t.me/DivideProjectsDiscussion", "url"
+                            "https://t.me/DivideProjectsDiscussion",
+                            "url",
                         ),
-                        (
-                            "Channel",
-                            "https://t.me/DivideProjects", "url"
-                        )
+                        ("Channel", "https://t.me/DivideProjects", "url"),
                     ],
-                    [
-                        ("About Me", "aboutbot"),
-                        ("Help", "helptext")
-                    ]
-                ]
+                    [("About Me", "aboutbot"), ("Help", "helptext")],
+                ],
             ),
         )
     await cmd.answer()
