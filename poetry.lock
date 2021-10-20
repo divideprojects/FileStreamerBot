@@ -410,24 +410,6 @@ pyaes = "1.6.1"
 pysocks = "1.7.1"
 
 [[package]]
-name = "pyromod"
-version = "1.5"
-description = "A monkeypatcher add-on for Pyrogram"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-develop = false
-
-[package.dependencies]
-pyrogram = ">=1.0.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/usernein/pyromod.git"
-reference = "2d71f19a821355ff9a4e1cd9fdbbf2a0990b482a"
-resolved_reference = "2d71f19a821355ff9a4e1cd9fdbbf2a0990b482a"
-
-[[package]]
 name = "pyshorteners"
 version = "1.0.1"
 description = "A Python lib to wrap and consume the most used shorteners APIs"
@@ -598,7 +580,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "e46812447d9f0ade1cf1b19fc38d61bd37c2781d3e25bfd6244d3b5256d8f9e1"
+content-hash = "5d5fbcd3979b54cdc818b0d9f4f9ae4bf27c9320323a723aacb48355609ebfc8"
 
 [metadata.files]
 aiofiles = [
@@ -969,7 +951,6 @@ pyrogram = [
     {file = "Pyrogram-1.2.9-py3-none-any.whl", hash = "sha256:85cacbcebb704f6d849ff52b07e1bb4972b4ff81216c3d45ed385e9a5ab057a7"},
     {file = "Pyrogram-1.2.9.tar.gz", hash = "sha256:0f207cac92f4a4d204037214a1ebb54ba272a9557a22633427880fdef844c012"},
 ]
-pyromod = []
 pyshorteners = [
     {file = "pyshorteners-1.0.1.tar.gz", hash = "sha256:22045c997c4283124768c165623a267cf9ba2a7d416101e2e5fccfc244d34544"},
 ]

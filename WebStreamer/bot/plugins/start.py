@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.types import Message, CallbackQuery
-from pyromod.helpers import ikb
+from WebStreamer.utils.ikb import ikb
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.custom_filters import user_check

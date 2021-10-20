@@ -15,7 +15,6 @@ dnspython = "~=2.1.0"
 requests = "~=2.26.0"
 motor = "~=2.5.1"
 pyshorteners = "~=1.0.1"
-pyromod = {git = "https://github.com/usernein/pyromod.git", rev = "2d71f19a821355ff9a4e1cd9fdbbf2a0990b482a"}
 
 [tool.poetry.dev-dependencies]
 black = "~=21.9b0"

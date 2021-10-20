@@ -3,7 +3,7 @@ from asyncio import sleep
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait, UserNotParticipant
 from pyrogram.types import Message
-from pyromod.helpers import ikb
+from WebStreamer.utils.ikb import ikb
 
 from WebStreamer.db import Users
 from WebStreamer.logger import LOGGER

@@ -6,7 +6,7 @@ from pyshorteners import Shortener
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
-from pyromod.helpers import ikb
+from WebStreamer.utils.ikb import ikb
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.db import Downloads
@@ -73,7 +73,7 @@ Please wait while I process your file ...
             ),
             disable_web_page_preview=True,
             quote=True,
-            reply_markup= ikb([[("Ban User", f"ban_{user_id}")]]),
+            reply_markup=ikb([[("Ban User", f"ban_{user_id}")]]),
         )
 
         s = Shortener()
