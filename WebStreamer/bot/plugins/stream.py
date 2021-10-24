@@ -64,19 +64,19 @@ Please wait while I process your file ...
             file_size = humanbytes(m.photo[-1].file_size)
             file_name = m.photo[-1].file_name
 
+        s = Shortener()
+        short_link = s.dagd.short(stream_link)
+
         await log_msg.reply_text(
             text=(
                 f"<b>Requested By:</b> [{m.from_user.first_name}](tg://user?id={user_id})\n"
                 f"<b>User ID:</b> <code>{user_id}</code>\n"
-                f"<b>Download Link:</b> {stream_link}"
+                f"<b>Download Link:</b> {short_link}"
             ),
             disable_web_page_preview=True,
             quote=True,
             reply_markup=ikb([[("Ban User", f"ban_{user_id}")]]),
         )
-
-        s = Shortener()
-        short_link = s.dagd.short(stream_link)
 
         await wait.edit_text(
             text=msg_text.format(file_name, file_size, short_link),
