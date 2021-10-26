@@ -1,6 +1,8 @@
 from asyncio import sleep
 from secrets import token_urlsafe
+from time import time
 
+from cachetools import TTLCache
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
@@ -26,6 +28,8 @@ msg_text = """
 <i>@DivideProjects </i>
 """
 
+ttl_dict = TTLCache(maxsize=512, ttl=(5 * 60))
+
 
 @StreamBot.on_message(
     filters.private
@@ -37,6 +41,13 @@ msg_text = """
 async def private_receive_handler(c: Client, m: Message):
     user_id = m.from_user.id
 
+    # spam check
+    if user_id in ttl_dict.keys():
+        await m.reply_text(
+            f"Flood control active, please wait {int(ttl_dict[user_id]-time())} seconds!",
+        )
+        return
+
     wait = await m.reply_text(
         """
 Please wait while I process your file ...
@@ -46,7 +57,7 @@ Please wait while I process your file ...
     )
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
-        random_url = token_urlsafe(log_msg.message_id)
+        random_url = token_urlsafe()
         stream_link = (
             f"https://{Var.FQDN}/{random_url}"
             if Var.ON_HEROKU or Var.NO_PORT
@@ -83,6 +94,10 @@ Please wait while I process your file ...
             disable_web_page_preview=True,
             reply_markup=ikb([[("Download 📥", short_link, "url")]]),
         )
+
+        # user should wait for 5 minutes before sending another file
+        ttl_dict[user_id] = time() + int(5 * 60)
+
     except FloodWait as e:
         LOGGER.info(f"Sleeping for {str(e.x)}s")
         await sleep(e.x)
