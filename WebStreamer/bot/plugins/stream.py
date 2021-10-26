@@ -1,6 +1,7 @@
 from asyncio import sleep
 from secrets import token_urlsafe
 from time import time
+from random import randint
 
 from cachetools import TTLCache
 from pyrogram import Client, filters
@@ -57,7 +58,7 @@ Please wait while I process your file ...
     )
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
-        random_url = token_urlsafe()
+        random_url = token_urlsafe(randint(32, 64))
         stream_link = (
             f"https://{Var.FQDN}/{random_url}"
             if Var.ON_HEROKU or Var.NO_PORT
