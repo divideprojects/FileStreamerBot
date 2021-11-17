@@ -3,7 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from WebStreamer.vars import Var
 
 db_client = AsyncIOMotorClient(Var.DATABASE_URL)
-main_db = db_client["bots"]
+main_db = db_client["divideprojects_bots"]
 
 
 class MongoDB:
