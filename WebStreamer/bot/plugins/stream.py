@@ -18,11 +18,11 @@ from WebStreamer.utils.ikb import ikb
 from WebStreamer.vars import Var
 
 msg_text = """
-<b><i><u>Link Generated!!</u></i></b>
+<b>Link Generated!</b>
 
-<b><u>📂 Name:</u></b> <i>{}</i>\n
-<b><u>📦 Size:</u></b> <i>{}</i>\n
-<b><u>📥 Download link:</u></b> <i>{}</i>
+<b>📂 Name:</b> <i>{}</i>
+<b>📦 Size:</b> <i>{}</i>
+<b>📥 Download link:</b> {}
 
 <b>🚸 Note: This link will expire after 24 hours!</b>
 
@@ -40,7 +40,8 @@ ttl_dict = TTLCache(maxsize=512, ttl=(5 * 60))
     group=4,
 )
 async def private_receive_handler(c: Client, m: Message):
-    user_id = m.from_user.id
+    user = m.from_user
+    user_id = user.id
 
     # spam check
     if user_id in ttl_dict.keys():
@@ -52,13 +53,13 @@ async def private_receive_handler(c: Client, m: Message):
     wait = await m.reply_text(
         """
 Please wait while I process your file ...
-<b>Do not send any other media file till i give you the link for the current given file !</b>
+<b>Do not send any other media file till I generate the link for the current file!</b>
 """,
         quote=True,
     )
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
-        random_url = token_urlsafe(randint(32, 64))
+        random_url = token_urlsafe(randint(32, 64)) + user_id
         stream_link = (
             f"https://{Var.FQDN}/{random_url}"
             if Var.ON_HEROKU or Var.NO_PORT
@@ -67,21 +68,21 @@ Please wait while I process your file ...
 
         await Downloads().add_download(log_msg.message_id, random_url, user_id)
 
-        # Only get file size if it's a file
+        # Only get file size if it's a file, different for photos
         doc = m.document or m.audio or m.video
         if doc:
             file_size = humanbytes(doc.file_size)
             file_name = doc.file_name
         else:
-            file_size = humanbytes(m.photo[-1].file_size)
-            file_name = m.photo[-1].file_name
+            file_size = "nil"
+            file_name = "photo"
 
         s = Shortener()
         short_link = s.dagd.short(stream_link)
 
         await log_msg.reply_text(
             text=(
-                f"<b>Requested By:</b> [{m.from_user.first_name}](tg://user?id={user_id})\n"
+                f"<b>Requested By:</b> [{user.first_name}](tg://user?id={user_id})\n"
                 f"<b>User ID:</b> <code>{user_id}</code>\n"
                 f"<b>Download Link:</b> {short_link}"
             ),
@@ -104,7 +105,9 @@ Please wait while I process your file ...
         await sleep(e.x)
         await c.send_message(
             chat_id=Var.LOG_CHANNEL,
-            text=f"FloodWait {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={user_id})\n\n<b>User ID:</b> "
-            f"<code>{str(user_id)}</code>",
+            text=(
+                f"FloodWait {e.x}s from {user.mention}\n\n"
+                f"<b>User ID:</b> <code>{user_id}</code>"
+            ),
             disable_web_page_preview=True,
         )
