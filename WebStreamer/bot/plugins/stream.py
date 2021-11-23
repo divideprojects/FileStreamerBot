@@ -59,7 +59,7 @@ Please wait while I process your file ...
     )
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
-        random_url = token_urlsafe(randint(32, 64)) + user_id
+        random_url = token_urlsafe(randint(32, 64)) + "-" + str(user_id)
         stream_link = (
             f"https://{Var.FQDN}/{random_url}"
             if Var.ON_HEROKU or Var.NO_PORT
