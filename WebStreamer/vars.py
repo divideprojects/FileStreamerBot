@@ -1,4 +1,4 @@
-from os import getcwd, environ
+from os import environ, getcwd
 
 from prettyconf import Configuration
 from prettyconf.loaders import EnvFile, Environment

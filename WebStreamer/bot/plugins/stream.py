@@ -1,7 +1,7 @@
 from asyncio import sleep
+from random import randint
 from secrets import token_urlsafe
 from time import time
-from random import randint
 
 from cachetools import TTLCache
 from pyrogram import Client, filters
