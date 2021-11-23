@@ -6,7 +6,7 @@ from time import time
 from cachetools import TTLCache
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
-from pyrogram.types import Message
+from pyrogram.types import CallbackQuery, Message
 from pyshorteners import Shortener
 
 from WebStreamer.bot import StreamBot
@@ -59,7 +59,7 @@ Please wait while I process your file ...
     )
     try:
         log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
-        random_url = token_urlsafe(randint(32, 64)) + "-" + str(user_id)
+        random_url = token_urlsafe(20) + "-" + str(user_id)
         stream_link = (
             f"https://{Var.FQDN}/{random_url}"
             if Var.ON_HEROKU or Var.NO_PORT
@@ -82,7 +82,7 @@ Please wait while I process your file ...
 
         await log_msg.reply_text(
             text=(
-                f"<b>Requested By:</b> [{user.first_name}](tg://user?id={user_id})\n"
+                f"<b>Requested By:</b> {user.mention}\n"
                 f"<b>User ID:</b> <code>{user_id}</code>\n"
                 f"<b>Download Link:</b> {short_link}"
             ),
@@ -94,7 +94,12 @@ Please wait while I process your file ...
         await wait.edit_text(
             text=msg_text.format(file_name, file_size, short_link),
             disable_web_page_preview=True,
-            reply_markup=ikb([[("Download 📥", short_link, "url")]]),
+            reply_markup=ikb(
+                [
+                    [("Download 📥", short_link, "url")],
+                    [("Delete ❌", f"delete_url.{random_url}")],
+                ],
+            ),
         )
 
         # user should wait for 5 minutes before sending another file
@@ -111,3 +116,20 @@ Please wait while I process your file ...
             ),
             disable_web_page_preview=True,
         )
+
+
+@StreamBot.on_callback_query(filters.regex("^delete_url."))
+async def delete_download(_, q: CallbackQuery):
+    user_id = q.from_user.id
+    msg = q.message
+    msg_text = ""
+    url = str(q.data.split(".")[-1])
+    deleted = await Downloads().delete_download(url, user_id)
+
+    msg_text = (
+        "<b>Deleted the file permanently from my server!</b>"
+        if deleted
+        else ("<b>Error:</b>\nCould not delete download, please contact my developers!")
+    )
+    await msg.edit_text(msg_text)
+    await q.answer("Operation Complete!")
