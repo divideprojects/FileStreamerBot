@@ -6,12 +6,12 @@ from WebStreamer.utils.custom_filters import user_check
 from WebStreamer.utils.ikb import ikb
 
 PMTEXT = """
-Hi, {} !
+Hi {}!
 I'm File streamer Bot!
 
 <i>Click on the below buttons to learn more!</i>
 
-<b><u><i>WARNING:</i></u></b> <i>NSFW Content will lead to ban!</i>
+<b><u>WARNING:</u></b> <i>NSFW Content will lead to ban!</i>
 """
 
 HELPTEXT = """
@@ -43,23 +43,25 @@ Hi there, I'm an Advanced and Fast File Streamer Bot! Made with love from @Divid
 """
 
 
+class Btns:
+    channel_and_group = [
+        ("Support Group", "https://t.me/DivideProjectsDiscussion", "url"),
+        ("Channel", "https://t.me/DivideProjects", "url"),
+    ]
+    about_me = ("About Me", "aboutbot")
+    help_me = ("Help", "helptext")
+    back = ("Back", "gotohome")
+
+
 @StreamBot.on_message(
     filters.command("start") & filters.private & ~filters.edited & user_check,
 )
 async def start(_, m: Message):
     return await m.reply_text(
-        text=PMTEXT.format(m.chat.first_name),
-        parse_mode="HTML",
+        text=PMTEXT.format(m.from_user.mention),
+        parse_mode="html",
         disable_web_page_preview=True,
-        reply_markup=ikb(
-            [
-                [
-                    ("Support Group", "https://t.me/DivideProjectsDiscussion", "url"),
-                    ("Channel", "https://t.me/DivideProjects", "url"),
-                ],
-                [("About Me", "aboutbot"), ("Help", "helptext")],
-            ],
-        ),
+        reply_markup=ikb([Btns.channel_and_group, [Btns.about_me, Btns.help_me]]),
     )
 
 
@@ -69,58 +71,35 @@ async def start(_, m: Message):
 async def help_handler(_, m: Message):
     return await m.reply_text(
         HELPTEXT,
-        parse_mode="HTML",
+        parse_mode="html",
+        reply_markup=ikb([[Btns.back]]),
     )
 
 
 @StreamBot.on_callback_query()
-async def button(_, cmd: CallbackQuery):
-    cb_data = cmd.data
-    if "aboutbot" in cb_data:
-        await cmd.message.edit(
+async def button(_, m: CallbackQuery):
+    cb_data = m.data
+    msg = m.message
+
+    if cb_data == "aboutbot":
+        await msg.edit(
             text=ABOUT,
-            parse_mode="HTML",
+            parse_mode="html",
             disable_web_page_preview=True,
-            reply_markup=ikb(
-                [
-                    [
-                        ("Go to Home", "gotohome"),
-                        ("Help", "helptext"),
-                    ],
-                ],
-            ),
+            reply_markup=ikb([[Btns.back]]),
         )
-    elif "helptext" in cb_data:
-        await cmd.message.edit(
+    elif cb_data == "helptext":
+        await msg.edit(
             text=HELPTEXT,
-            parse_mode="HTML",
+            parse_mode="html",
             disable_web_page_preview=True,
-            reply_markup=ikb(
-                [
-                    [
-                        ("About Me", "aboutbot"),
-                        ("Back", "gotohome"),
-                    ],
-                ],
-            ),
+            reply_markup=ikb([[Btns.back]]),
         )
-    elif "gotohome" in cb_data:
-        await cmd.message.edit(
-            text=PMTEXT.format(cmd.message.chat.first_name),
-            parse_mode="HTML",
+    elif cb_data == "gotohome":
+        await msg.edit(
+            text=PMTEXT.format(msg.from_user.mention),
+            parse_mode="html",
             disable_web_page_preview=True,
-            reply_markup=ikb(
-                [
-                    [
-                        (
-                            "Support Group",
-                            "https://t.me/DivideProjectsDiscussion",
-                            "url",
-                        ),
-                        ("Channel", "https://t.me/DivideProjects", "url"),
-                    ],
-                    [("About Me", "aboutbot"), ("Help", "helptext")],
-                ],
-            ),
+            reply_markup=ikb([Btns.channel_and_group, [Btns.about_me, Btns.help_me]]),
         )
-    await cmd.answer()
+    await m.answer()
