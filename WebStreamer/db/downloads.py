@@ -44,3 +44,6 @@ class Downloads(MongoDB):
             len(all_data) - len(valid_count),
             len(valid_count),
         )
+
+    async def delete_download(self, link: str, user_id: int):
+        return await self.delete_one({"link": link, "user_id": user_id})
