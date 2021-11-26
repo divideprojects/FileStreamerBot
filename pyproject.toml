@@ -22,7 +22,7 @@ prettyconf = "^2.2.1"
 black = "~=21.11b1"
 pre-commit = "~=2.15.0"
 isort = "~=5.10.1"
-pylint = "~=2.11.1"
+pylint = "~=2.12.1"
 pyclean = "~=2.0.0"
 
 [build-system]
