@@ -2,8 +2,8 @@ from pyrogram import filters
 from pyrogram.types import CallbackQuery, Message
 
 from WebStreamer.bot import StreamBot
-from WebStreamer.utils.custom_filters import user_check
 from WebStreamer.utils.ikb import ikb
+from WebStreamer.utils.joinCheck import joinCheck
 
 PMTEXT = """
 Hi {}!
@@ -53,9 +53,8 @@ class Btns:
     back = ("Back", "gotohome")
 
 
-@StreamBot.on_message(
-    filters.command("start") & filters.private & ~filters.edited & user_check,
-)
+@StreamBot.on_message(filters.command("start") & filters.private & ~filters.edited)
+@joinCheck()
 async def start(_, m: Message):
     return await m.reply_text(
         text=PMTEXT.format(m.from_user.mention),
@@ -65,9 +64,8 @@ async def start(_, m: Message):
     )
 
 
-@StreamBot.on_message(
-    filters.command("help") & filters.private & ~filters.edited & user_check,
-)
+@StreamBot.on_message(filters.command("help") & filters.private & ~filters.edited)
+@joinCheck()
 async def help_handler(_, m: Message):
     return await m.reply_text(
         HELPTEXT,

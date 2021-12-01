@@ -12,9 +12,9 @@ from pyshorteners import Shortener
 from WebStreamer.bot import StreamBot
 from WebStreamer.db import Downloads
 from WebStreamer.logger import LOGGER
-from WebStreamer.utils.custom_filters import user_check
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.ikb import ikb
+from WebStreamer.utils.joinCheck import joinCheck
 from WebStreamer.vars import Var
 
 msg_text = """
@@ -35,10 +35,10 @@ ttl_dict = TTLCache(maxsize=512, ttl=(5 * 60))
 @StreamBot.on_message(
     filters.private
     & (filters.document | filters.video | filters.audio | filters.photo)
-    & ~filters.edited
-    & user_check,
+    & ~filters.edited,
     group=4,
 )
+@joinCheck()
 async def private_receive_handler(c: Client, m: Message):
     user = m.from_user
     user_id = user.id
