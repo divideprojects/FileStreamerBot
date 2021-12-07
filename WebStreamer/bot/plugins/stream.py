@@ -1,5 +1,4 @@
 from asyncio import sleep
-from random import randint
 from secrets import token_urlsafe
 from time import time
 
@@ -7,7 +6,6 @@ from cachetools import TTLCache
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import CallbackQuery, Message
-from pyshorteners import Shortener
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.db import Downloads
@@ -15,6 +13,7 @@ from WebStreamer.logger import LOGGER
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.ikb import ikb
 from WebStreamer.utils.joinCheck import joinCheck
+from WebStreamer.utils.shortlink import shorten_link
 from WebStreamer.vars import Var
 
 msg_text = """
@@ -77,8 +76,7 @@ Please wait while I process your file ...
             file_size = "nil"
             file_name = "photo"
 
-        s = Shortener()
-        short_link = s.dagd.short(stream_link)
+        short_link = shorten_link(stream_link)
 
         await log_msg.reply_text(
             text=(
