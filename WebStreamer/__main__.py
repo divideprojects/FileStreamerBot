@@ -7,6 +7,7 @@ from sys import modules
 from aiohttp import web
 from apscheduler.schedulers.background import BackgroundScheduler
 from pyrogram import idle
+from pytz import utc
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.logger import LOGGER
@@ -38,7 +39,7 @@ async def start_services():
             LOGGER.info(f"Imported => {plugin_name}")
     if Var.ON_HEROKU:
         LOGGER.info("------------------ Starting Keep Alive Service ------------------")
-        scheduler = BackgroundScheduler()
+        scheduler = BackgroundScheduler(timezone=utc)
         scheduler.add_job(ping_server, "interval", seconds=1200)
         scheduler.start()
     LOGGER.info("-------------------- Initializing Web Server --------------------")
