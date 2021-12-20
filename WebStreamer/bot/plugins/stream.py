@@ -13,7 +13,6 @@ from WebStreamer.logger import LOGGER
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.ikb import ikb
 from WebStreamer.utils.joinCheck import joinCheck
-from WebStreamer.utils.shortlink import shorten_link
 from WebStreamer.vars import Var
 
 msg_text = """
@@ -76,7 +75,7 @@ Please wait while I process your file ...
             file_size = "nil"
             file_name = "photo"
 
-        short_link = shorten_link(stream_link)
+        short_link = stream_link
 
         await log_msg.reply_text(
             text=(
