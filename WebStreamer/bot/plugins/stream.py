@@ -41,12 +41,13 @@ async def private_receive_handler(c: Client, m: Message):
     user = m.from_user
     user_id = user.id
 
-    # spam check
-    if user_id in ttl_dict.keys():
-        await m.reply_text(
-            f"Flood control active, please wait {int(ttl_dict[user_id]-time())} seconds!",
-        )
-        return
+    if user_id != Var.OWNER_ID:
+        # spam check
+        if user_id in ttl_dict.keys():
+            await m.reply_text(
+                f"Flood control active, please wait {int(ttl_dict[user_id]-time())} seconds!",
+            )
+            return
 
     wait = await m.reply_text(
         """
