@@ -15,7 +15,7 @@ dnspython = "^2.2.0"
 requests = "^2.27.1"
 motor = "^2.5.1"
 pyshorteners = "^1.0.1"
-cachetools = "^4.2.4"
+cachetools = "^5.0.0"
 prettyconf = "^2.2.1"
 
 [tool.poetry.dev-dependencies]
