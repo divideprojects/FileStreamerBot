@@ -83,7 +83,7 @@ async def broadcast_(_, m: Message):
     )
     async with open_aiofiles("broadcast.txt", "w") as broadcast_log_file:
         for user in all_users:
-            sts, msg = await send_msg(user_id=int(user["id"]), message=broadcast_msg)
+            sts, msg = await send_msg(user_id=int(user), message=broadcast_msg)
             if msg is not None:
                 await broadcast_log_file.write(msg)
             if sts == 200:
@@ -91,7 +91,7 @@ async def broadcast_(_, m: Message):
             else:
                 failed += 1
             if sts == 400:
-                await Users().delete_user(user["id"])
+                await Users().delete_user(user)
             done += 1
             if broadcast_ids.get(broadcast_id) is None:
                 break

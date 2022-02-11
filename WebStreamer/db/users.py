@@ -18,7 +18,8 @@ class Users(MongoDB):
         return await self.count({})
 
     async def get_all_users(self):
-        return await self.find_all({})
+        users = await self.find_all({})
+        return [user["id"] for user in users]
 
     async def user_exists(self, user_id: int):
         user = await self.find_one({"id": user_id})
