@@ -7,7 +7,7 @@ env_file = f"{getcwd()}/.env"
 config = Configuration(loaders=[Environment(), EnvFile(filename=env_file)])
 
 
-class Var:
+class Vars:
     API_ID = int(config("API_ID", default=None))
     API_HASH = str(config("API_HASH", default=None))
     BOT_TOKEN = str(config("BOT_TOKEN", default=None))

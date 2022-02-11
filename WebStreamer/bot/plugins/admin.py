@@ -12,7 +12,7 @@ from pyrogram.types import Message
 from WebStreamer.bot import StreamBot
 from WebStreamer.db import Downloads, Users
 from WebStreamer.utils.broadcast_helper import send_msg
-from WebStreamer.vars import Var
+from WebStreamer.vars import Vars
 
 broadcast_ids = {}
 
@@ -20,7 +20,7 @@ broadcast_ids = {}
 @StreamBot.on_message(
     filters.command("status")
     & filters.private
-    & filters.user(Var.OWNER_ID)
+    & filters.user(Vars.OWNER_ID)
     & ~filters.edited,
 )
 async def status(_, m: Message):
@@ -58,7 +58,7 @@ async def status(_, m: Message):
 @StreamBot.on_message(
     filters.command("broadcast")
     & filters.private
-    & filters.user(Var.OWNER_ID)
+    & filters.user(Vars.OWNER_ID)
     & filters.reply
     & ~filters.edited,
 )

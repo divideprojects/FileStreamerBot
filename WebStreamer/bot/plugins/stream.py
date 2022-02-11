@@ -13,7 +13,7 @@ from WebStreamer.logger import LOGGER
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.ikb import ikb
 from WebStreamer.utils.joinCheck import joinCheck
-from WebStreamer.vars import Var
+from WebStreamer.vars import Vars
 
 msg_text = """
 <b>Link Generated!</b>
@@ -41,7 +41,7 @@ async def private_receive_handler(c: Client, m: Message):
     user = m.from_user
     user_id = user.id
 
-    if user_id != Var.OWNER_ID:
+    if user_id != Vars.OWNER_ID:
         # spam check
         if user_id in ttl_dict.keys():
             await m.reply_text(
@@ -57,12 +57,12 @@ Please wait while I process your file ...
         quote=True,
     )
     try:
-        log_msg = await m.forward(chat_id=Var.LOG_CHANNEL)
+        log_msg = await m.forward(chat_id=Vars.LOG_CHANNEL)
         random_url = token_urlsafe(20) + "-" + str(user_id)
         stream_link = (
-            f"https://{Var.FQDN}/{random_url}"
-            if Var.ON_HEROKU or Var.NO_PORT
-            else f"https://{Var.FQDN}:{Var.PORT}/{random_url}"
+            f"https://{Vars.FQDN}/{random_url}"
+            if Vars.ON_HEROKU or Vars.NO_PORT
+            else f"https://{Vars.FQDN}:{Vars.PORT}/{random_url}"
         )
 
         await Downloads().add_download(log_msg.message_id, random_url, user_id)
@@ -107,7 +107,7 @@ Please wait while I process your file ...
         LOGGER.info(f"Sleeping for {str(e.x)}s")
         await sleep(e.x)
         await c.send_message(
-            chat_id=Var.LOG_CHANNEL,
+            chat_id=Vars.LOG_CHANNEL,
             text=(
                 f"FloodWait {e.x}s from {user.mention}\n\n"
                 f"<b>User ID:</b> <code>{user_id}</code>"

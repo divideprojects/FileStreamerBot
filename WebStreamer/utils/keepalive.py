@@ -1,14 +1,14 @@
 from requests import get
 
 from WebStreamer.logger import LOGGER
-from WebStreamer.vars import Var
+from WebStreamer.vars import Vars
 
 
 def ping_server():
-    k = get(f"https://ping-pong-sn.herokuapp.com/pingback?link={Var.URL}").json()
+    k = get(f"https://ping-pong-sn.herokuapp.com/pingback?link={Vars.URL}").json()
     if not k.get("error"):
         LOGGER.info(
-            f"KeepAliveService: Pinged {Var.FQDN} with response: {k['message']}",
+            f"KeepAliveService: Pinged {Vars.FQDN} with response: {k['message']}",
         )
     else:
         LOGGER.error("Couldn't Ping the Server!")

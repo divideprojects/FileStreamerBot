@@ -11,7 +11,7 @@ from WebStreamer.db import Downloads
 from WebStreamer.logger import LOGGER
 from WebStreamer.utils.custom_dl import TGCustomYield, chunk_size, offset_fix
 from WebStreamer.utils.time_format import get_readable_time
-from WebStreamer.vars import Var
+from WebStreamer.vars import Vars
 
 routes = web.RouteTableDef()
 
@@ -61,7 +61,7 @@ async def stream_handler(request):
 
 async def media_streamer(request, message_id: int):
     range_header = request.headers.get("Range", 0)
-    media_msg = await StreamBot.get_messages(Var.LOG_CHANNEL, message_id)
+    media_msg = await StreamBot.get_messages(Vars.LOG_CHANNEL, message_id)
     file_properties = await TGCustomYield().generate_file_properties(media_msg)
     file_size = file_properties.file_size
 

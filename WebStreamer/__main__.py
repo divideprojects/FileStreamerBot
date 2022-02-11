@@ -13,7 +13,7 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.logger import LOGGER
 from WebStreamer.server import web_server
 from WebStreamer.utils.keepalive import ping_server
-from WebStreamer.vars import Var
+from WebStreamer.vars import Vars
 
 ppath = "WebStreamer/bot/plugins/*.py"
 files = glob(ppath)
@@ -37,7 +37,7 @@ async def start_services():
             spec.loader.exec_module(load)
             modules[f"WebStreamer.bot.plugins.{plugin_name}"] = load
             LOGGER.info(f"Imported => {plugin_name}")
-    if Var.ON_HEROKU:
+    if Vars.ON_HEROKU:
         LOGGER.info("------------------ Starting Keep Alive Service ------------------")
         scheduler = BackgroundScheduler(timezone=utc)
         scheduler.add_job(ping_server, "interval", seconds=1200)
@@ -45,14 +45,14 @@ async def start_services():
     LOGGER.info("-------------------- Initializing Web Server --------------------")
     app = web.AppRunner(await web_server())
     await app.setup()
-    bind_address = "0.0.0.0" if Var.ON_HEROKU else Var.FQDN
-    await web.TCPSite(app, bind_address, Var.PORT).start()
+    bind_address = "0.0.0.0" if Vars.ON_HEROKU else Vars.FQDN
+    await web.TCPSite(app, bind_address, Vars.PORT).start()
     LOGGER.info("----------------------------- DONE -----------------------------")
     LOGGER.info("----------------------- Service Started -----------------------")
     LOGGER.info(f"bot =>> {(await StreamBot.get_me()).first_name}")
-    LOGGER.info(f"server ip =>> {bind_address}:{Var.PORT}")
-    if Var.ON_HEROKU:
-        LOGGER.info(f"app running on =>> {Var.FQDN}")
+    LOGGER.info(f"server ip =>> {bind_address}:{Vars.PORT}")
+    if Vars.ON_HEROKU:
+        LOGGER.info(f"app running on =>> {Vars.FQDN}")
     LOGGER.info("---------------------------------------------------------------")
     await idle()
 

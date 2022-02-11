@@ -1,12 +1,12 @@
 from pyrogram import Client
 
-from WebStreamer.vars import Var
+from WebStreamer.vars import Vars
 
 StreamBot = Client(
     "Web Streamer",
-    api_id=Var.API_ID,
-    api_hash=Var.API_HASH,
-    bot_token=Var.BOT_TOKEN,
-    sleep_threshold=Var.SLEEP_THRESHOLD,
-    workers=Var.WORKERS,
+    api_id=Vars.API_ID,
+    api_hash=Vars.API_HASH,
+    bot_token=Vars.BOT_TOKEN,
+    sleep_threshold=Vars.SLEEP_THRESHOLD,
+    workers=Vars.WORKERS,
 )

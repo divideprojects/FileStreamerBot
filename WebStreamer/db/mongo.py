@@ -1,8 +1,8 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from WebStreamer.vars import Var
+from WebStreamer.vars import Vars
 
-db_client = AsyncIOMotorClient(Var.DATABASE_URL)
+db_client = AsyncIOMotorClient(Vars.DATABASE_URL)
 main_db = db_client["divideprojects_bots"]
 
 
