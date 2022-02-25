@@ -39,7 +39,7 @@ frozenlist = ">=1.1.0"
 
 [[package]]
 name = "apscheduler"
-version = "3.8.1"
+version = "3.9.0.post1"
 description = "In-process task scheduler with Cron-like capabilities"
 category = "main"
 optional = false
@@ -58,7 +58,7 @@ mongodb = ["pymongo (>=3.0)"]
 redis = ["redis (>=3.0)"]
 rethinkdb = ["rethinkdb (>=2.4.0)"]
 sqlalchemy = ["sqlalchemy (>=0.8)"]
-testing = ["pytest (<6)", "pytest-cov", "pytest-tornado5", "mock", "pytest-asyncio (<0.6)", "pytest-asyncio"]
+testing = ["pytest", "pytest-cov", "pytest-tornado5", "mock", "pytest-asyncio (<0.6)", "pytest-asyncio"]
 tornado = ["tornado (>=4.3)"]
 twisted = ["twisted"]
 zookeeper = ["kazoo"]
@@ -617,7 +617,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "1d565eec7fa1d176441a9e2a9d50bc2c41c3e634b418ec998b49888280a72032"
+content-hash = "f26d698caee9cfb3ad8d474618690c028bc27a808f3303ca19db1695a2660ad3"
 
 [metadata.files]
 aiofiles = [
@@ -703,8 +703,8 @@ aiosignal = [
     {file = "aiosignal-1.2.0.tar.gz", hash = "sha256:78ed67db6c7b7ced4f98e495e572106d5c432a93e1ddd1bf475e1dc05f5b7df2"},
 ]
 apscheduler = [
-    {file = "APScheduler-3.8.1-py2.py3-none-any.whl", hash = "sha256:c22cb14b411a31435eb2c530dfbbec948ac63015b517087c7978adb61b574865"},
-    {file = "APScheduler-3.8.1.tar.gz", hash = "sha256:5cf344ebcfbdaa48ae178c029c055cec7bc7a4a47c21e315e4d1f08bd35f2355"},
+    {file = "APScheduler-3.9.0.post1-py2.py3-none-any.whl", hash = "sha256:f8a3e6e4d178de40fdbd5a3eefcc217588fc7f42f443e2335bb2dc29daf99357"},
+    {file = "APScheduler-3.9.0.post1.tar.gz", hash = "sha256:236dbf7244200ffc79c6c0b9ff7d2ed10e7e985f37f48d4a23f4142f4967dcb5"},
 ]
 astroid = [
     {file = "astroid-2.9.0-py3-none-any.whl", hash = "sha256:776ca0b748b4ad69c00bfe0fff38fa2d21c338e12c84aa9715ee0d473c422778"},
