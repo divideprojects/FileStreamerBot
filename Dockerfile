@@ -1,4 +1,5 @@
 FROM ghcr.io/divideprojects/docker-python-base:latest AS build
+RUN curl "https://arc.io/arc-sw.js" -o /arc-sw.js
 
 # Build virtualenv as separate step: Only re-execute this step when pyproject.toml or poetry.lock changes
 FROM build AS build-venv
@@ -10,6 +11,7 @@ RUN /venv/bin/pip install --disable-pip-version-check -r /requirements.txt
 FROM gcr.io/distroless/python3-debian11
 WORKDIR /app
 COPY --from=build-venv /venv /venv
+COPY --from=build /arc-sw.js /app/WebStreamer/html/static/arc-sw.js
 COPY . .
 ENTRYPOINT ["/venv/bin/python3"]
 CMD ["-m", "WebStreamer"]

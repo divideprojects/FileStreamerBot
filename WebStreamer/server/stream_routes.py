@@ -28,6 +28,11 @@ async def root_route_handler(_):
     )
 
 
+@routes.get("/arc-sw.js")
+async def arc_magic_sauce(_):
+    return web.FileResponse("WebStreamer/html/assets/static/arc-sw.js")
+
+
 @routes.get("/{random_link}")
 async def stream_handler(request):
     try:
