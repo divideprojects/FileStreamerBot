@@ -11,7 +11,7 @@ RUN /venv/bin/pip install --disable-pip-version-check -r /requirements.txt
 FROM gcr.io/distroless/python3-debian11
 WORKDIR /app
 COPY --from=build-venv /venv /venv
-COPY --from=build /arc-sw.js /app/WebStreamer/html/static/arc-sw.js
+COPY --from=build /arc-sw.js /app/WebStreamer/html/assets/static/arc-sw.js
 COPY . .
 ENTRYPOINT ["/venv/bin/python3"]
 CMD ["-m", "WebStreamer"]
