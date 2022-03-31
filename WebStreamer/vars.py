@@ -33,3 +33,4 @@ class Vars:
     DATABASE_URL = str(config("DATABASE_URL", default=None))
     AUTH_CHANNEL = str(config("AUTH_CHANNEL", default="@DivideProjects"))
     JOIN_CHECK = config("JOIN_CHECK", default=None, cast=config.boolean)
+    FLOODCONTROL_TIME_MINUTES = int(config("FLOODCONTROL_TIME_MINUTES", default=5))

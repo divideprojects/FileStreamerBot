@@ -27,7 +27,7 @@ msg_text = """
 <i>@DivideProjects </i>
 """
 
-ttl_dict = TTLCache(maxsize=512, ttl=(5 * 60))
+ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60))
 
 
 @StreamBot.on_message(
