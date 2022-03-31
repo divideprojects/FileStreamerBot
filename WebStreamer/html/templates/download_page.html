@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>FileStreamBot - DivideProjects</title>
+    <title>FileStreamBot - Download Page</title>
     <meta
       name="description"
       content="Download website for FileStreamBot, wait for a few seconds to download your content."
@@ -23,18 +23,35 @@
 
     <link rel="icon" href="assets/img/favicon.png" />
     <link rel="icon" href="assets/img/favicon.png" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="assets/img//apple-touch-icon.png" />
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+
     <script async src="https://arc.io/widget.min.js#iV2ngVtF"></script>
+    <style>
+      .btn {
+        background-color: DodgerBlue;
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        cursor: pointer;
+        font-size: 20px;
+      }
+
+      /* Darker background on mouse-over */
+      .btn:hover {
+        background-color: RoyalBlue;
+      }
+    </style>
   </head>
 
   <body>
-    Status: {{ status }}
+    <b>Press the button below to download the file!</b>
     <br />
-    Maintained By: <a href="https://t.me/{{ maintainer }}">@{{ maintainer }}</a>
-    <br />
-    Uptime: {{ uptime }}
-    <br />
-    Bot Username:
-    <a href="https://t.me/{{ bot_username }}">@{{ bot_username }}</a>
+    <button
+      class="btn"
+      onclick="window.open('{{ download_link }}')"
+      style="width: 100%"
+    >
+      <i class="fas fa-download"></i> Download
+    </button>
   </body>
 </html>

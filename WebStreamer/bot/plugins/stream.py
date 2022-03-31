@@ -76,7 +76,8 @@ Please wait while I process your file ...
             file_size = "nil"
             file_name = "photo"
 
-        short_link = stream_link
+        # added '.html' at end to redirect to custom download page
+        short_link = stream_link + ".html"
 
         await log_msg.reply_text(
             text=(

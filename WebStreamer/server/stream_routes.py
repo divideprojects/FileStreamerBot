@@ -23,9 +23,9 @@ routes = web.RouteTableDef()
 async def index_handler(_):
     return {
         "status": "Active",
-        "maintainer": "<a href='https://t.me/DivideProjects'>@DivideProjects</a>",
+        "maintainer": "DivideProjects",
         "uptime": get_readable_time(time() - StartTime),
-        "bot_username": "<a href='https://t.me/GetPublicLink_Robot'>@GetPublicLink_Robot</a>",
+        "bot_username": "GetPublicLink_Robot",
     }
 
 
@@ -35,19 +35,31 @@ async def arc_magic_sauce(_):
     return web.FileResponse("/app/WebStreamer/html/assets/static/arc-sw.js")
 
 
+# custom download page
+@routes.get("/{random_link}.html")
+@template("download_page.html")
+async def stream_handler(request):
+    try:
+        random_link = request.match_info["random_link"]
+        return {"download_link": f"{Vars.URL}/{random_link}"}
+    except ValueError as ef:
+        LOGGER.error(ef)
+        raise web.HTTPNotFound
+
+
+# actual download link
 @routes.get("/{random_link}")
 async def stream_handler(request):
     try:
         random_link = request.match_info["random_link"]
         message_id, valid, valid_upto = await Downloads().get_msg_id(random_link)
         if not valid:
-            mybot = await StreamBot.get_me()
             if int(message_id) == 0:
                 return web.json_response(
                     {
                         "status": "not found",
                         "maintained_by": "@DivideProjects",
-                        "telegram_bot": f"@{mybot.username}",
+                        "telegram_bot": "@GetPublicLink_Robot",
                     },
                     status=404,
                 )
@@ -56,7 +68,7 @@ async def stream_handler(request):
                     "status": "download_link_expired",
                     "expired_time": str(valid_upto),
                     "maintained_by": "@DivideProjects",
-                    "telegram_bot": f"@{mybot.username}",
+                    "telegram_bot": "@GetPublicLink_Robot",
                 },
                 status=410,
             )
