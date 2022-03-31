@@ -13,21 +13,23 @@ from WebStreamer.utils.custom_dl import TGCustomYield, chunk_size, offset_fix
 from WebStreamer.utils.time_format import get_readable_time
 from WebStreamer.vars import Vars
 
+from aiohttp_jinja2 import template
+
 routes = web.RouteTableDef()
 
 
 @routes.get("/", allow_head=True)
-async def root_route_handler(_):
-    return web.json_response(
-        {
-            "status": "running",
-            "maintained_by": "@DivideProjects",
-            "uptime": get_readable_time(time() - StartTime),
-            "telegram_bot": "@" + (await StreamBot.get_me()).username,
-        },
-    )
+@template("index.html")
+async def index_handler(_):
+    return {
+        "status": "Active",
+        "maintainer": "<a href='https://t.me/DivideProjects'>@DivideProjects</a>",
+        "uptime": get_readable_time(time() - StartTime),
+        "bot_username": "<a href='https://t.me/GetPublicLink_Robot'>@GetPublicLink_Robot</a>",
+    }
 
 
+# this is a hack used to serve arc io magic sauce
 @routes.get("/arc-sw.js")
 async def arc_magic_sauce(_):
     return web.FileResponse("/app/WebStreamer/html/assets/static/arc-sw.js")

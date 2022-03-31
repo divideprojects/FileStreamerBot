@@ -17,6 +17,7 @@ motor = "^2.5.1"
 pyshorteners = "^1.0.1"
 cachetools = "^5.0.0"
 prettyconf = "^2.2.1"
+aiohttp-jinja2 = "^1.5"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3"
