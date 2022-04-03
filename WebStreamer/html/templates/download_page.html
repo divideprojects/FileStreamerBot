@@ -19,11 +19,6 @@
       property="og:description"
       content="Download website for FileStreamBot, wait for a few seconds to download your content."
     />
-    <meta property="og:image" content="assets/img/favicon.png" />
-
-    <link rel="icon" href="assets/img/favicon.png" />
-    <link rel="icon" href="assets/img/favicon.png" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
 
     <script async src="https://arc.io/widget.min.js#iV2ngVtF"></script>
     <script
@@ -33,6 +28,8 @@
       data-ackee-domain-id="76b6ce15-fbd8-4187-b822-ae4798fa38ed"
       data-ackee-opts='{ "detailed": true }'
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-hcaptcha"></script>
+
     <style>
       .btn {
         background-color: DodgerBlue;
@@ -43,9 +40,11 @@
         font-size: 20px;
       }
 
-      /* Darker background on mouse-over */
-      .btn:hover {
-        background-color: RoyalBlue;
+      button:disabled,
+      button[disabled] {
+        border: 1px solid #999999;
+        background-color: #cccccc;
+        color: #666666;
       }
     </style>
   </head>
@@ -53,12 +52,35 @@
   <body>
     <b>Press the button below to download the file!</b>
     <br />
+
+    <h-captcha
+      id="signupCaptcha"
+      site-key="b349154f-f7b7-4752-bcfd-187cb50f4b75"
+    >
+    </h-captcha>
+
     <button
+      id="vBtn"
       class="btn"
       onclick="window.open('{{ download_link }}')"
       style="width: 100%"
+      disabled="true"
     >
       <i class="fas fa-download"></i> Download
     </button>
+
+    <script type="text/javascript">
+      const signupCaptcha = document.getElementById("signupCaptcha");
+      const btn = document.getElementById("vBtn");
+
+      signupCaptcha.addEventListener("verified", (e) => {
+        console.log("verified event");
+        btn.disabled = false;
+      });
+      signupCaptcha.addEventListener("error", (e) => {
+        console.log("error event", { error: e.error });
+        btn.disabled = true;
+      });
+    </script>
   </body>
 </html>
