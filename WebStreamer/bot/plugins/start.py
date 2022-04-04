@@ -11,7 +11,7 @@ I'm File streamer Bot!
 
 <i>Click on the below buttons to learn more!</i>
 
-<b><u>WARNING:</u></b> <i>NSFW Content will lead to ban!</i>
+<b><u>WARNING:</u></b> <i>NSFW content will lead to ban!</i>
 """
 
 HELPTEXT = """
