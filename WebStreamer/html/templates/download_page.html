@@ -2,24 +2,7 @@
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <title>FileStreamBot - Download Page</title>
-    <meta
-      name="description"
-      content="Download website for FileStreamBot, wait for a few seconds to download your content."
-    />
-    <meta name="author" content="DivideProjects" />
-
-    <meta property="og:title" content="Download website for FileStreamBot" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://divkix.me" />
-    <meta
-      property="og:description"
-      content="Download website for FileStreamBot, wait for a few seconds to download your content."
-    />
-
     <script async src="https://arc.io/widget.min.js#iV2ngVtF"></script>
     <script
       async
@@ -28,8 +11,7 @@
       data-ackee-domain-id="76b6ce15-fbd8-4187-b822-ae4798fa38ed"
       data-ackee-opts='{ "detailed": true }'
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-hcaptcha"></script>
-
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
     <style>
       .btn {
         background-color: DodgerBlue;
@@ -39,7 +21,6 @@
         cursor: pointer;
         font-size: 20px;
       }
-
       button:disabled,
       button[disabled] {
         border: 1px solid #999999;
@@ -50,15 +31,11 @@
   </head>
 
   <body>
-    <b>Press the button below to download the file!</b>
-    <br />
-
-    <h-captcha
-      id="signupCaptcha"
-      site-key="b349154f-f7b7-4752-bcfd-187cb50f4b75"
-    >
-    </h-captcha>
-
+    <div
+      class="h-captcha"
+      data-sitekey="b349154f-f7b7-4752-bcfd-187cb50f4b75"
+      data-callback="onSubmit"
+    ></div>
     <button
       id="vBtn"
       class="btn"
@@ -69,18 +46,41 @@
       <i class="fas fa-download"></i> Download
     </button>
 
-    <script type="text/javascript">
-      const signupCaptcha = document.getElementById("signupCaptcha");
-      const btn = document.getElementById("vBtn");
-
-      signupCaptcha.addEventListener("verified", (e) => {
-        console.log("verified event");
+    <script>
+      function onSubmit(token) {
+        const btn = document.getElementById("vBtn");
         btn.disabled = false;
-      });
-      signupCaptcha.addEventListener("error", (e) => {
-        console.log("error event", { error: e.error });
-        btn.disabled = true;
-      });
+        console.log("Response Token: ", token);
+        sendPostReq(token);
+      }
+
+      function sendPostReq(rToken) {
+        const url = "https://hcaptcha.com/siteverify";
+        // const url = "https://httpbin.org/post";
+        const jsonData = {
+          response: rToken,
+          secret: "0x622965962F316d443F7cc9B9AA2402f222becea9",
+        };
+        var options = {
+          method: "POST",
+          body: JSON.stringify(jsonData),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        };
+
+        fetch(url, options)
+          .then((data) => data.json())
+          .then(function (data) {
+            const success = data["success"];
+            if (success) {
+              console.log("Captcha Solve Success");
+            } else {
+              console.log("Captcha Solve Failed:\n", data);
+            }
+          })
+          .catch((err) => console.error("Error: ", err));
+      }
     </script>
   </body>
 </html>
