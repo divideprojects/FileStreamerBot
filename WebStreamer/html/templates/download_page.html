@@ -54,6 +54,7 @@
       function onSubmit(token) {
         const btn = document.getElementById("vBtn");
         console.log("Response Token: ", token);
+        btn.disabled = false;
         sendPostReq(token, btn);
       }
 
