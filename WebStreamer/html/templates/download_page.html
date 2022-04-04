@@ -4,6 +4,7 @@
   <head>
     <title>FileStreamBot - Download Page</title>
     <script async src="https://arc.io/widget.min.js#iV2ngVtF"></script>
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
     <script
       async
       src="https://ackee.divkix.me/tracker.js"
@@ -11,8 +12,19 @@
       data-ackee-domain-id="76b6ce15-fbd8-4187-b822-ae4798fa38ed"
       data-ackee-opts='{ "detailed": true }'
     ></script>
-    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
     <style>
+      html,
+      body {
+        height: 100%;
+      }
+      html {
+        display: table;
+        margin: auto;
+      }
+      body {
+        display: table-cell;
+        vertical-align: middle;
+      }
       .btn {
         background-color: DodgerBlue;
         border: none;
@@ -32,21 +44,22 @@
   <body>
     <div style="text-align: center">
       <b>Please verify the captcha to download the file!</b>
-      </br>
-      </br>
+      <br />
+      <br />
       <div
         class="h-captcha"
         data-sitekey="b349154f-f7b7-4752-bcfd-187cb50f4b75"
         data-callback="onSubmit"
       ></div>
+      <br />
       <button
         id="vBtn"
         class="btn"
         onclick="window.open('{{ download_link }}')"
-        style="width: 60%"
+        style="width: 100%"
         disabled="true"
       >
-        <i class="fas fa-download"></i> Download
+        Download
       </button>
     </div>
 
@@ -58,7 +71,8 @@
       }
 
       function sendPostReq(rToken, btn) {
-        const url = "https://cors-anywhere.herokuapp.com/https://hcaptcha.com/siteverify";
+        const url =
+          "https://cors-anywhere.herokuapp.com/https://hcaptcha.com/siteverify";
         const secret = "0x622965962F316d443F7cc9B9AA2402f222becea9";
         var options = {
           method: "POST",
