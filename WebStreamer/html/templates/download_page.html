@@ -38,10 +38,10 @@
         const btn = document.getElementById("vBtn");
         console.log("Response Token: ", token);
         // enable the button after the captcha is solved
-        if (token) {
-          btn.disabled = false;
-          btn.style.color = "white";
-        }
+        // if (token) {
+        //   btn.disabled = false;
+        //   btn.style.color = "white";
+        // }
         sendPostReq(token, btn);
       }
       function sendPostReq(rToken, btn) {
