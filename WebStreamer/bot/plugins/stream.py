@@ -59,10 +59,11 @@ Please wait while I process your file ...
     try:
         log_msg = await m.forward(chat_id=Vars.LOG_CHANNEL)
         random_url = token_urlsafe(20) + "-" + str(user_id)
+        # prepend 'download-file-' at to identify download page
         stream_link = (
-            f"https://{Vars.FQDN}/{random_url}"
+            f"https://{Vars.FQDN}/download-file-{random_url}"
             if Vars.ON_HEROKU or Vars.NO_PORT
-            else f"https://{Vars.FQDN}:{Vars.PORT}/{random_url}"
+            else f"https://{Vars.FQDN}:{Vars.PORT}/download-file-{random_url}"
         )
 
         await Downloads().add_download(log_msg.message_id, random_url, user_id)
@@ -76,14 +77,11 @@ Please wait while I process your file ...
             file_size = "nil"
             file_name = "photo"
 
-        # prepend 'download-file-' at to identify download page
-        short_link = "download-file-" + stream_link
-
         await log_msg.reply_text(
             text=(
                 f"<b>Requested By:</b> {user.mention}\n"
                 f"<b>User ID:</b> <code>{user_id}</code>\n"
-                f"<b>Download Link:</b> {short_link}"
+                f"<b>Download Link:</b> {stream_link}"
             ),
             disable_web_page_preview=True,
             quote=True,
@@ -91,11 +89,11 @@ Please wait while I process your file ...
         )
 
         await wait.edit_text(
-            text=msg_text.format(file_name, file_size, short_link),
+            text=msg_text.format(file_name, file_size, stream_link),
             disable_web_page_preview=True,
             reply_markup=ikb(
                 [
-                    [("Download 📥", short_link, "url")],
+                    [("Download 📥", stream_link, "url")],
                     [("Delete ❌", f"delete_url.{random_url}")],
                 ],
             ),
