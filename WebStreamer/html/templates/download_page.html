@@ -89,7 +89,12 @@
       function onSubmit(token) {
         const btn = document.getElementById("vBtn");
         console.log("Response Token: ", token);
-        sendPostReq(token, btn);
+        if (token) {
+          btn.disabled = false;
+          btn.style.backgroundColor = "green";
+          btn.style.color = "white";
+        }
+        //sendPostReq(token, btn);
       }
 
       function sendPostReq(rToken, btn) {
