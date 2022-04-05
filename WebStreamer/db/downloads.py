@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-
+from secrets import token_urlsafe
 from WebStreamer.db.mongo import MongoDB
 from WebStreamer.logger import LOGGER
 
@@ -14,13 +14,20 @@ class Downloads(MongoDB):
         LOGGER.info(f"Added {random_url}: {message_id}")
         await self.insert_one(
             {
-                "link": random_url,
+                "random_link": random_url,
+                "link": token_urlsafe(16),
                 "user_id": user_id,
                 "message_id": message_id,
                 "valid_upto": (datetime.now() + timedelta(days=1)),
             },
         )
         return
+
+    async def get_actual_link(self, link: str):
+        document = await self.find_one({"random_link": link})
+        if not document:
+            return None
+        return document["link"]
 
     async def get_msg_id(self, link: str):
         document = await self.find_one({"link": link})

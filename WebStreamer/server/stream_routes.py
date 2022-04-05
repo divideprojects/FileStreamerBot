@@ -41,18 +41,19 @@ async def arc_magic_sauce(_):
 async def stream_handler(request):
     try:
         random_link = request.match_info["random_link"]
-        return {"download_link": f"{Vars.URL}/{random_link}"}
+        real_link = await Downloads().get_actual_link(random_link)
+        return {"download_link": Vars.URL + real_link}
     except ValueError as ef:
         LOGGER.error(ef)
         raise web.HTTPNotFound
 
 
 # actual download link
-@routes.get("/{random_link}")
+@routes.get("/{real_link}")
 async def stream_handler(request):
     try:
-        random_link = request.match_info["random_link"]
-        message_id, valid, valid_upto = await Downloads().get_msg_id(random_link)
+        real_link = request.match_info["real_link"]
+        message_id, valid, valid_upto = await Downloads().get_msg_id(real_link)
         if not valid:
             if int(message_id) == 0:
                 return web.json_response(
