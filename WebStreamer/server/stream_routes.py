@@ -36,7 +36,7 @@ async def arc_magic_sauce(_):
 
 
 # custom download page
-@routes.get("/{random_link}.html")
+@routes.get("/download-file-{random_link}")
 @template("download_page.html")
 async def stream_handler(request):
     try:
