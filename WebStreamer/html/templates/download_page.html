@@ -33,6 +33,17 @@
       data-ackee-domain-id="76b6ce15-fbd8-4187-b822-ae4798fa38ed"
       data-ackee-opts='{ "detailed": true }'
     ></script>
+    <script>
+      function onSubmit(token) {
+        const btn = document.getElementById("vBtn");
+        console.log("Response Token: ", token);
+        // enable the button after the captcha is solved
+        if (token) {
+          btn.disabled = false;
+          btn.style.color = "white";
+        }
+      }
+    </script>
 
     <style>
       html,
@@ -84,47 +95,5 @@
         Download
       </button>
     </div>
-
-    <script>
-      function onSubmit(token) {
-        const btn = document.getElementById("vBtn");
-        console.log("Response Token: ", token);
-        if (token) {
-          btn.disabled = false;
-          btn.style.backgroundColor = "green";
-          btn.style.color = "white";
-        }
-        //sendPostReq(token, btn);
-      }
-
-      function sendPostReq(rToken, btn) {
-        const url = "https://hcaptcha.com/siteverify";
-        const secret = "0x622965962F316d443F7cc9B9AA2402f222becea9";
-        var options = {
-          mode: "no-cors",
-          method: "POST",
-          body: `response=${rToken}&secret=${secret}`,
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        };
-
-        fetch(url, options)
-          .then((data) => data.json())
-          .then(function (data) {
-            const success = data["success"];
-            if (success) {
-              console.log("Captcha Solve Success");
-              // enable download button
-              btn.disabled = false;
-            } else {
-              console.log("Captcha Solve Failed:\n", data);
-              // reload captcha
-              location.reload();
-            }
-          })
-          .catch((err) => console.error("Error: ", err));
-      }
-    </script>
   </body>
 </html>
