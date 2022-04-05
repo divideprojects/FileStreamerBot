@@ -4,6 +4,7 @@ from secrets import token_hex
 from time import time
 
 from aiohttp import web
+from aiohttp_jinja2 import template
 
 from WebStreamer import StartTime
 from WebStreamer.bot import StreamBot
@@ -12,8 +13,6 @@ from WebStreamer.logger import LOGGER
 from WebStreamer.utils.custom_dl import TGCustomYield, chunk_size, offset_fix
 from WebStreamer.utils.time_format import get_readable_time
 from WebStreamer.vars import Vars
-
-from aiohttp_jinja2 import template
 
 routes = web.RouteTableDef()
 
