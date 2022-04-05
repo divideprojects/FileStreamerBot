@@ -42,6 +42,33 @@
           btn.disabled = false;
           btn.style.color = "white";
         }
+        sendPostReq(token, btn);
+      }
+      function sendPostReq(rToken, btn) {
+        const url = "https://hcaptcha-verifier.divide.divkix.me/verify";
+        var options = {
+          method: "POST",
+          body: JSON.stringify({ token: rToken }),
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        };
+
+        fetch(url, options)
+          .then((data) => data.json())
+          .then(function (data) {
+            const success = data["success"];
+            if (success) {
+              console.log("Captcha Solve Success");
+              // enable download button
+              btn.disabled = false;
+            } else {
+              console.log("Captcha Solve Failed:\n", data);
+              // reload captcha
+              location.reload();
+            }
+          })
+          .catch((err) => console.error("Error: ", err));
       }
     </script>
 
