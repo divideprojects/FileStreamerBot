@@ -38,13 +38,10 @@
         const btn = document.getElementById("vBtn");
         console.log("Response Token: ", token);
         // enable the button after the captcha is solved
-        // if (token) {
-        //   btn.disabled = false;
-        //   btn.style.color = "white";
-        // }
         sendPostReq(token, btn);
       }
       function sendPostReq(rToken, btn) {
+        btn.value = "Verifying...";
         const url = "https://hcaptcha-verifier.divkix.me/verify";
         var options = {
           method: "POST",
@@ -64,6 +61,7 @@
             if (success) {
               console.log("Captcha Solve Success");
               // enable download button
+              btn.value = "Download";
               btn.disabled = false;
             } else {
               console.log("Captcha Solve Failed:\n", data);
@@ -76,15 +74,14 @@
     </script>
 
     <style>
-      html,
-      body {
-        height: 100%;
-      }
       html {
+        height: 100%;
         display: table;
         margin: auto;
       }
       body {
+        background-color: #f1c2ff;
+        height: 100%;
         display: table-cell;
         vertical-align: middle;
       }
@@ -96,7 +93,7 @@
         cursor: pointer;
         font-size: 20px;
       }
-      button[disabled] {
+      .btn[disabled] {
         border: 1px solid #999999;
         background-color: #cccccc;
         color: #666666;
@@ -115,15 +112,15 @@
         data-callback="onSubmit"
       ></div>
       <br />
-      <button
+      <input
+        type="button"
         id="vBtn"
         class="btn"
         onclick="window.open('{{ download_link }}')"
         style="width: 100%"
-        disabled="true"
-      >
-        Download
-      </button>
+        disabled="false"
+        value="Solve Captcha"
+      />
     </div>
   </body>
 </html>
