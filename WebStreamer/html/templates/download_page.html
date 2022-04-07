@@ -65,8 +65,8 @@
               btn.disabled = false;
             } else {
               console.log("Captcha Solve Failed:\n", data);
-              // reload captcha
-              // location.reload();
+              // send a alert to reload te page
+              alert("Captcha Failed, Please Reload the page and Try Again!");
             }
           })
           .catch((err) => console.error("Error: ", err));
@@ -80,7 +80,7 @@
         margin: auto;
       }
       body {
-        background-color: #f1c2ff;
+        /* background-color: #f1c2ff; */
         height: 100%;
         display: table-cell;
         vertical-align: middle;
@@ -98,11 +98,14 @@
         background-color: #cccccc;
         color: #666666;
       }
+      divBody {
+        text-align: center;
+      }
     </style>
   </head>
 
   <body>
-    <div style="text-align: center">
+    <div class="divBody">
       <b>Please verify the captcha to download the file!</b>
       <br />
       <br />
