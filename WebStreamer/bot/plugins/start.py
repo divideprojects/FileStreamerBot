@@ -1,4 +1,5 @@
 from pyrogram import filters
+from pyrogram.enums import ParseMode
 from pyrogram.types import CallbackQuery, Message
 
 from WebStreamer.bot import StreamBot
@@ -53,23 +54,23 @@ class Btns:
     back = ("Back", "gotohome")
 
 
-@StreamBot.on_message(filters.command("start") & filters.private & ~filters.edited)
+@StreamBot.on_message(filters.command("start") & filters.private)
 @joinCheck()
 async def start(_, m: Message):
     return await m.reply_text(
         text=PMTEXT.format(m.from_user.mention),
-        parse_mode="html",
+        parse_mode=ParseMode.HTML,
         disable_web_page_preview=True,
         reply_markup=ikb([Btns.channel_and_group, [Btns.about_me, Btns.help_me]]),
     )
 
 
-@StreamBot.on_message(filters.command("help") & filters.private & ~filters.edited)
+@StreamBot.on_message(filters.command("help") & filters.private)
 @joinCheck()
 async def help_handler(_, m: Message):
     return await m.reply_text(
         HELPTEXT,
-        parse_mode="html",
+        parse_mode=ParseMode.HTML,
         reply_markup=ikb([[Btns.back]]),
     )
 
@@ -82,21 +83,21 @@ async def button(_, m: CallbackQuery):
     if cb_data == "aboutbot":
         await msg.edit(
             text=ABOUT,
-            parse_mode="html",
+            parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
             reply_markup=ikb([[Btns.back]]),
         )
     elif cb_data == "helptext":
         await msg.edit(
             text=HELPTEXT,
-            parse_mode="html",
+            parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
             reply_markup=ikb([[Btns.back]]),
         )
     elif cb_data == "gotohome":
         await msg.edit(
             text=PMTEXT.format(msg.from_user.mention),
-            parse_mode="html",
+            parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
             reply_markup=ikb([Btns.channel_and_group, [Btns.about_me, Btns.help_me]]),
         )

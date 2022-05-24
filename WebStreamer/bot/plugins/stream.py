@@ -32,8 +32,7 @@ ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60))
 
 @StreamBot.on_message(
     filters.private
-    & (filters.document | filters.video | filters.audio | filters.photo)
-    & ~filters.edited,
+    & (filters.document | filters.video | filters.audio | filters.photo),
     group=4,
 )
 @joinCheck()
@@ -66,7 +65,7 @@ Please wait while I process your file ...
             else f"https://{Vars.FQDN}:{Vars.PORT}/download-file-{random_url}"
         )
 
-        await Downloads().add_download(log_msg.message_id, random_url, user_id)
+        await Downloads().add_download(log_msg.id, random_url, user_id)
 
         # Only get file size if it's a file, different for photos
         doc = m.document or m.audio or m.video
@@ -103,12 +102,12 @@ Please wait while I process your file ...
         ttl_dict[user_id] = time() + int(5 * 60)
 
     except FloodWait as e:
-        LOGGER.info(f"Sleeping for {str(e.x)}s")
-        await sleep(e.x)
+        LOGGER.info(f"Sleeping for {str(e.value)}s")
+        await sleep(e.value)
         await c.send_message(
             chat_id=Vars.LOG_CHANNEL,
             text=(
-                f"FloodWait {e.x}s from {user.mention}\n\n"
+                f"FloodWait {e.value}s from {user.mention}\n\n"
                 f"<b>User ID:</b> <code>{user_id}</code>"
             ),
             disable_web_page_preview=True,
@@ -119,14 +118,13 @@ Please wait while I process your file ...
 async def delete_download(_, q: CallbackQuery):
     user_id = q.from_user.id
     msg = q.message
-    msg_text = ""
     url = str(q.data.split(".")[-1])
     deleted = await Downloads().delete_download(url, user_id)
 
-    msg_text = (
+    _text = (
         "<b>Deleted the file permanently from my server!</b>"
         if deleted
-        else ("<b>Error:</b>\nCould not delete download, please contact my developers!")
+        else "<b>Error:</b>\nCould not delete download, please contact my developers!"
     )
-    await msg.edit_text(msg_text)
+    await msg.edit_text(_text)
     await q.answer("Operation Complete!")
