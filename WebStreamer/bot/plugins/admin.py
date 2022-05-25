@@ -18,10 +18,7 @@ broadcast_ids = {}
 
 
 @StreamBot.on_message(
-    filters.command("status")
-    & filters.private
-    & filters.user(Vars.OWNER_ID)
-    & ~filters.edited,
+    filters.command("status") & filters.private & filters.user(Vars.OWNER_ID),
 )
 async def status(_, m: Message):
     dl = Downloads()
@@ -59,13 +56,12 @@ async def status(_, m: Message):
     filters.command("broadcast")
     & filters.private
     & filters.user(Vars.OWNER_ID)
-    & filters.reply
-    & ~filters.edited,
+    & filters.reply,
 )
 async def broadcast_(_, m: Message):
     all_users = await Users().get_all_users()
     broadcast_msg = m.reply_to_message
-    while True:
+    while 1:
         broadcast_id = "".join(choice(ascii_letters) for _ in range(3))
         if not broadcast_ids.get(broadcast_id):
             break

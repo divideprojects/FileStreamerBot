@@ -1,3 +1,4 @@
+from pyrogram.enums import ChatMemberStatus
 from pyrogram.errors import UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -34,11 +35,15 @@ def joinCheck():
                         ],
                     ),
                 )
-            if get.status in ("restricted", "kicked"):
+            if get.status in (ChatMemberStatus.RESTRICTED, ChatMemberStatus.BANNED):
                 return await m.reply_text(
                     f"You were banned from using me. If you think this is a mistake then report this at {Vars.SUPPORT_GROUP}",
                 )
-            if not get.status in ("creator", "administrator", "member"):
+            if get.status not in (
+                ChatMemberStatus.OWNER,
+                ChatMemberStatus.ADMINISTRATOR,
+                ChatMemberStatus.MEMBER,
+            ):
                 return await m.reply_text(
                     f"You need to Join {Vars.AUTH_CHANNEL} to use me.",
                     reply_markup=InlineKeyboardMarkup(
