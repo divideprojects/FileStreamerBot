@@ -18,9 +18,7 @@ broadcast_ids = {}
 
 
 @StreamBot.on_message(
-    filters.command("status")
-    & filters.private
-    & filters.user(Vars.OWNER_ID)
+    filters.command("status") & filters.private & filters.user(Vars.OWNER_ID),
 )
 async def status(_, m: Message):
     dl = Downloads()
@@ -58,7 +56,7 @@ async def status(_, m: Message):
     filters.command("broadcast")
     & filters.private
     & filters.user(Vars.OWNER_ID)
-    & filters.reply
+    & filters.reply,
 )
 async def broadcast_(_, m: Message):
     all_users = await Users().get_all_users()
