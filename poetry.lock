@@ -108,7 +108,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "cachetools"
-version = "5.1.0"
+version = "5.2.0"
 description = "Extensible memoizing collections and decorators"
 category = "main"
 optional = false
@@ -586,7 +586,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "96038d2e8c1179064990aa8c73a6bcdce7614d9e2b2b70d49547644ff6980df0"
+content-hash = "c6f6a3f87d5a721501e6aa14beb00c295448937d6f5e897099564d8b5746d723"
 
 [metadata.files]
 aiofiles = [
@@ -713,8 +713,8 @@ black = [
     {file = "black-22.3.0.tar.gz", hash = "sha256:35020b8886c022ced9282b51b5a875b6d1ab0c387b31a065b84db7c33085ca79"},
 ]
 cachetools = [
-    {file = "cachetools-5.1.0-py3-none-any.whl", hash = "sha256:4ebbd38701cdfd3603d1f751d851ed248ab4570929f2d8a7ce69e30c420b141c"},
-    {file = "cachetools-5.1.0.tar.gz", hash = "sha256:8b3b8fa53f564762e5b221e9896798951e7f915513abf2ba072ce0f07f3f5a98"},
+    {file = "cachetools-5.2.0-py3-none-any.whl", hash = "sha256:f9f17d2aec496a9aa6b76f53e3b614c965223c061982d434d160f930c698a9db"},
+    {file = "cachetools-5.2.0.tar.gz", hash = "sha256:6a94c6402995a99c3970cc7e4884bb60b4a8639938157eeed436098bf9831757"},
 ]
 certifi = [
     {file = "certifi-2022.5.18.1-py3-none-any.whl", hash = "sha256:f1d53542ee8cbedbe2118b5686372fb33c297fcd6379b050cca0ef13a597382a"},
