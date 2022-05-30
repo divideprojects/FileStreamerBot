@@ -14,15 +14,15 @@ dnspython = "^2.2.1"
 requests = "^2.27.1"
 motor = "^3.0.0"
 pyshorteners = "^1.0.1"
-cachetools = "^5.1.0"
+cachetools = "^5.2.0"
 prettyconf = "^2.2.1"
 aiohttp-jinja2 = "^1.5"
 
 [tool.poetry.dev-dependencies]
-black = "^22.3"
+black = "^22.3.0"
 pre-commit = "^2.19.0"
 isort = "^5.10.1"
-pylint = "^2.13.8"
+pylint = "^2.13.9"
 pyclean = "^2.2.0"
 
 [build-system]
