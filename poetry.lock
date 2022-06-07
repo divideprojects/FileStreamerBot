@@ -395,7 +395,7 @@ python-versions = "*"
 
 [[package]]
 name = "pylint"
-version = "2.14.0"
+version = "2.14.1"
 description = "python code static checker"
 category = "dev"
 optional = false
@@ -596,7 +596,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "4ebf96fc86599e6afdedea71276ec55240158fc8c179974ba9129692d6fda6a0"
+content-hash = "b3e943ce25a99d707fde6c384c294be67fd9e7f291b119a359f290d12d17a5bb"
 
 [metadata.files]
 aiofiles = [
@@ -1020,8 +1020,8 @@ pyclean = [
     {file = "pyclean-2.2.0.tar.gz", hash = "sha256:48f1801804fa2f04f2c64348da8bd61797fc9722e1120c470d5cc67a205843c7"},
 ]
 pylint = [
-    {file = "pylint-2.14.0-py3-none-any.whl", hash = "sha256:ef64ce5d4c17b8906caeaf2c2914ef3036a3a1b7f4a86f5fbf6caff9067c5f63"},
-    {file = "pylint-2.14.0.tar.gz", hash = "sha256:10d291ea5133645f73fc1b51ca137ad6531223c1461a5632a1db029a9bc033b5"},
+    {file = "pylint-2.14.1-py3-none-any.whl", hash = "sha256:bb71e6d169506de585edea997e48d9ff20c0dc0e2fbc1d166bad6b640120326b"},
+    {file = "pylint-2.14.1.tar.gz", hash = "sha256:549261e0762c3466cc001024c4419c08252cb8c8d40f5c2c6966fea690e7fe2a"},
 ]
 pymongo = [
     {file = "pymongo-4.1.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:eff9818b7671a55f1ce781398607e0d8c304cd430c0581fbe15b868a7a371c27"},
