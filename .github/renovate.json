@@ -2,18 +2,34 @@
   "extends": [
     "config:base"
   ],
+  "assigneesFromCodeOwners": true,
   "packageRules": [
     {
-      "updateTypes": [
+      "matchPackagePatterns": [
+        "*"
+      ],
+      "matchUpdateTypes": [
         "minor",
-        "patch",
-        "pin",
-        "digest"
+        "patch"
       ],
-      "matchDepTypes": [
-        "devDependencies"
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch",
+      "automerge": true,
+      "labels": [
+        "dependencies"
+      ]
+    },
+    {
+      "matchPackagePatterns": [
+        "*"
       ],
-      "automerge": true
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "dependencies",
+        "breaking"
+      ]
     }
   ]
 }
