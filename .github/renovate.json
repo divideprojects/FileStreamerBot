@@ -10,6 +10,9 @@
         "pin",
         "digest"
       ],
+      "matchDepTypes": [
+        "devDependencies"
+      ],
       "automerge": true
     }
   ]
