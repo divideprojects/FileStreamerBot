@@ -22,7 +22,7 @@ aiohttp-jinja2 = "^1.5"
 black = "^22.3.0"
 pre-commit = "^2.19.0"
 isort = "^5.10.1"
-pylint = "^2.14.1"
+pylint = "^2.14.2"
 pyclean = "^2.2.0"
 
 [build-system]
