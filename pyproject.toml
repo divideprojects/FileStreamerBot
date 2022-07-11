@@ -20,7 +20,7 @@ aiohttp-jinja2 = "^1.5"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
-pre-commit = "^2.19.0"
+pre-commit = "^2.20.0"
 isort = "^5.10.1"
 pylint = "^2.14.4"
 pyclean = "^2.2.0"
