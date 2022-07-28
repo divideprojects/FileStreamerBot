@@ -65,7 +65,12 @@ Please wait while I process your file ...
             else f"https://{Vars.FQDN}:{Vars.PORT}/download-file-{random_url}"
         )
 
-        direct_link = await Downloads().add_download(log_msg.id, random_url, user_id)
+        __direct_link = await Downloads().add_download(log_msg.id, random_url, user_id)
+        direct_link = (
+            f"https://{Vars.FQDN}/{__direct_link}"
+            if Vars.ON_HEROKU or Vars.NO_PORT
+            else f"https://{Vars.FQDN}:{Vars.PORT}/{__direct_link}"
+        )
 
         # Only get file size if it's a file, different for photos
         doc = m.document or m.audio or m.video
@@ -78,10 +83,10 @@ Please wait while I process your file ...
 
         await log_msg.reply_text(
             text=(
-                f"<b>Requested By:</b> {user.mention}\n"
-                f"<b>User ID:</b> <code>{user_id}</code>\n"
-                f"<b>Download Link:</b> {stream_link}"
-                f"<b>Direct Link:</b> {direct_link}"
+                f"<b>Requested By:</b> {user.mention}"
+                f"\n<b>User ID:</b> <code>{user_id}</code>"
+                f"\n<b>Download Link:</b> {stream_link}"
+                f"\n<b>Direct Link:</b> {direct_link}"
             ),
             disable_web_page_preview=True,
             quote=True,
