@@ -11,18 +11,19 @@ class Downloads(MongoDB):
     def __init__(self):
         super().__init__(self.db_name)
 
-    async def add_download(self, message_id: int, random_url: str, user_id: int):
+    async def add_download(self, message_id: int, random_url: str, user_id: int) -> str:
         LOGGER.info(f"Added {random_url}: {message_id}")
+        real_link = token_urlsafe(16)
         await self.insert_one(
             {
                 "random_link": random_url,
-                "link": token_urlsafe(16),
+                "link": real_link,
                 "user_id": user_id,
                 "message_id": message_id,
                 "valid_upto": (datetime.now() + timedelta(days=1)),
             },
         )
-        return
+        return real_link
 
     async def get_actual_link(self, link: str):
         document = await self.find_one({"random_link": link})

@@ -65,7 +65,7 @@ Please wait while I process your file ...
             else f"https://{Vars.FQDN}:{Vars.PORT}/download-file-{random_url}"
         )
 
-        await Downloads().add_download(log_msg.id, random_url, user_id)
+        direct_link = await Downloads().add_download(log_msg.id, random_url, user_id)
 
         # Only get file size if it's a file, different for photos
         doc = m.document or m.audio or m.video
@@ -81,6 +81,7 @@ Please wait while I process your file ...
                 f"<b>Requested By:</b> {user.mention}\n"
                 f"<b>User ID:</b> <code>{user_id}</code>\n"
                 f"<b>Download Link:</b> {stream_link}"
+                f"<b>Direct Link:</b> {direct_link}"
             ),
             disable_web_page_preview=True,
             quote=True,
