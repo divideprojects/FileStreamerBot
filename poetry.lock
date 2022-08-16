@@ -24,7 +24,7 @@ multidict = ">=4.5,<7.0"
 yarl = ">=1.0,<2.0"
 
 [package.extras]
-speedups = ["aiodns", "brotli", "cchardet"]
+speedups = ["cchardet", "brotli", "aiodns"]
 
 [[package]]
 name = "aiohttp-jinja2"
@@ -79,10 +79,10 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.extras]
-dev = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface", "furo", "sphinx", "sphinx-notfound-page", "pre-commit", "cloudpickle"]
-docs = ["furo", "sphinx", "zope.interface", "sphinx-notfound-page"]
-tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface", "cloudpickle"]
-tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "cloudpickle"]
+tests_no_zope = ["cloudpickle", "pytest-mypy-plugins", "mypy", "six", "pytest (>=4.3.0)", "pympler", "hypothesis", "coverage[toml] (>=5.0.2)"]
+tests = ["cloudpickle", "zope.interface", "pytest-mypy-plugins", "mypy", "six", "pytest (>=4.3.0)", "pympler", "hypothesis", "coverage[toml] (>=5.0.2)"]
+docs = ["sphinx-notfound-page", "zope.interface", "sphinx", "furo"]
+dev = ["cloudpickle", "pre-commit", "sphinx-notfound-page", "sphinx", "furo", "zope.interface", "pytest-mypy-plugins", "mypy", "six", "pytest (>=4.3.0)", "pympler", "hypothesis", "coverage[toml] (>=5.0.2)"]
 
 [[package]]
 name = "black"
@@ -101,10 +101,10 @@ tomli = {version = ">=1.1.0", markers = "python_full_version < \"3.11.0a7\""}
 typing-extensions = {version = ">=3.10.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
-colorama = ["colorama (>=0.4.3)"]
-d = ["aiohttp (>=3.7.4)"]
-jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
+jupyter = ["tokenize-rt (>=3.2.0)", "ipython (>=7.8.0)"]
+d = ["aiohttp (>=3.7.4)"]
+colorama = ["colorama (>=0.4.3)"]
 
 [[package]]
 name = "cachetools"
@@ -188,12 +188,12 @@ optional = false
 python-versions = ">=3.6,<4.0"
 
 [package.extras]
-dnssec = ["cryptography (>=2.6,<37.0)"]
-curio = ["curio (>=1.2,<2.0)", "sniffio (>=1.1,<2.0)"]
-doh = ["h2 (>=4.1.0)", "httpx (>=0.21.1)", "requests (>=2.23.0,<3.0.0)", "requests-toolbelt (>=0.9.1,<0.10.0)"]
-idna = ["idna (>=2.1,<4.0)"]
-trio = ["trio (>=0.14,<0.20)"]
 wmi = ["wmi (>=1.5.1,<2.0.0)"]
+trio = ["trio (>=0.14,<0.20)"]
+curio = ["sniffio (>=1.1,<2.0)", "curio (>=1.2,<2.0)"]
+doh = ["requests-toolbelt (>=0.9.1,<0.10.0)", "requests (>=2.23.0,<3.0.0)", "httpx (>=0.21.1)", "h2 (>=4.1.0)"]
+idna = ["idna (>=2.1,<4.0)"]
+dnssec = ["cryptography (>=2.6,<37.0)"]
 
 [[package]]
 name = "filelock"
@@ -204,8 +204,8 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-docs = ["furo (>=2021.8.17b43)", "sphinx (>=4.1)", "sphinx-autodoc-typehints (>=1.12)"]
-testing = ["covdefaults (>=1.2.0)", "coverage (>=4)", "pytest (>=4)", "pytest-cov", "pytest-timeout (>=1.4.2)"]
+testing = ["pytest-timeout (>=1.4.2)", "pytest-cov", "pytest (>=4)", "coverage (>=4)", "covdefaults (>=1.2.0)"]
+docs = ["sphinx-autodoc-typehints (>=1.12)", "sphinx (>=4.1)", "furo (>=2021.8.17b43)"]
 
 [[package]]
 name = "frozenlist"
@@ -243,10 +243,10 @@ optional = false
 python-versions = ">=3.6.1,<4.0"
 
 [package.extras]
-pipfile_deprecated_finder = ["pipreqs", "requirementslib"]
-requirements_deprecated_finder = ["pipreqs", "pip-api"]
-colors = ["colorama (>=0.4.3,<0.5.0)"]
 plugins = ["setuptools"]
+colors = ["colorama (>=0.4.3,<0.5.0)"]
+requirements_deprecated_finder = ["pip-api", "pipreqs"]
+pipfile_deprecated_finder = ["requirementslib", "pipreqs"]
 
 [[package]]
 name = "jinja2"
@@ -347,8 +347,8 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-docs = ["furo (>=2021.7.5b38)", "proselint (>=0.10.2)", "sphinx-autodoc-typehints (>=1.12)", "sphinx (>=4)"]
-test = ["appdirs (==1.4.4)", "pytest-cov (>=2.7)", "pytest-mock (>=3.6)", "pytest (>=6)"]
+test = ["pytest (>=6)", "pytest-mock (>=3.6)", "pytest-cov (>=2.7)", "appdirs (==1.4.4)"]
+docs = ["sphinx (>=4)", "sphinx-autodoc-typehints (>=1.12)", "proselint (>=0.10.2)", "furo (>=2021.7.5b38)"]
 
 [[package]]
 name = "pre-commit"
@@ -413,8 +413,8 @@ tomlkit = ">=0.10.1"
 typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
-spelling = ["pyenchant (>=3.2,<4.0)"]
 testutils = ["gitpython (>3)"]
+spelling = ["pyenchant (>=3.2,<4.0)"]
 
 [[package]]
 name = "pymongo"
@@ -425,17 +425,17 @@ optional = false
 python-versions = ">=3.6.2"
 
 [package.extras]
-aws = ["pymongo-auth-aws (<2.0.0)"]
-encryption = ["pymongocrypt (>=1.2.0,<2.0.0)"]
-gssapi = ["pykerberos"]
-ocsp = ["pyopenssl (>=17.2.0)", "requests (<3.0.0)", "service-identity (>=18.1.0)", "certifi"]
-snappy = ["python-snappy"]
-srv = ["dnspython (>=1.16.0,<3.0.0)"]
 zstd = ["zstandard"]
+srv = ["dnspython (>=1.16.0,<3.0.0)"]
+snappy = ["python-snappy"]
+ocsp = ["certifi", "service-identity (>=18.1.0)", "requests (<3.0.0)", "pyopenssl (>=17.2.0)"]
+gssapi = ["pykerberos"]
+encryption = ["pymongocrypt (>=1.2.0,<2.0.0)"]
+aws = ["pymongo-auth-aws (<2.0.0)"]
 
 [[package]]
 name = "pyrogram"
-version = "2.0.36"
+version = "2.0.40"
 description = "Elegant, modern and asynchronous Telegram MTProto API framework in Python for users and bots"
 category = "main"
 optional = false
@@ -491,8 +491,8 @@ idna = ">=2.5,<4"
 urllib3 = ">=1.21.1,<1.27"
 
 [package.extras]
-socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
+socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 
 [[package]]
 name = "six"
@@ -551,9 +551,9 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
 
 [package.extras]
-brotli = ["brotlicffi (>=0.8.0)", "brotli (>=1.0.9)", "brotlipy (>=0.6.0)"]
-secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "ipaddress"]
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
+secure = ["ipaddress", "certifi", "idna (>=2.0.0)", "cryptography (>=1.3.4)", "pyOpenSSL (>=0.14)"]
+brotli = ["brotlipy (>=0.6.0)", "brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
 
 [[package]]
 name = "virtualenv"
@@ -570,8 +570,8 @@ platformdirs = ">=2,<3"
 six = ">=1.9.0,<2"
 
 [package.extras]
-docs = ["proselint (>=0.10.2)", "sphinx (>=3)", "sphinx-argparse (>=0.2.5)", "sphinx-rtd-theme (>=0.4.3)", "towncrier (>=21.3)"]
-testing = ["coverage (>=4)", "coverage-enable-subprocess (>=1)", "flaky (>=3)", "pytest (>=4)", "pytest-env (>=0.6.2)", "pytest-freezegun (>=0.4.1)", "pytest-mock (>=2)", "pytest-randomly (>=1)", "pytest-timeout (>=1)", "packaging (>=20.0)"]
+testing = ["packaging (>=20.0)", "pytest-timeout (>=1)", "pytest-randomly (>=1)", "pytest-mock (>=2)", "pytest-freezegun (>=0.4.1)", "pytest-env (>=0.6.2)", "pytest (>=4)", "flaky (>=3)", "coverage-enable-subprocess (>=1)", "coverage (>=4)"]
+docs = ["towncrier (>=21.3)", "sphinx-rtd-theme (>=0.4.3)", "sphinx-argparse (>=0.2.5)", "sphinx (>=3)", "proselint (>=0.10.2)"]
 
 [[package]]
 name = "wrapt"
@@ -596,7 +596,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "4d4277921360be738d4982dc18f664ee31363edc181fa97032b74a41277d8523"
+content-hash = "ac8a228ae33fd59de3d9aea65aaf7fc2e4abfe76aa63c849ad8988e4cff31fc8"
 
 [metadata.files]
 aiofiles = [
@@ -1109,8 +1109,8 @@ pymongo = [
     {file = "pymongo-4.1.1.tar.gz", hash = "sha256:d7b8f25c9b0043cbaf77b8b895814e33e7a3c807a097377c07e1bd49946030d5"},
 ]
 pyrogram = [
-    {file = "Pyrogram-2.0.36-py3-none-any.whl", hash = "sha256:96b2f4fc4915371114ea49397334fbf7967b64aedc7915e71f41bca9ab7e72c5"},
-    {file = "Pyrogram-2.0.36.tar.gz", hash = "sha256:e4d8904fee0200673b0914e2b7277a629ec484891fc573cb9ba89f011064a75f"},
+    {file = "Pyrogram-2.0.40-py3-none-any.whl", hash = "sha256:2a4cc8ff16395824700562b650cbba17b3d1fe66a2955ab9921c2d17fc074a86"},
+    {file = "Pyrogram-2.0.40.tar.gz", hash = "sha256:05ef778f13fb3de24bfb7f345f1ea045cbfde0704290db74ae100c6ab97f23f7"},
 ]
 pyshorteners = [
     {file = "pyshorteners-1.0.1.tar.gz", hash = "sha256:22045c997c4283124768c165623a267cf9ba2a7d416101e2e5fccfc244d34544"},
