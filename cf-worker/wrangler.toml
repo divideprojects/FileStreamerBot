@@ -4,3 +4,4 @@ compatibility_date = "2022-08-07"
 
 [vars]
 FQDN = "https://public-link-bot-dp.herokuapp.com"
+ARC_CORE = "https://arc.io/arc-sw-core.js"

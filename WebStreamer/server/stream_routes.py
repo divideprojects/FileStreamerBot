@@ -28,12 +28,6 @@ async def index_handler(_):
     }
 
 
-# this is a hack used to serve arc io magic sauce
-@routes.get("/arc-sw.js")
-async def arc_magic_sauce(_):
-    return web.FileResponse("/app/WebStreamer/html/assets/static/arc-sw.js")
-
-
 # custom download page
 @routes.get("/download-file-{random_link}")
 @template("download_page.html")
