@@ -24,48 +24,6 @@
     <link rel="icon" href="assets/img/favicon.png" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/img//apple-touch-icon.png" />
 
-    <script async src="https://arc.io/widget.min.js#iV2ngVtF"></script>
-    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-    <script>
-      function onSubmit(token) {
-        const btn = document.getElementById("vBtn");
-        console.log("Response Token: ", token);
-        // enable the button after the captcha is solved
-        sendPostReq(token, btn);
-      }
-      function sendPostReq(rToken, btn) {
-        btn.value = "Verifying...";
-        const url = "https://hcaptcha-verifier.divideprojects.com/verify";
-        var options = {
-          method: "POST",
-          body: JSON.stringify({
-            token: rToken,
-          }),
-          headers: {
-            accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        };
-
-        fetch(url, options)
-          .then((data) => data.json())
-          .then(function (data) {
-            const success = data["success"];
-            if (success) {
-              console.log("Captcha Solve Success");
-              // enable download button
-              btn.value = "Download";
-              btn.disabled = false;
-            } else {
-              console.log("Captcha Solve Failed:\n", data);
-              // send a alert to reload te page
-              alert("Captcha Failed, Please Reload the page and Try Again!");
-            }
-          })
-          .catch((err) => console.error("Error: ", err));
-      }
-    </script>
-
     <style>
       html {
         height: 100%;
@@ -101,21 +59,13 @@
     <div class="divBody">
       <b>Please verify the captcha to download the file!</b>
       <br />
-      <br />
-      <div
-        class="h-captcha"
-        data-sitekey="b349154f-f7b7-4752-bcfd-187cb50f4b75"
-        data-callback="onSubmit"
-      ></div>
-      <br />
       <input
         type="button"
         id="vBtn"
         class="btn"
         onclick="window.open('{{ download_link }}')"
         style="width: 100%"
-        disabled="false"
-        value="Solve Captcha"
+        value="Download Now
       />
     </div>
   </body>

@@ -18,7 +18,6 @@ routes = web.RouteTableDef()
 
 
 @routes.get("/", allow_head=True)
-@template("index.html")
 async def index_handler(_):
     return {
         "status": "Active",
