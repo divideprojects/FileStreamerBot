@@ -19,12 +19,14 @@ routes = web.RouteTableDef()
 
 @routes.get("/", allow_head=True)
 async def index_handler(_):
-    return {
-        "status": "Active",
-        "maintainer": "DivideProjects",
-        "uptime": get_readable_time(time() - StartTime),
-        "bot_username": "GetPublicLink_Robot",
-    }
+    return web.json_response(
+        {
+            "status": "Active",
+            "maintainer": "DivideProjects",
+            "uptime": get_readable_time(time() - StartTime),
+            "bot_username": "GetPublicLink_Robot",
+        },
+    )
 
 
 # custom download page
