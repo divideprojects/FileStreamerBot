@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'cf-worker/**'
+      - '.github/**'
     branches:
      - main
   pull_request:
