@@ -16,4 +16,3 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           target: minor
           merge-comment: Dependabot PR Auto Merge
-          pr-number: ${{ github.event.inputs.pr-number }}
