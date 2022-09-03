@@ -1,4 +1,4 @@
-name: cf-workers-push
+name: Cloudflare Workers CI
 on:
   push:
     paths:
