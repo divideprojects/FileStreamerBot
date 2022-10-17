@@ -2,7 +2,7 @@
   "name": "filestreambot",
   "version": "1.0.0",
   "devDependencies": {
-    "@cloudflare/workers-types": "^3.14.1",
+    "@cloudflare/workers-types": "^3.17.0",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.39.0",
     "eslint": "^8.25.0",
