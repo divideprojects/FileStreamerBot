@@ -19,6 +19,6 @@
     "lint": "eslint -c .eslintrc.js --ext .ts src/**"
   },
   "dependencies": {
-    "hono": "^2.4.1"
+    "hono": "^2.5.1"
   }
 }
