@@ -6,3 +6,6 @@ run:
 
 clean:
 	@pyclean .
+
+doppler:
+	@doppler run -- python3 -m WebStreamer
