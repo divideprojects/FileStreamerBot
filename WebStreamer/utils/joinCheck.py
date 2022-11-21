@@ -5,7 +5,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from WebStreamer.utils.ikb import ikb
 from WebStreamer.vars import Vars
 
-support_group = "https://t.me/DivideProjectsDiscussion"
+support_group = "https://t.me/DivideSupport"
 
 
 def ban_kb(user_id: int):

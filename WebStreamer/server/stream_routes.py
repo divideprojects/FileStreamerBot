@@ -2,6 +2,7 @@ from math import ceil
 from mimetypes import guess_type
 from secrets import token_hex
 from time import time
+from typing import Dict, Union
 
 from aiohttp import web
 from aiohttp_jinja2 import template
@@ -18,7 +19,10 @@ routes = web.RouteTableDef()
 
 
 @routes.get("/", allow_head=True)
-async def index_handler(_):
+async def index_handler(_) -> web.StreamResponse:
+    """
+    Index Handler for WebStreamer, the '/' route.
+    """
     return web.json_response(
         {
             "status": "Active",
@@ -32,7 +36,10 @@ async def index_handler(_):
 # custom download page
 @routes.get("/download-file-{random_link}")
 @template("download_page.html")
-async def stream_handler(request):
+async def stream_handler(request) -> Union[web.StreamResponse | Dict[str]]:
+    """
+    Stream Handler for WebStreamer, the '/download-file-*' route.
+    """
     try:
         random_link = request.match_info["random_link"]
         real_link = await Downloads().get_actual_link(random_link)
@@ -44,7 +51,10 @@ async def stream_handler(request):
 
 # actual download link
 @routes.get("/{real_link}")
-async def stream_handler(request):
+async def stream_handler(request) -> web.StreamResponse:
+    """
+    Stream Handler for WebStreamer, the '/{real_link}' route.
+    """
     try:
         real_link = request.match_info["real_link"]
         message_id, valid, valid_upto = await Downloads().get_msg_id(real_link)
@@ -73,7 +83,10 @@ async def stream_handler(request):
         raise web.HTTPNotFound
 
 
-async def media_streamer(request, message_id: int):
+async def media_streamer(request, message_id: int) -> web.StreamResponse:
+    """
+    Media Streamer for WebStreamer, the '/{real_link}' route.
+    """
     range_header = request.headers.get("Range", 0)
     media_msg = await StreamBot.get_messages(Vars.LOG_CHANNEL, message_id)
     file_properties = await TGCustomYield().generate_file_properties(media_msg)

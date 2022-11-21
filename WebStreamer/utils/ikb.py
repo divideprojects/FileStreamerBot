@@ -1,7 +1,11 @@
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-def ikb(rows=None):
+def ikb(rows=None) -> InlineKeyboardMarkup:
+    """
+    :param rows: list of list of buttons
+    :return: InlineKeyboardMarkup
+    """
     if rows is None:
         rows = []
     lines = []
@@ -15,6 +19,12 @@ def ikb(rows=None):
     # return {'inline_keyboard': lines}
 
 
-def btn(text, value, type="callback_data"):
-    return InlineKeyboardButton(text, **{type: value})
+def btn(text, value, t="callback_data"):
+    """
+    :param text: button text
+    :param value: button value
+    :param t: button type
+    :return: InlineKeyboardButton
+    """
+    return InlineKeyboardButton(text, **{t: value})
     # return {'text': text, type: value}

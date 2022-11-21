@@ -21,6 +21,9 @@ broadcast_ids = {}
     filters.command("status") & filters.private & filters.user(Vars.OWNER_ID),
 )
 async def status(_, m: Message):
+    """
+    Get status of the bot, number of users, number of files, etc.
+    """
     dl = Downloads()
     filename = "downloadList.txt"
     total_users = await Users().total_users_count()
@@ -59,6 +62,9 @@ async def status(_, m: Message):
     & filters.reply,
 )
 async def broadcast_(_, m: Message):
+    """
+    Broadcast a message to all users
+    """
     all_users = await Users().get_all_users()
     broadcast_msg = m.reply_to_message
     while 1:
@@ -79,7 +85,7 @@ async def broadcast_(_, m: Message):
     )
     async with open_aiofiles("broadcast.txt", "w") as broadcast_log_file:
         for user in all_users:
-            sts, msg = await send_msg(user_id=int(user), message=broadcast_msg)
+            sts, msg = await send_msg(user_id=int(user), m=broadcast_msg)
             if msg is not None:
                 await broadcast_log_file.write(msg)
             if sts == 200:

@@ -1,5 +1,6 @@
 from asyncio import sleep
 from traceback import format_exc
+from typing import Tuple, Union
 
 from pyrogram.errors import (
     FloodWait,
@@ -7,15 +8,19 @@ from pyrogram.errors import (
     PeerIdInvalid,
     UserIsBlocked,
 )
+from pyrogram.types import Message
 
 
-async def send_msg(user_id, message):
+async def send_msg(user_id: int, m: Message) -> Tuple[int, Union[Message, None, str]]:
+    """
+    Send message to user using their user_id
+    """
     try:
-        await message.forward(chat_id=user_id)
+        await m.forward(chat_id=user_id)
         return 200, None
     except FloodWait as e:
         await sleep(e.value)
-        return send_msg(user_id, message)
+        return send_msg(user_id, m)
     except InputUserDeactivated:
         return 400, f"{user_id} : deactivated\n"
     except UserIsBlocked:

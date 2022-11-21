@@ -1,4 +1,7 @@
-def humanbytes(size):
+def humanbytes(size) -> str:
+    """
+    Returns a human readable string representation of bytes.
+    """
     if not size:
         return ""
     power = 2**10

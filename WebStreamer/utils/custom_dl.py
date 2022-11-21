@@ -10,18 +10,23 @@ from pyrogram.types import Message
 from WebStreamer.bot import StreamBot
 
 
-async def chunk_size(length):
+async def chunk_size(length) -> int:
     return 2 ** max(min(ceil(log2(length / 1024)), 10), 2) * 1024
 
 
-async def offset_fix(offset, chunksize):
+async def offset_fix(offset, chunksize) -> int:
     offset -= offset % chunksize
     return offset
 
 
 class TGCustomYield:
+    """
+    class to get the file from telegram servers
+    """
+
     def __init__(self):
-        """A custom method to stream files from telegram. functions: generate_file_properties: returns the properties
+        """
+        A custom method to stream files from telegram. functions: generate_file_properties: returns the properties
         for a media on a specific message contained in FileId class. generate_media_session: returns the media
         session for the DC that contains the media file on the message. yield_file: yield a file from telegram
         servers for streaming.
@@ -29,7 +34,10 @@ class TGCustomYield:
         self.main_bot = StreamBot
 
     @staticmethod
-    async def generate_file_properties(msg: Message):
+    async def generate_file_properties(m: Message):
+        """
+        generate file properties from a message
+        """
         available_media = (
             "audio",
             "document",
@@ -41,17 +49,17 @@ class TGCustomYield:
             "video_note",
         )
 
-        if isinstance(msg, Message):
+        if isinstance(m, Message):
             error_message = "This message doesn't contain any downloadable media"
             for kind in available_media:
-                media = getattr(msg, kind, None)
+                media = getattr(m, kind, None)
 
                 if media is not None:
                     break
             else:
                 raise ValueError(error_message)
         else:
-            media = msg
+            media = m
 
         file_id_str = media if isinstance(media, str) else media.file_id
         file_id_obj = FileId.decode(file_id_str)
@@ -63,28 +71,31 @@ class TGCustomYield:
 
         return file_id_obj
 
-    async def generate_media_session(self, client: Client, msg: Message):
-        data = await self.generate_file_properties(msg)
+    async def generate_media_session(self, c: Client, m: Message):
+        """
+        generate media session from a message
+        """
+        data = await self.generate_file_properties(m)
 
-        media_session = client.media_sessions.get(data.dc_id, None)
+        media_session = c.media_sessions.get(data.dc_id, None)
 
         if media_session is None:
-            if data.dc_id != await client.storage.dc_id():
+            if data.dc_id != await c.storage.dc_id():
                 media_session = Session(
-                    client,
+                    c,
                     data.dc_id,
                     await Auth(
-                        client,
+                        c,
                         data.dc_id,
-                        await client.storage.test_mode(),
+                        await c.storage.test_mode(),
                     ).create(),
-                    await client.storage.test_mode(),
+                    await c.storage.test_mode(),
                     is_media=True,
                 )
                 await media_session.start()
 
                 for _ in range(3):
-                    exported_auth = await client.send(
+                    exported_auth = await c.send(
                         raw.functions.auth.ExportAuthorization(dc_id=data.dc_id),
                     )
 
@@ -104,20 +115,23 @@ class TGCustomYield:
                     raise AuthBytesInvalid
             else:
                 media_session = Session(
-                    client,
+                    c,
                     data.dc_id,
-                    await client.storage.auth_key(),
-                    await client.storage.test_mode(),
+                    await c.storage.auth_key(),
+                    await c.storage.test_mode(),
                     is_media=True,
                 )
                 await media_session.start()
 
-            client.media_sessions[data.dc_id] = media_session
+            c.media_sessions[data.dc_id] = media_session
 
         return media_session
 
     @staticmethod
     async def get_location(file_id: FileId):
+        """
+        get location from file id
+        """
         file_type = file_id.file_type
 
         if file_type == FileType.CHAT_PHOTO:
@@ -164,6 +178,9 @@ class TGCustomYield:
         part_count: int,
         chunk_size_int: int,
     ) -> Union[str, None]:  # pylint: disable=unsubscriptable-object
+        """
+        yield a file from telegram servers for streaming
+        """
         client = self.main_bot
         data = await self.generate_file_properties(media_msg)
         media_session = await self.generate_media_session(client, media_msg)
@@ -204,10 +221,13 @@ class TGCustomYield:
 
                 current_part += 1
 
-    async def download_as_bytesio(self, media_msg: Message):
+    async def download_as_bytesio(self, m: Message):
+        """
+        download a file as bytesio
+        """
         client = self.main_bot
-        data = await self.generate_file_properties(media_msg)
-        media_session = await self.generate_media_session(client, media_msg)
+        data = await self.generate_file_properties(m)
+        media_session = await self.generate_media_session(client, m)
 
         location = await self.get_location(data)
 

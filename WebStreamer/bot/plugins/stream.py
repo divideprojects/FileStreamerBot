@@ -27,6 +27,7 @@ msg_text = """
 <i>@DivideProjects </i>
 """
 
+# Cache for storing how many times a user has used the bot, takes number of mimuted from Vars
 ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60))
 
 
@@ -35,7 +36,7 @@ ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60))
     & (filters.document | filters.video | filters.audio | filters.photo),
     group=4,
 )
-@joinCheck()
+@joinCheck()  # Check if user has joined the channel
 async def private_receive_handler(c: Client, m: Message):
     user = m.from_user
     user_id = user.id
@@ -122,6 +123,9 @@ Please wait while I process your file ...
 
 @StreamBot.on_callback_query(filters.regex("^delete_url."))
 async def delete_download(_, q: CallbackQuery):
+    """
+    Delete the download link from the database using a callback query
+    """
     user_id = q.from_user.id
     msg = q.message
     url = str(q.data.split(".")[-1])

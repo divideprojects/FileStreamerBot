@@ -19,6 +19,9 @@ loop = get_event_loop()
 
 
 async def start_services():
+    """
+    Start the bot and the web server
+    """
     LOGGER.info("------------------- Initializing Telegram Bot -------------------")
     await StreamBot.start()
     LOGGER.info("----------------------------- DONE -----------------------------")

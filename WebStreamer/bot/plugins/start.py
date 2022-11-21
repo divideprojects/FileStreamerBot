@@ -46,7 +46,7 @@ Hi there, I'm an Advanced and Fast File Streamer Bot! Made with love from @Divid
 
 class Btns:
     channel_and_group = [
-        ("Support Group", "https://t.me/DivideProjectsDiscussion", "url"),
+        ("Support Group", "https://t.me/DivideSupport", "url"),
         ("Channel", "https://t.me/DivideProjects", "url"),
     ]
     about_me = ("About Me", "aboutbot")
@@ -57,6 +57,9 @@ class Btns:
 @StreamBot.on_message(filters.command("start") & filters.private)
 @joinCheck()
 async def start(_, m: Message):
+    """
+    Start the bot
+    """
     return await m.reply_text(
         text=PMTEXT.format(m.from_user.mention),
         parse_mode=ParseMode.HTML,
@@ -68,6 +71,9 @@ async def start(_, m: Message):
 @StreamBot.on_message(filters.command("help") & filters.private)
 @joinCheck()
 async def help_handler(_, m: Message):
+    """
+    Help message handler
+    """
     return await m.reply_text(
         HELPTEXT,
         parse_mode=ParseMode.HTML,
@@ -77,28 +83,36 @@ async def help_handler(_, m: Message):
 
 @StreamBot.on_callback_query()
 async def button(_, m: CallbackQuery):
+    """
+    handle button presses
+    """
     cb_data = m.data
     msg = m.message
 
-    if cb_data == "aboutbot":
-        await msg.edit(
-            text=ABOUT,
-            parse_mode=ParseMode.HTML,
-            disable_web_page_preview=True,
-            reply_markup=ikb([[Btns.back]]),
-        )
-    elif cb_data == "helptext":
-        await msg.edit(
-            text=HELPTEXT,
-            parse_mode=ParseMode.HTML,
-            disable_web_page_preview=True,
-            reply_markup=ikb([[Btns.back]]),
-        )
-    elif cb_data == "gotohome":
-        await msg.edit(
-            text=PMTEXT.format(msg.from_user.mention),
-            parse_mode=ParseMode.HTML,
-            disable_web_page_preview=True,
-            reply_markup=ikb([Btns.channel_and_group, [Btns.about_me, Btns.help_me]]),
-        )
+    match cb_data:
+        case "aboutbot":
+            await msg.edit(
+                text=ABOUT,
+                parse_mode=ParseMode.HTML,
+                disable_web_page_preview=True,
+                reply_markup=ikb([[Btns.back]]),
+            )
+        case "helptext":
+            await msg.edit(
+                text=HELPTEXT,
+                parse_mode=ParseMode.HTML,
+                disable_web_page_preview=True,
+                reply_markup=ikb([[Btns.back]]),
+            )
+        case "gotohome":
+            await msg.edit(
+                text=PMTEXT.format(msg.from_user.mention),
+                parse_mode=ParseMode.HTML,
+                disable_web_page_preview=True,
+                reply_markup=ikb(
+                    [Btns.channel_and_group, [Btns.about_me, Btns.help_me]],
+                ),
+            )
+        case _:
+            await msg.edit("Invalid Button Pressed!")
     await m.answer()

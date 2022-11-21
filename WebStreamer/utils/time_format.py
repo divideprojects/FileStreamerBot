@@ -1,4 +1,7 @@
 def get_readable_time(seconds: int) -> str:
+    """
+    Get readable time from seconds
+    """
     count = 0
     readable_time = ""
     time_list = []

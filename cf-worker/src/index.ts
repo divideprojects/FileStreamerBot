@@ -5,9 +5,16 @@ const app = new Hono();
 
 // listen for get requests on /
 app.get("/*", async (c: Context) => {
+    // get the formed url from the context
     const formedUrl = new URL(c.req.url);
+
+    // get the fqdn from the env
     let fqdn = c.env.FQDN;
+
+    // if fqdn ends without a slash, add one to it
     if (!fqdn.endsWith("/")) fqdn = fqdn + "/";
+
+    // slice the formed url to get the path, which is the file path
     const dlUrl = fqdn + formedUrl.pathname.slice(1);
 
     // Fetch from origin server.
@@ -24,4 +31,5 @@ app.get("/*", async (c: Context) => {
     return new Response(readable, response);
 });
 
+// export default app
 export default app;
