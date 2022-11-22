@@ -11,10 +11,16 @@ from WebStreamer.bot import StreamBot
 
 
 async def chunk_size(length) -> int:
+    """
+    Calculate chunk size based on file length
+    """
     return 2 ** max(min(ceil(log2(length / 1024)), 10), 2) * 1024
 
 
 async def offset_fix(offset, chunksize) -> int:
+    """
+    Fix offset to be a multiple of chunksize
+    """
     offset -= offset % chunksize
     return offset
 

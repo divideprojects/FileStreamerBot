@@ -23,6 +23,8 @@ broadcast_ids = {}
 async def status(_, m: Message):
     """
     Get status of the bot, number of users, number of files, etc.
+    :param _: pyrogram.Client
+    :param m: pyrogram.types.Message
     """
     dl = Downloads()
     filename = "downloadList.txt"
@@ -64,6 +66,8 @@ async def status(_, m: Message):
 async def broadcast_(_, m: Message):
     """
     Broadcast a message to all users
+    :param _: pyrogram.Client
+    :param m: pyrogram.types.Message
     """
     all_users = await Users().get_all_users()
     broadcast_msg = m.reply_to_message

@@ -12,4 +12,5 @@ def __connect_first():
     LOGGER.info("Initialized Database!")
 
 
+# Start the database connection
 __connect_first()

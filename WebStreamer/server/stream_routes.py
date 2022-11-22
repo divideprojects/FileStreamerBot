@@ -39,6 +39,8 @@ async def index_handler(_) -> web.StreamResponse:
 async def stream_handler(request) -> Union[web.StreamResponse | Dict[str, str]]:
     """
     Stream Handler for WebStreamer, the '/download-file-*' route.
+    :param request: Request object
+    :return: StreamResponse object or a dict with appropriate data
     """
     try:
         random_link = request.match_info["random_link"]
@@ -54,6 +56,8 @@ async def stream_handler(request) -> Union[web.StreamResponse | Dict[str, str]]:
 async def stream_handler(request) -> web.StreamResponse:
     """
     Stream Handler for WebStreamer, the '/{real_link}' route.
+    :param request: Request object
+    :return: StreamResponse object
     """
     try:
         real_link = request.match_info["real_link"]
@@ -86,6 +90,9 @@ async def stream_handler(request) -> web.StreamResponse:
 async def media_streamer(request, message_id: int) -> web.StreamResponse:
     """
     Media Streamer for WebStreamer, the '/{real_link}' route.
+    :param request: Request object
+    :param message_id: Message ID of the file to be streamed
+    :return: StreamResponse object
     """
     range_header = request.headers.get("Range", 0)
     media_msg = await StreamBot.get_messages(Vars.LOG_CHANNEL, message_id)

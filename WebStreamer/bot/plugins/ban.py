@@ -9,6 +9,8 @@ from WebStreamer.vars import Vars
 async def ban_user(c: StreamBot, q: CallbackQuery):
     """
     Ban a user from using the bot
+    :param c: pyrogram.Client
+    :param q: pyrogram.types.CallbackQuery
     """
     user_id = int(q.data.split("_", 1)[1])
     await c.ban_chat_member(Vars.AUTH_CHANNEL, user_id)

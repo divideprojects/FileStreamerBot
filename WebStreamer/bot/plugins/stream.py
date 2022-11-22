@@ -38,6 +38,11 @@ ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60))
 )
 @joinCheck()  # Check if user has joined the channel
 async def private_receive_handler(c: Client, m: Message):
+    """
+    Handler for receiving files in private
+    :param c: pyrogram.Client
+    :param m: pyrogram.types.Message
+    """
     user = m.from_user
     user_id = user.id
 
@@ -125,6 +130,8 @@ Please wait while I process your file ...
 async def delete_download(_, q: CallbackQuery):
     """
     Delete the download link from the database using a callback query
+    :param _: pyrogram.Client
+    :param q: pyrogram.types.CallbackQuery
     """
     user_id = q.from_user.id
     msg = q.message

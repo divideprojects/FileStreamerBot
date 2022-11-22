@@ -1,13 +1,14 @@
 from datetime import date
-from typing import List, Union
+from typing import Dict, List, Union
 
 from WebStreamer.db.mongo import MongoDB
 from WebStreamer.logger import LOGGER
 
 
-def new_user(uid: int):
+def new_user(uid: int) -> Dict[str, Union[str, int, date]]:
     """
     Creates a new user in the database
+    :param uid: User ID
     """
     return {
         "id": uid,
@@ -35,6 +36,7 @@ class Users(MongoDB):
     async def get_all_users(self) -> List[int]:
         """
         Returns a list of all users in the database
+        :return: List of user ids
         """
         users = await self.find_all({})
         return [user["id"] for user in users]
@@ -42,6 +44,8 @@ class Users(MongoDB):
     async def user_exists(self, user_id: int) -> bool:
         """
         Checks if a user exists in the database
+        :param user_id: User id to check
+        :return: True if user exists, False otherwise
         """
         user = await self.find_one({"id": user_id})
         if not user:
@@ -57,5 +61,7 @@ class Users(MongoDB):
     async def delete_user(self, user_id: int) -> Union[bool, int]:
         """
         Deletes a user from the database
+        :param user_id: User id to delete
+        :return: True if user was deleted, False otherwise
         """
         return await self.delete_one({"id": user_id})

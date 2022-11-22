@@ -45,6 +45,10 @@ Hi there, I'm an Advanced and Fast File Streamer Bot! Made with love from @Divid
 
 
 class Btns:
+    """
+    Class for storing static buttons
+    """
+
     channel_and_group = [
         ("Support Group", "https://t.me/DivideSupport", "url"),
         ("Channel", "https://t.me/DivideProjects", "url"),
@@ -59,6 +63,8 @@ class Btns:
 async def start(_, m: Message):
     """
     Start the bot
+    :param _: pyrogram.Client
+    :param m: pyrogram.types.Message
     """
     return await m.reply_text(
         text=PMTEXT.format(m.from_user.mention),
@@ -73,6 +79,8 @@ async def start(_, m: Message):
 async def help_handler(_, m: Message):
     """
     Help message handler
+    :param _: pyrogram.Client
+    :param m: pyrogram.types.Message
     """
     return await m.reply_text(
         HELPTEXT,
@@ -85,6 +93,8 @@ async def help_handler(_, m: Message):
 async def button(_, m: CallbackQuery):
     """
     handle button presses
+    :param _: pyrogram.Client
+    :param m: pyrogram.types.Message
     """
     cb_data = m.data
     msg = m.message
