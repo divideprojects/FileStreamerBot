@@ -95,7 +95,7 @@ class TGCustomYield:
                 await media_session.start()
 
                 for _ in range(3):
-                    exported_auth = await c.send(
+                    exported_auth = await c.invoke(
                         raw.functions.auth.ExportAuthorization(dc_id=data.dc_id),
                     )
 
@@ -150,8 +150,7 @@ class TGCustomYield:
 
             return raw.types.InputPeerPhotoFileLocation(
                 peer=peer,
-                volume_id=file_id.volume_id,
-                local_id=file_id.local_id,
+                photo_id=file_id.media_id,
                 big=file_id.thumbnail_source == ThumbnailSource.CHAT_PHOTO_BIG,
             )
         elif file_type == FileType.PHOTO:
