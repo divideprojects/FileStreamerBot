@@ -100,7 +100,7 @@ class TGCustomYield:
                     )
 
                     try:
-                        await media_session.send(
+                        await media_session.invoke(
                             raw.functions.auth.ImportAuthorization(
                                 id=exported_auth.id,
                                 bytes=exported_auth.bytes,
@@ -186,7 +186,7 @@ class TGCustomYield:
 
         location = await self.get_location(data)
 
-        r = await media_session.send(
+        r = await media_session.invoke(
             raw.functions.upload.GetFile(
                 location=location,
                 offset=offset,
@@ -210,7 +210,7 @@ class TGCustomYield:
                 if 1 < current_part <= part_count:
                     yield chunk
 
-                r = await media_session.send(
+                r = await media_session.invoke(
                     raw.functions.upload.GetFile(
                         location=location,
                         offset=offset,
@@ -233,7 +233,7 @@ class TGCustomYield:
         limit = 1024 * 1024
         offset = 0
 
-        r = await media_session.send(
+        r = await media_session.invoke(
             raw.functions.upload.GetFile(location=location, offset=offset, limit=limit),
         )
 
@@ -250,7 +250,7 @@ class TGCustomYield:
 
                 offset += limit
 
-                r = await media_session.send(
+                r = await media_session.invoke(
                     raw.functions.upload.GetFile(
                         location=location,
                         offset=offset,
