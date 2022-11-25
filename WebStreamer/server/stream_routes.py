@@ -36,7 +36,7 @@ async def index_handler(_) -> web.StreamResponse:
 # custom download page
 @routes.get("/download-file-{random_link}")
 @template("download_page.html")
-async def stream_handler(request) -> Union[web.StreamResponse | Dict[str, str]]:
+async def stream_handler(request) -> Union[web.StreamResponse, Dict[str, str]]:
     """
     Stream Handler for WebStreamer, the '/download-file-*' route.
     :param request: Request object
