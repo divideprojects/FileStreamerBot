@@ -46,7 +46,7 @@ async def private_receive_handler(c: Client, m: Message):
     user = m.from_user
     user_id = user.id
 
-    if user_id != Vars.OWNER_ID:
+    if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
         # spam check
         if user_id in ttl_dict.keys():
             await m.reply_text(
