@@ -53,9 +53,9 @@ class Btns:
         ("Support Group", "https://t.me/DivideSupport", "url"),
         ("Channel", "https://t.me/DivideProjects", "url"),
     ]
-    about_me = ("About Me", "aboutbot")
-    help_me = ("Help", "helptext")
-    back = ("Back", "gotohome")
+    about_me = ("About Me", "start_aboutbot")
+    help_me = ("Help", "start_helptext")
+    back = ("Back", "start_gotohome")
 
 
 @StreamBot.on_message(filters.command("start") & filters.private)
@@ -89,7 +89,7 @@ async def help_handler(_, m: Message):
     )
 
 
-@StreamBot.on_callback_query()
+@StreamBot.on_callback_query(filters.regex("^start_"))
 async def button(_, m: CallbackQuery):
     """
     handle button presses
@@ -100,21 +100,21 @@ async def button(_, m: CallbackQuery):
     msg = m.message
 
     match cb_data:
-        case "aboutbot":
+        case "start_aboutbot":
             await msg.edit(
                 text=ABOUT,
                 parse_mode=ParseMode.HTML,
                 disable_web_page_preview=True,
                 reply_markup=ikb([[Btns.back]]),
             )
-        case "helptext":
+        case "start_helptext":
             await msg.edit(
                 text=HELPTEXT,
                 parse_mode=ParseMode.HTML,
                 disable_web_page_preview=True,
                 reply_markup=ikb([[Btns.back]]),
             )
-        case "gotohome":
+        case "start_gotohome":
             await msg.edit(
                 text=PMTEXT.format(msg.from_user.mention),
                 parse_mode=ParseMode.HTML,
