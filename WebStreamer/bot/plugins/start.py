@@ -59,7 +59,6 @@ class Btns:
 
 
 @StreamBot.on_message(filters.command("start") & filters.private)
-@joinCheck()
 async def start(_, m: Message):
     """
     Start the bot
@@ -75,7 +74,6 @@ async def start(_, m: Message):
 
 
 @StreamBot.on_message(filters.command("help") & filters.private)
-@joinCheck()
 async def help_handler(_, m: Message):
     """
     Help message handler
