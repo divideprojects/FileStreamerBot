@@ -9,6 +9,7 @@ from pyrogram.types import CallbackQuery, Message
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.db import Downloads
+from WebStreamer.db.users import Users
 from WebStreamer.logger import LOGGER
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.ikb import ikb
@@ -45,12 +46,13 @@ async def private_receive_handler(c: Client, m: Message):
     """
     user = m.from_user
     user_id = user.id
+    await Users().user_exists(user_id)
 
     if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
         # spam check
         if user_id in ttl_dict.keys():
             await m.reply_text(
-                f"Flood control active, please wait {int(ttl_dict[user_id]-time())} seconds!",
+                f"Flood control active, please wait {int(ttl_dict[user_id] - time())} seconds!",
             )
             return
 

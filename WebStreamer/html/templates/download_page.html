@@ -1,69 +1,72 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <title>FileStreamBot - Download Page</title>
 
     <meta
-      name="description"
-      content="Download website for FileStreamBot, wait for a few seconds to download your content."
+            name="description"
+            content="Download website for FileStreamBot, wait for a few seconds to download your content."
     />
-    <meta name="author" content="DivideProjects" />
-    <meta property="og:title" content="Download website for FileStreamBot" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://divideprojects.com" />
+    <meta name="author" content="DivideProjects"/>
+    <meta property="og:title" content="Download website for FileStreamBot"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://divideprojects.com"/>
     <meta
-      property="og:description"
-      content="Download website for FileStreamBot, wait for a few seconds to download your content."
+            property="og:description"
+            content="Download website for FileStreamBot, wait for a few seconds to download your content."
     />
-    <meta property="og:image" content="assets/img/favicon.png" />
-    <link rel="icon" href="../assets/img/favicon.png" />
-    <link rel="icon" href="../assets/img/favicon.png" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png" />
+    <meta property="og:image" content="assets/img/favicon.png"/>
+    <link rel="icon" href="../assets/img/favicon.png"/>
+    <link rel="icon" href="../assets/img/favicon.png" type="image/svg+xml"/>
+    <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png"/>
 
     <style>
-      html {
-        height: 100%;
-        display: table;
-        margin: auto;
-      }
-      body {
-        /* background-color: #f1c2ff; */
-        height: 100%;
-        display: table-cell;
-        vertical-align: middle;
-      }
-      .btn {
-        background-color: DodgerBlue;
-        border: none;
-        color: white;
-        padding: 12px 30px;
-        cursor: pointer;
-        font-size: 20px;
-      }
-      divBody {
-        text-align: center;
-      }
-    </style>
-  </head>
+        html {
+            height: 100%;
+            display: table;
+            margin: auto;
+        }
 
-  <body>
-    <b>Click the button below to download the file!</b>
-    </br>
-    Superfast download link created just for you!
-    <div class="divBody">
-      <br />
-      <input
-        type="button"
-        id="vBtn"
-        class="btn"
-        onclick="window.open('{{ download_link }}')"
-        style="width: 100%"
-        value="Download Now"
-      />
-    </div>
-  </body>
+        body {
+            /* background-color: #f1c2ff; */
+            height: 100%;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .btn {
+            background-color: DodgerBlue;
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        divBody {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<b>Click the button below to download the file!</b>
+</br>
+Superfast download link created just for you!
+<div class="divBody">
+    <br/>
+    <input
+            type="button"
+            id="vBtn"
+            class="btn"
+            onclick="window.open('{{ download_link }}')"
+            style="width: 100%"
+            value="Download Now"
+    />
+</div>
+</body>
 </html>

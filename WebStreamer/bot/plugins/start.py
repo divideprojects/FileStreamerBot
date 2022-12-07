@@ -3,8 +3,8 @@ from pyrogram.enums import ParseMode
 from pyrogram.types import CallbackQuery, Message
 
 from WebStreamer.bot import StreamBot
+from WebStreamer.db.users import Users
 from WebStreamer.utils.ikb import ikb
-from WebStreamer.utils.joinCheck import joinCheck
 
 PMTEXT = """
 Hi {}!
@@ -65,6 +65,7 @@ async def start(_, m: Message):
     :param _: pyrogram.Client
     :param m: pyrogram.types.Message
     """
+    await Users().user_exists(m.from_user.id)
     return await m.reply_text(
         text=PMTEXT.format(m.from_user.mention),
         parse_mode=ParseMode.HTML,
@@ -80,6 +81,7 @@ async def help_handler(_, m: Message):
     :param _: pyrogram.Client
     :param m: pyrogram.types.Message
     """
+    await Users().user_exists(m.from_user.id)
     return await m.reply_text(
         HELPTEXT,
         parse_mode=ParseMode.HTML,
