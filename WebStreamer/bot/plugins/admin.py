@@ -18,11 +18,11 @@ broadcast_ids = {}
 
 
 @StreamBot.on_message(
-    filters.command("status") & filters.private & filters.user(Vars.OWNER_ID),
+    filters.command("stats") & filters.private & filters.user(Vars.OWNER_ID),
 )
-async def status(_, m: Message):
+async def stats(_, m: Message):
     """
-    Get status of the bot, number of users, number of files, etc.
+    Get stats of the bot, number of users, number of files, etc.
     :param _: pyrogram.Client
     :param m: pyrogram.types.Message
     """
