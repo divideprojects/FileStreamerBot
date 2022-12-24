@@ -11,9 +11,8 @@ def new_user(uid: int) -> Dict[str, Union[str, int, date]]:
     :param uid: User ID
     """
     return {
-        "id": uid,
+        "_id": uid,
         "join_date": date.today().isoformat(),
-        "downloads": [],
     }
 
 
@@ -39,7 +38,7 @@ class Users(MongoDB):
         :return: List of user ids
         """
         users = await self.find_all({})
-        return [user["id"] for user in users]
+        return [user["_id"] for user in users]
 
     async def user_exists(self, user_id: int) -> bool:
         """
@@ -47,10 +46,10 @@ class Users(MongoDB):
         :param user_id: User id to check
         :return: True if user exists, False otherwise
         """
-        user = await self.find_one({"id": user_id})
+        user = await self.find_one({"_id": user_id})
         if not user:
             user_data = {
-                "id": user_id,
+                "_id": user_id,
                 "join_date": date.today().isoformat(),
             }
             LOGGER.info(f"New User: {user_id}")
@@ -64,4 +63,4 @@ class Users(MongoDB):
         :param user_id: User id to delete
         :return: True if user was deleted, False otherwise
         """
-        return await self.delete_one({"id": user_id})
+        return await self.delete_one({"_id": user_id})
