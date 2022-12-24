@@ -35,6 +35,7 @@ class Vars:
     )
     URL = f"https://{FQDN}/" if ON_HEROKU or NO_PORT else f"https://{FQDN}:{PORT}/"
     DATABASE_URL = str(config("DATABASE_URL", default=None))
+    DATABASE_NAME = str(config("DATABASE_NAME", default="filestreambot"))
     SUPPORT_GROUP = config("SUPPORT_GROUP", default="@DivideSupport")
     AUTH_CHANNEL = str(config("AUTH_CHANNEL", default="@DivideProjects"))
     JOIN_CHECK = config("JOIN_CHECK", default=None, cast=config.boolean)
