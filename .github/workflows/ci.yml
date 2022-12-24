@@ -43,7 +43,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          workingDirectory: '.'
+          workingDirectory: 'cf-worker'
 
   pre-commit:
     uses: divkix/reusable-workflows/.github/workflows/pre-commit.yml@main
