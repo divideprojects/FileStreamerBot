@@ -5,7 +5,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from WebStreamer.vars import Vars
 
 db_client = AsyncIOMotorClient(Vars.DATABASE_URL)
-main_db = db_client["divideprojects_bots"]
+main_db = db_client["filestreambot"]
 
 
 class MongoDB:
