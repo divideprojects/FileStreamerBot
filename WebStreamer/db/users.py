@@ -21,7 +21,7 @@ class Users(MongoDB):
     Users collections to be made in the database
     """
 
-    db_name = "filestreamerbot_users"
+    db_name = "users"
 
     def __init__(self):
         super().__init__(self.db_name)

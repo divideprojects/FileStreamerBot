@@ -11,7 +11,7 @@ class Downloads(MongoDB):
     Define downloads collection here
     """
 
-    db_name = "filestreamerbot_downloads"
+    db_name = "downloads"
 
     def __init__(self):
         """
