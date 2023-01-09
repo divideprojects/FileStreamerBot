@@ -14,7 +14,7 @@ dnspython = "^2.2.1"
 requests = "^2.28.1"
 motor = "^3.1.1"
 pyshorteners = "^1.0.1"
-cachetools = "^5.2.0"
+cachetools = "^5.2.1"
 prettyconf = "^2.2.1"
 aiohttp-jinja2 = "^1.5"
 
