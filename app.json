@@ -13,8 +13,8 @@
         "media"
     ],
     "repository": "https://github.com/divkix/FileStreamBot/",
-    "success_url": "https://t.me/DivideProjects",
-    "website": "https://t.me/DivideProjects",
+    "success_url": "https://divkix.me",
+    "website": "https://divkix.me",
     "env": {
         "ENV": {
             "description": "Set this to True if you want bot to run on heroku",
@@ -72,13 +72,13 @@
         }
     },
     "buildpacks": [
-    {
-      "url": "https://github.com/moneymeets/python-poetry-buildpack.git"
-    },
-    {
-      "url": "heroku/python"
-    }
-  ],
+        {
+            "url": "https://github.com/moneymeets/python-poetry-buildpack.git"
+        },
+        {
+            "url": "heroku/python"
+        }
+    ],
     "formation": {
         "web": {
             "quantity": 1,
