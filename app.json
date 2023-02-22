@@ -12,7 +12,7 @@
         "modular",
         "media"
     ],
-    "repository": "https://github.com/DivideProjects/FileStreamBot/",
+    "repository": "https://github.com/divkix/FileStreamBot/",
     "success_url": "https://t.me/DivideProjects",
     "website": "https://t.me/DivideProjects",
     "env": {
