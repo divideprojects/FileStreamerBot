@@ -16,6 +16,8 @@ jobs:
     name: Create new tag
     if: startsWith(github.ref, 'refs/tags/') != 'true' && github.event.inputs.tag != ''
     uses: divkix/reusable-workflows/.github/workflows/create-tag.yml@main
+    with:
+      tag: ${{ inputs.tag }}
 
   # fetch some info from repo such as latest tag and name in lowercase
   get-repo-info:
