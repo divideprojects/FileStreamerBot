@@ -12,8 +12,7 @@ from WebStreamer.logger import LOGGER
 from WebStreamer.server import web_server
 from WebStreamer.vars import Vars
 
-ppath = "WebStreamer/bot/plugins/*.py"
-files = glob(ppath)
+files = glob("WebStreamer/bot/plugins/*.py")
 
 loop = get_event_loop()
 
