@@ -37,6 +37,7 @@ class TGCustomYield:
         session for the DC that contains the media file on the message. yield_file: yield a file from telegram
         servers for streaming.
         """
+        # NOTE: This is the default bot, can add a list and iterate over it to switch to different bots, need to add clients to 'bot/__init__.py'
         self.main_bot = StreamBot
 
     @staticmethod
