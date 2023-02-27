@@ -19,7 +19,13 @@ class Downloads(MongoDB):
         """
         super().__init__(self.db_name)
 
-    async def add_download(self, message_id: int, random_url: str, user_id: int) -> str:
+    async def add_download(
+        self,
+        message_id: int,
+        random_url: str,
+        user_id: int,
+        valid_upto: float,
+    ) -> str:
         """
         Add a download to the database
         :param message_id: Message id of the message
@@ -35,7 +41,7 @@ class Downloads(MongoDB):
                 "link": random_gen_link,
                 "user_id": user_id,
                 "message_id": message_id,
-                "valid_upto": (datetime.now() + timedelta(days=1)),
+                "valid_upto": (datetime.now() + timedelta(seconds=valid_upto)),
             },
         )
         return random_gen_link

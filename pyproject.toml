@@ -17,6 +17,7 @@ pyshorteners = "^1.0.1"
 cachetools = "^5.3.0"
 prettyconf = "^2.2.1"
 aiohttp-jinja2 = "^1.5"
+pypers = "^1.2.13"
 
 [tool.poetry.dev-dependencies]
 black = "^23.1.0"

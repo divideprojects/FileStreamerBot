@@ -19,6 +19,7 @@ HELPTEXT = """
 <b>Commands:</b>
 /start: <i>Start the bot.</i>
 /help: <i>Show this message again.</i>
+/expire: <i>Set the expire time for your links.</i>
 
 Just Send or Forward me any file or media, I'll give you a direct download link for it!
 """
@@ -81,7 +82,6 @@ async def help_handler(_, m: Message):
     :param _: pyrogram.Client
     :param m: pyrogram.types.Message
     """
-    await Users().user_exists(m.from_user.id)
     return await m.reply_text(
         HELPTEXT,
         parse_mode=ParseMode.HTML,

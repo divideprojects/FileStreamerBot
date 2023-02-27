@@ -3,6 +3,7 @@ from secrets import token_urlsafe
 from time import time
 
 from cachetools import TTLCache
+from pypers.formatters import Formatters
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import CallbackQuery, Message
@@ -23,7 +24,7 @@ msg_text = """
 <b>📦 Size:</b> <i>{}</i>
 <b>📥 Download link:</b> {}
 
-<b>🚸 Note: This link will expire after 24 hours!</b>
+<b>🚸 Note: This link will expire after {}!</b>
 
 <i>@DivideProjects </i>
 """
@@ -46,7 +47,8 @@ async def private_receive_handler(c: Client, m: Message):
     """
     user = m.from_user
     user_id = user.id
-    await Users().user_exists(user_id)
+    users_db = Users()
+    user_expire_time = await users_db.get_user_expire_time(user_id)
 
     if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
         # spam check
@@ -56,7 +58,7 @@ async def private_receive_handler(c: Client, m: Message):
             )
             return
 
-    wait = await m.reply_text(
+    wait_text = await m.reply_text(
         """
 Please wait while I process your file ...
 <b>Do not send any other media file till I generate the link for the current file!</b>
@@ -73,7 +75,12 @@ Please wait while I process your file ...
             else f"https://{Vars.FQDN}:{Vars.PORT}/download-file-{random_url}"
         )
 
-        __direct_link = await Downloads().add_download(log_msg.id, random_url, user_id)
+        __direct_link = await Downloads().add_download(
+            log_msg.id,
+            random_url,
+            user_id,
+            user_expire_time,
+        )
         direct_link = (
             f"https://{Vars.FQDN}/{__direct_link}"
             if Vars.ON_HEROKU or Vars.NO_PORT
@@ -101,8 +108,13 @@ Please wait while I process your file ...
             reply_markup=ikb([[("Ban User", f"ban_{user_id}")]]),
         )
 
-        await wait.edit_text(
-            text=msg_text.format(file_name, file_size, stream_link),
+        await wait_text.edit_text(
+            text=msg_text.format(
+                file_name,
+                file_size,
+                stream_link,
+                Formatters.time_formatter(user_expire_time),
+            ),
             disable_web_page_preview=True,
             reply_markup=ikb(
                 [
