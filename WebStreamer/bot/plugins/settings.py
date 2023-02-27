@@ -27,7 +27,7 @@ async def expire_settings(_, m: Message):
             time = args[1]
             seconds_time = Formatters.get_time_in_seconds(time)
             if seconds_time == -1:
-                reply_text = "Invalid time format. Send a time in min/h/d/w/m format to set the expire time for your stream links."
+                reply_text = "Invalid time format. Send a time in m/h/d/w format to set the expire time for your stream links."
             else:
                 reply_text = f"Your stream links will expire after {time}."
                 await users_db.set_user_expire_time(user_id, seconds_time)
