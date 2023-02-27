@@ -33,7 +33,7 @@ async def stats(_, m: Message):
         expired_downloads,
         valid_num_downloads,
     ) = await Downloads().valid_downloads_list()
-    await m.replt_text(
+    await m.reply_text(
         f"<b>Total Users:</b> <code>{total_users}</code>"
         f"\n<b>Total Downloads:</b> <code>{num_downloads}</code>"
         f"\n<b>Active Downloads:</b> <code>{valid_num_downloads}</code>"
@@ -95,8 +95,8 @@ async def userlist(_, m: Message):
     filename = "usersList.txt"
     async with open_aiofiles(filename, "w") as total_user_list:
         total_users = ""
-        for dl in await users_db.get_all_users():
-            total_users += {dl["user_id"]} + "\n"
+        for user_id in await users_db.get_all_users():
+            total_users += str(user_id) + "\n"
         await total_user_list.write(total_users)
     await m.reply_document(
         filename,
