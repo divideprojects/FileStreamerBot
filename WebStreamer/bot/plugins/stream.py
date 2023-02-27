@@ -29,6 +29,14 @@ msg_text = """
 <i>@DivideProjects </i>
 """
 
+log_channel_msg = """
+<b>Requested By:</b> {}
+<b>User ID:</b> <code>{}</code>
+<b>Download Link:</b> {}
+<b>Direct Link:</b> {}
+<b>Expires in:</b> {}
+"""
+
 # Cache for storing how many times a user has used the bot, takes number of mimuted from Vars
 ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60))
 
@@ -97,11 +105,12 @@ Please wait while I process your file ...
             file_name = "photo"
 
         await log_msg.reply_text(
-            text=(
-                f"<b>Requested By:</b> {user.mention}"
-                f"\n<b>User ID:</b> <code>{user_id}</code>"
-                f"\n<b>Download Link:</b> {stream_link}"
-                f"\n<b>Direct Link:</b> {direct_link}"
+            text=log_channel_msg.format(
+                user.mention,
+                user_id,
+                stream_link,
+                direct_link,
+                Formatters.time_formatter(user_expire_time),
             ),
             disable_web_page_preview=True,
             quote=True,
