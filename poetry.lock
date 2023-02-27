@@ -1164,14 +1164,14 @@ zstd = ["zstandard"]
 
 [[package]]
 name = "pypers"
-version = "1.3.0"
+version = "1.3.1"
 description = "A utilities module made for personal use, has small snippets which I use in many projects."
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "pypers-1.3.0-py3-none-any.whl", hash = "sha256:6aedda9322eda03d5b357a83c5106c699665752c6f385217a67010bc6dae1b94"},
-    {file = "pypers-1.3.0.tar.gz", hash = "sha256:9f6c0028a7f55a2f83b664810bd86c9971433de41ab9329facd64679c0533922"},
+    {file = "pypers-1.3.1-py3-none-any.whl", hash = "sha256:87decaac81fc9630c72b23ac82e21166cc3f100415477cdb4bc5d9ae888f412a"},
+    {file = "pypers-1.3.1.tar.gz", hash = "sha256:a4ad66d894a8322c559e661725eec8ee2e5afe23c9befbeb53a58f510e533511"},
 ]
 
 [package.dependencies]
@@ -1638,4 +1638,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "f4048ab1ee48f557987230939eef105becd905332094e044bc42a9c6a3d3063f"
+content-hash = "478532d350fe5769dd1f1620e630735d1b00d37c288bc9c90476a1d787a6755b"
