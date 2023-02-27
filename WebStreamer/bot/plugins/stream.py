@@ -110,7 +110,10 @@ Please wait while I process your file ...
                 user_id,
                 stream_link,
                 direct_link,
-                Formatters.time_formatter(user_expire_time),
+                # NOTE: Only 'never' is allowed for owners
+                Formatters.time_formatter(user_expire_time)
+                if user_expire_time != -1
+                else "Never",
             ),
             disable_web_page_preview=True,
             quote=True,

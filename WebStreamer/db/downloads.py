@@ -41,7 +41,10 @@ class Downloads(MongoDB):
                 "link": random_gen_link,
                 "user_id": user_id,
                 "message_id": message_id,
-                "valid_upto": (datetime.now() + timedelta(seconds=valid_upto)),
+                # NOTE: Only 'never' is allowed for owners
+                "valid_upto": (datetime.now() + timedelta(seconds=valid_upto))
+                if valid_upto != -1
+                else -1,
             },
         )
         return random_gen_link
@@ -67,7 +70,7 @@ class Downloads(MongoDB):
         if not document:
             return 0, False, datetime.now()
         valid_upto = document["valid_upto"]
-        valid = valid_upto > datetime.now()
+        valid = valid_upto > datetime.now() if valid_upto != -1 else True
         return document["message_id"], valid, valid_upto
 
     async def total_downloads(self) -> int:

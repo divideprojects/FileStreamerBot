@@ -4,6 +4,7 @@ from pyrogram.types import Message
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.db.users import Users
+from WebStreamer.vars import Vars
 
 
 @StreamBot.on_message(
@@ -24,6 +25,9 @@ async def expire_settings(_, m: Message):
             current_expire_time = await users_db.get_user_expire_time(user_id)
             reply_text = f"Your stream links expire after {Formatters.time_formatter(current_expire_time)}."
         case 2:
+            # NOTE: Only 'never' is allowed for owners
+            if args[1].lower() == "never" and user_id == Vars.OWNER_ID:
+                await users_db.set_user_expire_time(user_id, -1)
             time = args[1]
             seconds_time = Formatters.get_time_in_seconds(time)
             if seconds_time == -1:

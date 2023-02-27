@@ -75,7 +75,8 @@ async def stream_handler(request) -> web.StreamResponse:
             return web.json_response(
                 {
                     "status": "download_link_expired",
-                    "expired_time": str(valid_upto),
+                    # NOTE: Only 'never' is allowed for owners
+                    "expired_time": str(valid_upto) if valid_upto != -1 else "never",
                     "maintained_by": "@DivideProjects",
                     "telegram_bot": "@GetPublicLink_Robot",
                 },
