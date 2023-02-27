@@ -26,9 +26,34 @@ async def stats(_, m: Message):
     :param _: pyrogram.Client
     :param m: pyrogram.types.Message
     """
+    total_users = await Users().total_users_count()
+    (
+        _,
+        num_downloads,
+        expired_downloads,
+        valid_num_downloads,
+    ) = await Downloads().valid_downloads_list()
+    await m.replt_text(
+        f"<b>Total Users:</b> <code>{total_users}</code>"
+        f"\n<b>Total Downloads:</b> <code>{num_downloads}</code>"
+        f"\n<b>Active Downloads:</b> <code>{valid_num_downloads}</code>"
+        f"\n<b>Expired Downloads:</b> <code>{expired_downloads}</code>",
+        quote=True,
+    )
+    return
+
+
+@StreamBot.on_message(
+    filters.command("downloadlist") & filters.private & filters.user(Vars.OWNER_ID),
+)
+async def downloadList(_, m: Message):
+    """
+    Get the list of all downloads
+    :param _: pyrogram.Client
+    :param m: pyrogram.types.Message
+    """
     dl = Downloads()
     filename = "downloadList.txt"
-    total_users = await Users().total_users_count()
     (
         valid_downloads_list,
         num_downloads,
@@ -47,11 +72,35 @@ async def stats(_, m: Message):
     await m.reply_document(
         filename,
         caption=(
-            f"<b>Total Users:</b> <code>{total_users}</code>\n"
             f"<b>Total Downloads:</b> <code>{num_downloads}</code>\n"
             f"<b>Active Downloads:</b> <code>{valid_num_downloads}</code>\n"
             f"<b>Expired Downloads:</b> <code>{expired_downloads}</code>"
         ),
+        quote=True,
+    )
+    return
+
+
+@StreamBot.on_message(
+    filters.command("userlist") & filters.private & filters.user(Vars.OWNER_ID),
+)
+async def userlist(_, m: Message):
+    """
+    Get the list of all users
+    :param _: pyrogram.Client
+    :param m: pyrogram.types.Message
+    """
+    users_db = Users()
+    total_users_num = await users_db.total_users_count()
+    filename = "usersList.txt"
+    async with open_aiofiles(filename, "w") as total_user_list:
+        total_users = ""
+        for dl in await users_db.get_all_users():
+            total_users += {dl["user_id"]} + "\n"
+        await total_user_list.write(total_users)
+    await m.reply_document(
+        filename,
+        caption=(f"<b>Total Users:</b> <code>{total_users_num}</code>\n"),
         quote=True,
     )
     return
