@@ -45,20 +45,6 @@ Hi there, I'm an Advanced and Fast File Streamer Bot! Made with love from @Divid
 """
 
 
-class Btns:
-    """
-    Class for storing static buttons
-    """
-
-    channel_and_group = [
-        ("Support Group", "https://t.me/DivideSupport", "url"),
-        ("Channel", "https://t.me/DivideProjects", "url"),
-    ]
-    about_me = ("About Me", "start_aboutbot")
-    help_me = ("Help", "start_helptext")
-    back = ("Back", "start_gotohome")
-
-
 @StreamBot.on_message(filters.command("start") & filters.private)
 async def start(_, m: Message):
     """
@@ -71,7 +57,14 @@ async def start(_, m: Message):
         text=PMTEXT.format(m.from_user.mention),
         parse_mode=ParseMode.HTML,
         disable_web_page_preview=True,
-        reply_markup=ikb([Btns.channel_and_group, [Btns.about_me, Btns.help_me]]),
+        reply_markup=ikb(
+            [
+                [
+                    ("Support Group", "https://t.me/DivideSupport", "url"),
+                    ("Channel", "https://t.me/DivideProjects", "url"),
+                ],
+            ],
+        ),
     )
 
 
@@ -85,44 +78,4 @@ async def help_handler(_, m: Message):
     return await m.reply_text(
         HELPTEXT,
         parse_mode=ParseMode.HTML,
-        reply_markup=ikb([[Btns.back]]),
     )
-
-
-@StreamBot.on_callback_query(filters.regex("^start_"))
-async def button(_, m: CallbackQuery):
-    """
-    handle button presses
-    :param _: pyrogram.Client
-    :param m: pyrogram.types.Message
-    """
-    cb_data = m.data
-    msg = m.message
-
-    match cb_data:
-        case "start_aboutbot":
-            await msg.edit(
-                text=ABOUT,
-                parse_mode=ParseMode.HTML,
-                disable_web_page_preview=True,
-                reply_markup=ikb([[Btns.back]]),
-            )
-        case "start_helptext":
-            await msg.edit(
-                text=HELPTEXT,
-                parse_mode=ParseMode.HTML,
-                disable_web_page_preview=True,
-                reply_markup=ikb([[Btns.back]]),
-            )
-        case "start_gotohome":
-            await msg.edit(
-                text=PMTEXT.format(msg.from_user.mention),
-                parse_mode=ParseMode.HTML,
-                disable_web_page_preview=True,
-                reply_markup=ikb(
-                    [Btns.channel_and_group, [Btns.about_me, Btns.help_me]],
-                ),
-            )
-        case _:
-            await msg.edit("Invalid Button Pressed!")
-    await m.answer()
