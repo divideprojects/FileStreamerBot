@@ -15,6 +15,7 @@ class Vars:
     API_ID = int(config("API_ID", default=None))
     API_HASH = str(config("API_HASH", default=None))
     BOT_TOKEN = str(config("BOT_TOKEN", default=None))
+    MISSALITABOT_TOKEN = str(config("MISSALITABOT_TOKEN", default=None))
     SLEEP_THRESHOLD = int(config("SLEEP_THRESHOLD", default=60))
     WORKERS = int(config("WORKERS", default=8))
     LOG_CHANNEL = int(config("LOG_CHANNEL", default=-100))

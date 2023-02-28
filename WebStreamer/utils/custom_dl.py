@@ -30,7 +30,7 @@ class TGCustomYield:
     class to get the file from telegram servers
     """
 
-    def __init__(self):
+    def __init__(self, main_bot: Client = StreamBot):
         """
         A custom method to stream files from telegram. functions: generate_file_properties: returns the properties
         for a media on a specific message contained in FileId class. generate_media_session: returns the media
@@ -38,7 +38,7 @@ class TGCustomYield:
         servers for streaming.
         """
         # NOTE: This is the default bot, can add a list and iterate over it to switch to different bots, need to add clients to 'bot/__init__.py'
-        self.main_bot = StreamBot
+        self.main_bot = main_bot
 
     @staticmethod
     async def generate_file_properties(m: Message):
