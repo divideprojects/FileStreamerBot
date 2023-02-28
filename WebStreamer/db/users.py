@@ -14,6 +14,7 @@ def new_user(uid: int) -> Dict[str, Union[str, int, date]]:
         "_id": uid,
         "join_date": date.today().isoformat(),
         "expire_time": "86400",  # 24 hours in seconds
+        "ban": False,  # no use is banned by default
     }
 
 
@@ -49,14 +50,10 @@ class Users(MongoDB):
         """
         user = await self.find_one({"_id": user_id})
         if not user:
-            user_data = {
-                "_id": user_id,
-                "join_date": date.today().isoformat(),
-                "expire_time": "86400",  # 24 hours in seconds
-            }
+            # if user is not in the database, add them
+            user_data = new_user(user_id)
             LOGGER.info(f"New User: {user_id}")
             await self.insert_one(user_data)
-            return False
         return True
 
     async def delete_user(self, user_id: int) -> Union[bool, int]:
@@ -67,7 +64,7 @@ class Users(MongoDB):
         """
         return await self.delete_one({"_id": user_id})
 
-    async def get_user_expire_time(self, user_id: int) -> int:
+    async def get_expire_time(self, user_id: int) -> int:
         """
         Returns the expire time for a user (in seconds)
 
@@ -83,7 +80,11 @@ class Users(MongoDB):
         except:
             return 86400
 
-    async def set_user_expire_time(self, user_id: int, expire_time: int) -> bool:
+    async def set_expire_time(
+        self,
+        user_id: int,
+        expire_time: Union[int, bool],
+    ) -> bool:
         """
         Sets the expire time for a user (in seconds)
 
@@ -95,3 +96,30 @@ class Users(MongoDB):
             bool: True if the expire time was set, False otherwise
         """
         return await self.update({"_id": user_id}, {"expire_time": expire_time})
+
+    async def is_banned(self, user_id: int) -> bool:
+        """Gets the ban status of a user
+
+        Args:
+            user_id (int): User ID to get ban status for
+
+        Returns:
+            bool: True if the user is banned, False otherwise
+        """
+        try:
+            user = await self.find_one({"_id": user_id})
+            return int(user["ban"])
+        except:
+            return False
+
+    async def set_user_ban_status(self, user_id: int, ban_status: bool) -> bool:
+        """Sets the ban status of a user
+
+        Args:
+            user_id (int): User ID to set ban status for
+            ban_status (bool): The ban status for the user
+
+        Returns:
+            bool: True if the ban status was set, False otherwise
+        """
+        return await self.update({"_id": user_id}, {"ban": ban_status})

@@ -2,6 +2,7 @@ from pyrogram import filters
 from pyrogram.types import CallbackQuery, Message
 
 from WebStreamer.bot import StreamBot
+from WebStreamer.db.users import Users
 from WebStreamer.vars import Vars
 
 
@@ -13,8 +14,8 @@ async def ban_user(c: StreamBot, q: CallbackQuery):
     :param q: pyrogram.types.CallbackQuery
     """
     user_id = int(q.data.split("_", 1)[1])
-    await c.ban_chat_member(Vars.AUTH_CHANNEL, user_id)
-    await q.answer("User Banned from Updates Channel!", show_alert=True)
+    await Users().set_user_ban_status(user_id, True)
+    await q.answer("User Banned in Database!", show_alert=True)
 
 
 @StreamBot.on_message(

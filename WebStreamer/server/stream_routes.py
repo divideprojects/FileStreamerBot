@@ -6,13 +6,13 @@ from typing import Dict, Union
 
 from aiohttp import web
 from aiohttp_jinja2 import template
+from pypers.formatters import Formatters
 
 from WebStreamer import StartTime
 from WebStreamer.bot import StreamBot
-from WebStreamer.db import Downloads
+from WebStreamer.db import Downloads, Users
 from WebStreamer.logger import LOGGER
 from WebStreamer.utils.custom_dl import TGCustomYield, chunk_size, offset_fix
-from WebStreamer.utils.time_format import get_readable_time
 from WebStreamer.vars import Vars
 
 routes = web.RouteTableDef()
@@ -27,8 +27,9 @@ async def index_handler(_) -> web.StreamResponse:
         {
             "status": "Active",
             "maintainer": "DivideProjects",
-            "uptime": get_readable_time(time() - StartTime),
+            "uptime": Formatters.time_formatter(time() - StartTime),
             "bot_username": "GetPublicLink_Robot",
+            "bot_link": "https://t.me/GetPublicLink_Robot",
         },
     )
 
@@ -44,6 +45,21 @@ async def stream_handler(request) -> Union[web.StreamResponse, Dict[str, str]]:
     """
     try:
         random_link = request.match_info["random_link"]
+
+        # check if user is banned
+        if await Users().is_banned(random_link.split("-")[1]):
+            # user_id is the second part of the random_link separated by '-'
+            # if user is banned, return 403
+            return web.json_response(
+                {
+                    "status": "user_banned",
+                    "maintained_by": "@DivideProjects",
+                    "telegram_bot": "@GetPublicLink_Robot",
+                },
+                status=403,
+            )
+
+        # get the actual link
         real_link = await Downloads().get_actual_link(random_link)
         return {"download_link": Vars.URL + real_link}
     except ValueError as ef:

@@ -56,7 +56,7 @@ async def private_receive_handler(c: Client, m: Message):
     user = m.from_user
     user_id = user.id
     users_db = Users()
-    user_expire_time = await users_db.get_user_expire_time(user_id)
+    user_expire_time = await users_db.get_expire_time(user_id)
 
     if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
         # spam check

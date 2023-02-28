@@ -22,7 +22,7 @@ async def expire_settings(_, m: Message):
     reply_text = ""
     match len(args):
         case 1:
-            current_expire_time = await users_db.get_user_expire_time(user_id)
+            current_expire_time = await users_db.get_expire_time(user_id)
             reply_text = (
                 f"Your stream links expire after {Formatters.time_formatter(current_expire_time)}."
                 if current_expire_time != -1
@@ -32,7 +32,7 @@ async def expire_settings(_, m: Message):
             time = args[1].lower()
             # NOTE: Only 'never' is allowed for owners
             if args[1] == "never" and user_id == Vars.OWNER_ID:
-                await users_db.set_user_expire_time(user_id, -1)
+                await users_db.set_expire_time(user_id, -1)
                 reply_text = "Your stream links will never expire."
             else:
                 seconds_time = Formatters.get_time_in_seconds(time)
@@ -40,7 +40,7 @@ async def expire_settings(_, m: Message):
                     reply_text = "Invalid time format. Send a time in m/h/d/w format to set the expire time for your stream links."
                 else:
                     reply_text = f"Your stream links will expire after {time}."
-                    await users_db.set_user_expire_time(user_id, seconds_time)
+                    await users_db.set_expire_time(user_id, seconds_time)
         case _:
             reply_text = "Invalid command usage. Send /expire to get your current expire time or send /expire <time> to set your expire time."
     await m.reply_text(reply_text)
