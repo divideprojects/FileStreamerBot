@@ -35,7 +35,7 @@ jobs:
   ci:
     defaults:
       run:
-        working-directory: scripts
+        working-directory: cf-workers
     runs-on: ubuntu-latest
     needs: pre-commit
     strategy:
@@ -53,13 +53,12 @@ jobs:
       - run: npm run lint
 
   deploy-worker:
-    defaults:
-      run:
-        working-directory: scripts
     needs:
       - ci
       - pre-commit
     if: github.event_name != 'pull_request'
     name: Deploy
     uses: divkix/reusable-workflows/.github/workflows/wrangler-publish.yml@main
+    with:
+      working-directory: cf-workers
     secrets: inherit
