@@ -125,7 +125,9 @@ Please wait while I process your file ...
                 file_name,
                 file_size,
                 stream_link,
-                Formatters.time_formatter(user_expire_time),
+                Formatters.time_formatter(user_expire_time)
+                if user_expire_time != -1
+                else "Never",
             ),
             disable_web_page_preview=True,
             reply_markup=ikb(
