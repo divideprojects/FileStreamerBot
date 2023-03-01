@@ -9,7 +9,16 @@ from aiohttp_jinja2 import template
 from pypers.formatters import Formatters
 
 from WebStreamer import StartTime
-from WebStreamer.bot import MissAliTaBot, StreamBot
+from WebStreamer.bot import (
+    AlitaBetaBot,
+    DivkixBot,
+    DPWatermarkBot,
+    GoFilterBot,
+    MissAliTaBot,
+    PremiumAccountsRobot,
+    StreamBot,
+    VidMergeBot,
+)
 from WebStreamer.db import Downloads, Users
 from WebStreamer.logger import LOGGER
 from WebStreamer.utils.custom_dl import TGCustomYield, chunk_size, offset_fix
@@ -113,7 +122,17 @@ async def media_streamer(request, message_id: int) -> web.StreamResponse:
     """
     range_header = request.headers.get("Range", 0)
     media_msg = await StreamBot.get_messages(Vars.LOG_CHANNEL, message_id)
-    file_properties = await TGCustomYield(MissAliTaBot).generate_file_properties(
+    file_properties = await TGCustomYield(
+        [
+            MissAliTaBot,
+            DivkixBot,
+            PremiumAccountsRobot,
+            GoFilterBot,
+            AlitaBetaBot,
+            DPWatermarkBot,
+            VidMergeBot,
+        ],
+    ).generate_file_properties(
         media_msg,
     )
     file_size = file_properties.file_size

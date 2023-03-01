@@ -1,5 +1,6 @@
 from math import ceil, log2
-from typing import Union
+from secrets import choice
+from typing import List, Union
 
 from pyrogram import Client, raw, utils
 from pyrogram.errors import AuthBytesInvalid
@@ -8,6 +9,7 @@ from pyrogram.session import Auth, Session
 from pyrogram.types import Message
 
 from WebStreamer.bot import StreamBot
+from WebStreamer.logger import LOGGER
 
 
 async def chunk_size(length) -> int:
@@ -30,7 +32,7 @@ class TGCustomYield:
     class to get the file from telegram servers
     """
 
-    def __init__(self, main_bot: Client = StreamBot):
+    def __init__(self, main_bot: List[Client] = StreamBot):
         """
         A custom method to stream files from telegram. functions: generate_file_properties: returns the properties
         for a media on a specific message contained in FileId class. generate_media_session: returns the media
@@ -38,7 +40,9 @@ class TGCustomYield:
         servers for streaming.
         """
         # NOTE: This is the default bot, can add a list and iterate over it to switch to different bots, need to add clients to 'bot/__init__.py'
-        self.main_bot = main_bot
+        # choose a different bot from the list each time
+        self.main_bot = choice(main_bot)
+        LOGGER.info(f"Using {self.main_bot.name} to stream files")
 
     @staticmethod
     async def generate_file_properties(m: Message):

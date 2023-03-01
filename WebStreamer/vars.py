@@ -14,8 +14,17 @@ class Vars:
 
     API_ID = int(config("API_ID", default=None))
     API_HASH = str(config("API_HASH", default=None))
+
+    # Bot tokens
     BOT_TOKEN = str(config("BOT_TOKEN", default=None))
     MISSALITABOT_TOKEN = str(config("MISSALITABOT_TOKEN", default=None))
+    DIVKIXBOT_TOKEN = str(config("DIVKIXBOT_TOKEN", default=None))
+    PREMIUMACCOUNTSROBOT_TOKEN = str(config("PREMIUMACCOUNTSROBOT_TOKEN", default=None))
+    GOFILTERBOT_TOKEN = str(config("GOFILTERBOT_TOKEN", default=None))
+    ALITABETABOT_TOKEN = str(config("ALITABETABOT_TOKEN", default=None))
+    DP_WATERMARKBOTBOT_TOKEN = str(config("DP_WATERMARKBOTBOT_TOKEN", default=None))
+    VIDMERGEBOT_TOKEN = str(config("VIDMERGEBOT_TOKEN", default=None))
+
     SLEEP_THRESHOLD = int(config("SLEEP_THRESHOLD", default=60))
     WORKERS = int(config("WORKERS", default=8))
     LOG_CHANNEL = int(config("LOG_CHANNEL", default=-100))
