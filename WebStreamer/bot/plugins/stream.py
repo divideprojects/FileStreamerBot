@@ -12,7 +12,6 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.db import Downloads
 from WebStreamer.db.users import Users
 from WebStreamer.logger import LOGGER
-from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.ikb import ikb
 from WebStreamer.utils.joinCheck import joinCheck
 from WebStreamer.vars import Vars
@@ -98,7 +97,7 @@ Please wait while I process your file ...
         # Only get file size if it's a file, different for photos
         doc = m.document or m.audio or m.video
         if doc:
-            file_size = humanbytes(doc.file_size)
+            file_size = Formatters.humanbytes(doc.file_size)
             file_name = doc.file_name
         else:
             file_size = "nil"
