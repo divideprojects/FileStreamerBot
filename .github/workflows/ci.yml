@@ -32,10 +32,12 @@ jobs:
           dontuseforce: 1
 
   # Workflows for cf-workers
-  ci:
+  ci-worker:
     defaults:
       run:
         working-directory: cf-worker
+    # do not run if it is a pr
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     needs: pre-commit
     strategy:
@@ -54,7 +56,7 @@ jobs:
 
   deploy-worker:
     needs:
-      - ci
+      - ci-worker
       - pre-commit
     if: github.event_name != 'pull_request'
     name: Deploy
