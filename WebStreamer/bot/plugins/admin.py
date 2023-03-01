@@ -107,10 +107,7 @@ async def userlist(_, m: Message):
 
 
 @StreamBot.on_message(
-    filters.command("broadcast")
-    & filters.private
-    & filters.user(Vars.OWNER_ID)
-    & filters.reply,
+    filters.command("broadcast") & filters.private & filters.user(Vars.OWNER_ID),
 )
 async def broadcast_(_, m: Message):
     """
@@ -120,11 +117,15 @@ async def broadcast_(_, m: Message):
     """
     all_users = await Users().get_all_users()
     broadcast_msg = m.reply_to_message
+    # only replied msg can be broadcasted
+    if not broadcast_msg:
+        await m.reply_text("Reply to a message to broadcast.")
+        return
     while 1:
         broadcast_id = "".join(choice(ascii_letters) for _ in range(3))
         if not broadcast_ids.get(broadcast_id):
             break
-    out = await m.reply_text(
+    out_msg = await m.reply_text(
         "Broadcast initiated! You will be notified with log file when all the users are notified.",
     )
     start_time = time()
@@ -141,13 +142,16 @@ async def broadcast_(_, m: Message):
             sts, msg = await send_msg(user_id=int(user), m=broadcast_msg)
             if msg is not None:
                 await broadcast_log_file.write(msg)
-            if sts == 200:
-                success += 1
-            else:
-                failed += 1
-            if sts == 400:
-                await Users().delete_user(user)
+
+            match sts:
+                case 200:
+                    success += 1
+                case 400:
+                    await Users().delete_user(user)
+                case _:
+                    failed += 1
             done += 1
+
             if broadcast_ids.get(broadcast_id) is None:
                 break
             else:
@@ -158,7 +162,7 @@ async def broadcast_(_, m: Message):
         broadcast_ids.pop(broadcast_id)
     completed_in = timedelta(seconds=int(time() - start_time))
     await sleep(3)
-    await out.delete()
+    await out_msg.delete()
     if failed == 0:
         await m.reply_text(
             text=(

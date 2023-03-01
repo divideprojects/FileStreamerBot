@@ -7,7 +7,7 @@ from WebStreamer.vars import Vars
 
 
 @StreamBot.on_callback_query(filters.regex("^ban_"))
-async def ban_user(c: StreamBot, q: CallbackQuery):
+async def ban_user(_, q: CallbackQuery):
     """
     Ban a user from using the bot
     :param c: pyrogram.Client
