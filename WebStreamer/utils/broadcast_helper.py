@@ -12,8 +12,14 @@ from pyrogram.types import Message
 
 
 async def send_msg(user_id: int, m: Message) -> Tuple[int, Union[Message, None, str]]:
-    """
-    Send message to user using their user_id
+    """send_msg function to send message to user
+
+    Args:
+        user_id (int): user_id to send message
+        m (Message): Message to forward
+
+    Returns:
+        Tuple[int, Union[Message, None, str]]: status code, status message
     """
     try:
         await m.forward(chat_id=user_id)

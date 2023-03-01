@@ -6,8 +6,10 @@ from WebStreamer.server.stream_routes import routes
 
 
 async def web_server() -> web.Application:
-    """
-    Create the web server and return it
+    """Create the web server and return it
+
+    Returns:
+        web.Application: The web server
     """
     web_app = web.Application(client_max_size=30000000)
     # setup jinja2 with the web templates from templates folder

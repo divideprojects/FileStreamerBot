@@ -8,11 +8,21 @@ from WebStreamer.vars import Vars
 support_group = "https://t.me/DivideSupport"
 
 
-def ban_kb(user_id: int):
+def ban_kb(user_id: int) -> InlineKeyboardMarkup:
+    """ban_kb function to send ban keyboard
+
+    Args:
+        user_id (int): user_id to ban
+
+    Returns:
+        InlineKeyboardMarkup: ban keyboard
+    """
     return ikb([[("Ban User", f"ban_{user_id}")]]) if user_id != Vars.OWNER_ID else None
 
 
 def joinCheck():
+    """Function to check if user is joined the channel or not"""
+
     def wrapper(func):
         async def decorator(c, m):
             if not Vars.JOIN_CHECK:

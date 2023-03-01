@@ -2,7 +2,7 @@ from pyrogram import Client
 
 from WebStreamer.vars import Vars
 
-# Initialize bot
+# Initialize bot, for normal bot operations
 StreamBot = Client(
     "Web Streamer",
     api_id=Vars.API_ID,
