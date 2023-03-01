@@ -87,7 +87,10 @@ class Downloads(MongoDB):
         """
         all_data = await self.find_all()
         valid_count = [
-            document for document in all_data if document["valid_upto"] > datetime.now()
+            document
+            for document in all_data
+            # using -1 as a flag for never expiring links
+            if (document["valid_upto"] == -1 or document["valid_upto"] > datetime.now())
         ]
         return (
             valid_count,
