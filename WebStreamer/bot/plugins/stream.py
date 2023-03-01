@@ -42,7 +42,16 @@ ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60))
 
 @StreamBot.on_message(
     filters.private
-    & (filters.document | filters.video | filters.audio | filters.photo),
+    & (
+        filters.document
+        | filters.video
+        | filters.audio
+        | filters.animation
+        | filters.voice
+        | filters.video_note
+        | filters.photo
+        | filters.sticker
+    ),
     group=4,
 )
 @joinCheck()  # Check if user has joined the channel
