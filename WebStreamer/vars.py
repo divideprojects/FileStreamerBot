@@ -17,13 +17,7 @@ class Vars:
 
     # Bot tokens
     BOT_TOKEN = str(config("BOT_TOKEN", default=None))
-    MISSALITABOT_TOKEN = str(config("MISSALITABOT_TOKEN", default=None))
-    DIVKIXBOT_TOKEN = str(config("DIVKIXBOT_TOKEN", default=None))
-    PREMIUMACCOUNTSROBOT_TOKEN = str(config("PREMIUMACCOUNTSROBOT_TOKEN", default=None))
-    GOFILTERBOT_TOKEN = str(config("GOFILTERBOT_TOKEN", default=None))
-    ALITABETABOT_TOKEN = str(config("ALITABETABOT_TOKEN", default=None))
-    DP_WATERMARKBOTBOT_TOKEN = str(config("DP_WATERMARKBOTBOT_TOKEN", default=None))
-    VIDMERGEBOT_TOKEN = str(config("VIDMERGEBOT_TOKEN", default=None))
+    # Bot tokens end
 
     SLEEP_THRESHOLD = int(config("SLEEP_THRESHOLD", default=60))
     WORKERS = int(config("WORKERS", default=8))
@@ -31,6 +25,7 @@ class Vars:
     PORT = int(config("PORT", default=8080))
     BIND_ADDRESS = str(config("WEB_SERVER_BIND_ADDRESS", default="0.0.0.0"))
     OWNER_ID = int(config("OWNER_ID", default=1198820588))
+    HASH_LENGTH = int(config("HASH_LENGTH", default=6))
     NO_PORT = bool(config("NO_PORT", default=False))
     APP_NAME = None
     if "DYNO" in environ:
@@ -48,5 +43,10 @@ class Vars:
     DATABASE_NAME = str(config("DATABASE_NAME", default="filestreambot"))
     SUPPORT_GROUP = config("SUPPORT_GROUP", default="@DivideSupport")
     AUTH_CHANNEL = str(config("AUTH_CHANNEL", default="@DivideProjects"))
-    JOIN_CHECK = config("JOIN_CHECK", default=None, cast=config.boolean)
+    JOIN_CHECK = config(
+        "JOIN_CHECK",
+        default=False,
+        cast=config.boolean,
+    )  # join check false unless specified
     FLOODCONTROL_TIME_MINUTES = int(config("FLOODCONTROL_TIME_MINUTES", default=5))
+    MULTI_CLIENT = False  # this value is set later if MULTIBOT_TOKENS is set

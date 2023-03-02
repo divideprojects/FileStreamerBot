@@ -1,114 +1,92 @@
-from math import ceil, log2
-from secrets import choice
-from typing import List, Union
+from asyncio import create_task, sleep
+from typing import Dict, Union
 
 from pyrogram import Client, raw, utils
 from pyrogram.errors import AuthBytesInvalid
 from pyrogram.file_id import FileId, FileType, ThumbnailSource
 from pyrogram.session import Auth, Session
-from pyrogram.types import Message
 
-from WebStreamer.bot import StreamBot
+from WebStreamer.bot import work_loads
 from WebStreamer.logger import LOGGER
+from WebStreamer.server.exceptions import FIleNotFound
+from WebStreamer.utils.file_properties import get_file_ids
+from WebStreamer.vars import Vars
 
 
-async def chunk_size(length) -> int:
-    """
-    Calculate chunk size based on file length
-    """
-    return 2 ** max(min(ceil(log2(length / 1024)), 10), 2) * 1024
+class ByteStreamer:
+    def __init__(self, client: Client):
+        """A custom class that holds the cache of a specific client and class functions.
+        attributes:
+            client: the client that the cache is for.
+            cached_file_ids: a dict of cached file IDs.
+            cached_file_properties: a dict of cached file properties.
 
+        functions:
+            generate_file_properties: returns the properties for a media of a specific message contained in Tuple.
+            generate_media_session: returns the media session for the DC that contains the media file.
+            yield_file: yield a file from telegram servers for streaming.
 
-async def offset_fix(offset, chunksize) -> int:
-    """
-    Fix offset to be a multiple of chunksize
-    """
-    offset -= offset % chunksize
-    return offset
-
-
-class TGCustomYield:
-    """
-    class to get the file from telegram servers
-    """
-
-    def __init__(self, main_bot: List[Client] = [StreamBot]):
+        This is a modified version of the <https://github.com/eyaadh/megadlbot_oss/blob/master/mega/telegram/utils/custom_download.py>
+        Thanks to Eyaadh <https://github.com/eyaadh>
         """
-        A custom method to stream files from telegram. functions: generate_file_properties: returns the properties
-        for a media on a specific message contained in FileId class. generate_media_session: returns the media
-        session for the DC that contains the media file on the message. yield_file: yield a file from telegram
-        servers for streaming.
-        """
-        # NOTE: This is the default bot, can add a list and iterate over it to switch to different bots, need to add clients to 'bot/__init__.py'
-        # choose a different bot from the list each time
-        bot_used: Client = choice(main_bot)
-        self.main_bot = bot_used
-        LOGGER.info(f"Using {bot_used.name} to stream files")
+        self.clean_timer = 30 * 60
+        self.client: Client = client
+        self.cached_file_ids: Dict[int, FileId] = {}
+        create_task(self.clean_cache())
 
-    @staticmethod
-    async def generate_file_properties(m: Message):
+    async def get_file_properties(self, message_id: int) -> FileId:
         """
-        generate file properties from a message
+        Returns the properties of a media of a specific message in a FIleId class.
+        if the properties are cached, then it'll return the cached results.
+        or it'll generate the properties from the Message ID and cache them.
         """
-        available_media = (
-            "audio",
-            "document",
-            "photo",
-            "sticker",
-            "animation",
-            "video",
-            "voice",
-            "video_note",
+        if message_id not in self.cached_file_ids:
+            await self.generate_file_properties(message_id)
+            LOGGER.debug(f"Cached file properties for message with ID {message_id}")
+        return self.cached_file_ids[message_id]
+
+    async def generate_file_properties(self, message_id: int) -> FileId:
+        """
+        Generates the properties of a media file on a specific message.
+        returns ths properties in a FIleId class.
+        """
+        file_id = await get_file_ids(self.client, Vars.LOG_CHANNEL, message_id)
+        LOGGER.debug(
+            f"Generated file ID and Unique ID for message with ID {message_id}",
         )
+        if not file_id:
+            LOGGER.debug(f"Message with ID {message_id} not found")
+            raise FIleNotFound
+        self.cached_file_ids[message_id] = file_id
+        LOGGER.debug(f"Cached media message with ID {message_id}")
+        return self.cached_file_ids[message_id]
 
-        if isinstance(m, Message):
-            error_message = "This message doesn't contain any downloadable media"
-            for kind in available_media:
-                media = getattr(m, kind, None)
-
-                if media is not None:
-                    break
-            else:
-                raise ValueError(error_message)
-        else:
-            media = m
-
-        file_id_str = media if isinstance(media, str) else media.file_id
-        file_id_obj = FileId.decode(file_id_str)
-
-        # The below lines are added to avoid a break in routes.py
-        setattr(file_id_obj, "file_size", getattr(media, "file_size", 0))
-        setattr(file_id_obj, "mime_type", getattr(media, "mime_type", ""))
-        setattr(file_id_obj, "file_name", getattr(media, "file_name", ""))
-
-        return file_id_obj
-
-    async def generate_media_session(self, c: Client, m: Message):
+    async def generate_media_session(self, client: Client, file_id: FileId) -> Session:
         """
-        generate media session from a message
+        Generates the media session for the DC that contains the media file.
+        This is required for getting the bytes from Telegram servers.
         """
-        data = await self.generate_file_properties(m)
 
-        media_session = c.media_sessions.get(data.dc_id, None)
+        media_session = client.media_sessions.get(file_id.dc_id, None)
 
         if media_session is None:
-            if data.dc_id != await c.storage.dc_id():
+            if file_id.dc_id != await client.storage.dc_id():
                 media_session = Session(
-                    c,
-                    data.dc_id,
+                    client,
+                    file_id.dc_id,
                     await Auth(
-                        c,
-                        data.dc_id,
-                        await c.storage.test_mode(),
+                        client,
+                        file_id.dc_id,
+                        await client.storage.test_mode(),
                     ).create(),
-                    await c.storage.test_mode(),
+                    await client.storage.test_mode(),
                     is_media=True,
                 )
                 await media_session.start()
 
-                for _ in range(3):
-                    exported_auth = await c.invoke(
-                        raw.functions.auth.ExportAuthorization(dc_id=data.dc_id),
+                for _ in range(6):
+                    exported_auth = await client.invoke(
+                        raw.functions.auth.ExportAuthorization(dc_id=file_id.dc_id),
                     )
 
                     try:
@@ -118,31 +96,40 @@ class TGCustomYield:
                                 bytes=exported_auth.bytes,
                             ),
                         )
-                    except AuthBytesInvalid:
-                        continue
-                    else:
                         break
+                    except AuthBytesInvalid:
+                        LOGGER.debug(
+                            f"Invalid authorization bytes for DC {file_id.dc_id}",
+                        )
+                        continue
                 else:
                     await media_session.stop()
                     raise AuthBytesInvalid
             else:
                 media_session = Session(
-                    c,
-                    data.dc_id,
-                    await c.storage.auth_key(),
-                    await c.storage.test_mode(),
+                    client,
+                    file_id.dc_id,
+                    await client.storage.auth_key(),
+                    await client.storage.test_mode(),
                     is_media=True,
                 )
                 await media_session.start()
-
-            c.media_sessions[data.dc_id] = media_session
-
+            LOGGER.debug(f"Created media session for DC {file_id.dc_id}")
+            client.media_sessions[file_id.dc_id] = media_session
+        else:
+            LOGGER.debug(f"Using cached media session for DC {file_id.dc_id}")
         return media_session
 
     @staticmethod
-    async def get_location(file_id: FileId):
+    async def get_location(
+        file_id: FileId,
+    ) -> Union[
+        raw.types.InputPhotoFileLocation,
+        raw.types.InputDocumentFileLocation,
+        raw.types.InputPeerPhotoFileLocation,
+    ]:
         """
-        get location from file id
+        Returns the file location for the media file.
         """
         file_type = file_id.file_type
 
@@ -152,122 +139,106 @@ class TGCustomYield:
                     user_id=file_id.chat_id,
                     access_hash=file_id.chat_access_hash,
                 )
-            elif file_id.chat_access_hash == 0:
-                peer = raw.types.InputPeerChat(chat_id=-file_id.chat_id)
             else:
-                peer = raw.types.InputPeerChannel(
-                    channel_id=utils.get_channel_id(file_id.chat_id),
-                    access_hash=file_id.chat_access_hash,
-                )
+                if file_id.chat_access_hash == 0:
+                    peer = raw.types.InputPeerChat(chat_id=-file_id.chat_id)
+                else:
+                    peer = raw.types.InputPeerChannel(
+                        channel_id=utils.get_channel_id(file_id.chat_id),
+                        access_hash=file_id.chat_access_hash,
+                    )
 
-            return raw.types.InputPeerPhotoFileLocation(
+            location = raw.types.InputPeerPhotoFileLocation(
                 peer=peer,
-                photo_id=file_id.media_id,
+                volume_id=file_id.volume_id,
+                local_id=file_id.local_id,
                 big=file_id.thumbnail_source == ThumbnailSource.CHAT_PHOTO_BIG,
             )
         elif file_type == FileType.PHOTO:
-            return raw.types.InputPhotoFileLocation(
+            location = raw.types.InputPhotoFileLocation(
                 id=file_id.media_id,
                 access_hash=file_id.access_hash,
                 file_reference=file_id.file_reference,
                 thumb_size=file_id.thumbnail_size,
             )
         else:
-            return raw.types.InputDocumentFileLocation(
+            location = raw.types.InputDocumentFileLocation(
                 id=file_id.media_id,
                 access_hash=file_id.access_hash,
                 file_reference=file_id.file_reference,
                 thumb_size=file_id.thumbnail_size,
             )
+        return location
 
     async def yield_file(
         self,
-        media_msg: Message,
+        file_id: FileId,
+        index: int,
         offset: int,
         first_part_cut: int,
         last_part_cut: int,
         part_count: int,
-        chunk_size_int: int,
-    ) -> Union[str, None]:  # pylint: disable=unsubscriptable-object
+        chunk_size: int,
+    ) -> Union[str, None]:
         """
-        yield a file from telegram servers for streaming
+        Custom generator that yields the bytes of the media file.
+        Modded from <https://github.com/eyaadh/megadlbot_oss/blob/master/mega/telegram/utils/custom_download.py#L20>
+        Thanks to Eyaadh <https://github.com/eyaadh>
         """
-        client = self.main_bot
-        data = await self.generate_file_properties(media_msg)
-        media_session = await self.generate_media_session(client, media_msg)
+        client = self.client
+        work_loads[index] += 1
+        LOGGER.debug(f"Starting to yielding file with client {index}.")
+        media_session = await self.generate_media_session(client, file_id)
 
-        location = await self.get_location(data)
+        current_part = 1
+        location = await self.get_location(file_id)
 
-        r = await media_session.invoke(
-            raw.functions.upload.GetFile(
-                location=location,
-                offset=offset,
-                limit=chunk_size_int,
-            ),
-        )
+        try:
+            r = await media_session.invoke(
+                raw.functions.upload.GetFile(
+                    location=location,
+                    offset=offset,
+                    limit=chunk_size,
+                ),
+            )
+            if isinstance(r, raw.types.upload.File):
+                while True:
+                    chunk = r.bytes
+                    if not chunk:
+                        break
+                    elif part_count == 1:
+                        yield chunk[first_part_cut:last_part_cut]
+                    elif current_part == 1:
+                        yield chunk[first_part_cut:]
+                    elif current_part == part_count:
+                        yield chunk[:last_part_cut]
+                    else:
+                        yield chunk
 
-        if isinstance(r, raw.types.upload.File):
-            current_part = 1
+                    current_part += 1
+                    offset += chunk_size
 
-            while current_part <= part_count:
-                chunk = r.bytes
-                if not chunk:
-                    break
-                offset += chunk_size_int
-                if part_count == 1:
-                    yield chunk[first_part_cut:last_part_cut]
-                    break
-                if current_part == 1:
-                    yield chunk[first_part_cut:]
-                if 1 < current_part <= part_count:
-                    yield chunk
+                    if current_part > part_count:
+                        break
 
-                r = await media_session.invoke(
-                    raw.functions.upload.GetFile(
-                        location=location,
-                        offset=offset,
-                        limit=chunk_size_int,
-                    ),
-                )
+                    r = await media_session.invoke(
+                        raw.functions.upload.GetFile(
+                            location=location,
+                            offset=offset,
+                            limit=chunk_size,
+                        ),
+                    )
+        except (TimeoutError, AttributeError):
+            pass
+        finally:
+            LOGGER.debug("Finished yielding file with {current_part} parts.")
+            work_loads[index] -= 1
 
-                current_part += 1
-
-    async def download_as_bytesio(self, m: Message):
+    async def clean_cache(self) -> None:
         """
-        download a file as bytesio
+        function to clean the cache to reduce memory usage
         """
-        client = self.main_bot
-        data = await self.generate_file_properties(m)
-        media_session = await self.generate_media_session(client, m)
-
-        location = await self.get_location(data)
-
-        limit = 1024 * 1024
-        offset = 0
-
-        r = await media_session.invoke(
-            raw.functions.upload.GetFile(location=location, offset=offset, limit=limit),
-        )
-
-        if isinstance(r, raw.types.upload.File):
-            m_file = []
-            # m_file.name = file_name
-            while True:
-                chunk = r.bytes
-
-                if not chunk:
-                    break
-
-                m_file.append(chunk)
-
-                offset += limit
-
-                r = await media_session.invoke(
-                    raw.functions.upload.GetFile(
-                        location=location,
-                        offset=offset,
-                        limit=limit,
-                    ),
-                )
-
-            return m_file
+        while True:
+            await sleep(self.clean_timer)
+            self.cached_file_ids.clear()
+            LOGGER.debug("Cleaned the cache")

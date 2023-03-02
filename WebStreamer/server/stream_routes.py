@@ -1,6 +1,5 @@
-from math import ceil
+from math import ceil, floor
 from mimetypes import guess_type
-from secrets import token_hex
 from time import time
 from typing import Dict, Union
 
@@ -9,19 +8,11 @@ from aiohttp_jinja2 import template
 from pypers.formatters import Formatters
 
 from WebStreamer import StartTime
-from WebStreamer.bot import (
-    AlitaBetaBot,
-    DivkixBot,
-    DPWatermarkBot,
-    GoFilterBot,
-    MissAliTaBot,
-    PremiumAccountsRobot,
-    StreamBot,
-    VidMergeBot,
-)
+from WebStreamer.bot import multi_clients, work_loads
 from WebStreamer.db import Downloads, Users
 from WebStreamer.logger import LOGGER
-from WebStreamer.utils.custom_dl import TGCustomYield, chunk_size, offset_fix
+from WebStreamer.utils.custom_dl import ByteStreamer
+from WebStreamer.utils.file_properties import get_name
 from WebStreamer.vars import Vars
 
 routes = web.RouteTableDef()
@@ -39,6 +30,13 @@ async def index_handler(_) -> web.StreamResponse:
             "uptime": Formatters.time_formatter(time() - StartTime),
             "bot_username": "GetPublicLink_Robot",
             "bot_link": "https://t.me/GetPublicLink_Robot",
+            "connected_bots": len(multi_clients),
+            "loads": {
+                "bot" + str(c + 1): l
+                for c, (_, l) in enumerate(
+                    sorted(work_loads.items(), key=lambda x: x[1], reverse=True),
+                )
+            },
         },
     )
 
@@ -113,29 +111,30 @@ async def stream_handler(request) -> web.StreamResponse:
         raise web.HTTPNotFound
 
 
-async def media_streamer(request, message_id: int) -> web.StreamResponse:
-    """
-    Media Streamer for WebStreamer, the '/{real_link}' route.
-    :param request: Request object
-    :param message_id: Message ID of the file to be streamed
-    :return: StreamResponse object
-    """
+class_cache = {}
+
+
+async def media_streamer(request: web.Request, message_id: int):
     range_header = request.headers.get("Range", 0)
-    media_msg = await StreamBot.get_messages(Vars.LOG_CHANNEL, message_id)
-    file_properties = await TGCustomYield(
-        [
-            MissAliTaBot,
-            DivkixBot,
-            PremiumAccountsRobot,
-            GoFilterBot,
-            AlitaBetaBot,
-            DPWatermarkBot,
-            VidMergeBot,
-        ],
-    ).generate_file_properties(
-        media_msg,
-    )
-    file_size = file_properties.file_size
+
+    index = min(work_loads, key=work_loads.get)
+    faster_client = multi_clients[index]
+
+    if Vars.MULTI_CLIENT:
+        LOGGER.info(f"Client {index} is now serving {request.remote}")
+
+    if faster_client in class_cache:
+        tg_connect = class_cache[faster_client]
+        LOGGER.debug(f"Using cached ByteStreamer object for client {index}")
+    else:
+        LOGGER.debug(f"Creating new ByteStreamer object for client {index}")
+        tg_connect = ByteStreamer(faster_client)
+        class_cache[faster_client] = tg_connect
+    LOGGER.debug("before calling get_file_properties")
+    file_id = await tg_connect.get_file_properties(message_id)
+    LOGGER.debug("after calling get_file_properties")
+
+    file_size = file_id.file_size
 
     if range_header:
         from_bytes, until_bytes = range_header.replace("bytes=", "").split("-")
@@ -143,39 +142,51 @@ async def media_streamer(request, message_id: int) -> web.StreamResponse:
         until_bytes = int(until_bytes) if until_bytes else file_size - 1
     else:
         from_bytes = request.http_range.start or 0
-        until_bytes = request.http_range.stop or file_size - 1
+        until_bytes = (request.http_range.stop or file_size) - 1
 
-    req_length = until_bytes - from_bytes
+    if (until_bytes > file_size) or (from_bytes < 0) or (until_bytes < from_bytes):
+        return web.Response(
+            status=416,
+            body="416: Range not satisfiable",
+            headers={"Content-Range": f"bytes */{file_size}"},
+        )
 
-    new_chunk_size = await chunk_size(req_length)
-    offset = await offset_fix(from_bytes, new_chunk_size)
+    chunk_size = 1024 * 1024
+    until_bytes = min(until_bytes, file_size - 1)
+
+    offset = from_bytes - (from_bytes % chunk_size)
     first_part_cut = from_bytes - offset
-    last_part_cut = (until_bytes % new_chunk_size) + 1
-    part_count = ceil(req_length / new_chunk_size)
-    body = TGCustomYield().yield_file(
-        media_msg,
+    last_part_cut = until_bytes % chunk_size + 1
+
+    req_length = until_bytes - from_bytes + 1
+    part_count = ceil(until_bytes / chunk_size) - floor(offset / chunk_size)
+    body = tg_connect.yield_file(
+        file_id,
+        index,
         offset,
         first_part_cut,
         last_part_cut,
         part_count,
-        new_chunk_size,
+        chunk_size,
     )
+    mime_type = file_id.mime_type
+    file_name = get_name(file_id)
+    disposition = "attachment"
 
-    file_name = file_properties.file_name or f"{token_hex(2)}.jpeg"
-    mime_type = file_properties.mime_type or f"{guess_type(file_name)}"
+    if not mime_type:
+        mime_type = guess_type(file_name)[0] or "application/octet-stream"
 
-    return_resp = web.Response(
+    if "video/" in mime_type or "audio/" in mime_type or "/html" in mime_type:
+        disposition = "inline"
+
+    return web.Response(
         status=206 if range_header else 200,
         body=body,
         headers={
-            "Content-Type": mime_type,
+            "Content-Type": f"{mime_type}",
             "Content-Range": f"bytes {from_bytes}-{until_bytes}/{file_size}",
-            "Content-Disposition": f'attachment; filename="{file_name}"',
+            "Content-Length": str(req_length),
+            "Content-Disposition": f'{disposition}; filename="{file_name}"',
             "Accept-Ranges": "bytes",
         },
     )
-
-    if return_resp.status == 200:
-        return_resp.headers.add("Content-Length", str(file_size))
-
-    return return_resp

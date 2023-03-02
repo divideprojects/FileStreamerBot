@@ -5,7 +5,7 @@ from jinja2 import FileSystemLoader
 from WebStreamer.server.stream_routes import routes
 
 
-async def web_server() -> web.Application:
+def web_server() -> web.Application:
     """Create the web server and return it
 
     Returns:
