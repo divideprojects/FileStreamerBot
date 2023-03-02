@@ -32,7 +32,6 @@ log_channel_msg = """
 <b>Requested By:</b> {}
 <b>User ID:</b> <code>{}</code>
 <b>Download Link:</b> {}
-<b>Direct Link:</b> {}
 <b>Expires in:</b> {}
 """
 
@@ -97,11 +96,6 @@ Please wait while I process your file ...
             user_id,
             user_expire_time,
         )
-        direct_link = (
-            f"https://{Vars.FQDN}/{random_url}"
-            if Vars.ON_HEROKU or Vars.NO_PORT
-            else f"https://{Vars.FQDN}:{Vars.PORT}/{random_url}"
-        )
 
         # Only get file size if it's a file, different for photos
         doc = m.document or m.audio or m.video
@@ -117,7 +111,6 @@ Please wait while I process your file ...
                 user.mention,
                 user_id,
                 stream_link,
-                direct_link,
                 # NOTE: Only 'never' is allowed for owners
                 Formatters.time_formatter(user_expire_time)
                 if user_expire_time != -1
