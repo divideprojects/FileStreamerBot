@@ -98,8 +98,7 @@ async def stream_handler(request) -> web.StreamResponse:
                 {
                     "maintained_by": "@DivideProjects",
                     "telegram_bot": "@GetPublicLink_Robot",
-                }
-                + custom_repsonse,
+                }.update(custom_repsonse),
                 status=status_code,
             )
 
