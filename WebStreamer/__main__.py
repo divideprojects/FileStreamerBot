@@ -8,7 +8,7 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.bot.client import initialize_clients
 from WebStreamer.logger import LOGGER
 from WebStreamer.server import web_server
-from WebStreamer.utils import ping_server
+from WebStreamer.utils.keep_alive import ping_server
 from WebStreamer.vars import Vars
 
 files = glob("WebStreamer/bot/plugins/*.py")
