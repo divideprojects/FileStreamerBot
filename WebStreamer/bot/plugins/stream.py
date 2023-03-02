@@ -84,23 +84,23 @@ Please wait while I process your file ...
     try:
         log_msg = await m.forward(chat_id=Vars.LOG_CHANNEL)
         random_url = token_urlsafe(20) + "-" + str(user_id)
-        # prepend 'download-file-' at to identify download page
+        # prepend '' at to identify download page
         stream_link = (
-            f"https://{Vars.FQDN}/download-file-{random_url}"
+            f"https://{Vars.FQDN}/{random_url}"
             if Vars.ON_HEROKU or Vars.NO_PORT
-            else f"https://{Vars.FQDN}:{Vars.PORT}/download-file-{random_url}"
+            else f"https://{Vars.FQDN}:{Vars.PORT}/{random_url}"
         )
 
-        __direct_link = await Downloads().add_download(
+        await Downloads().add_download(
             log_msg.id,
             random_url,
             user_id,
             user_expire_time,
         )
         direct_link = (
-            f"https://{Vars.FQDN}/{__direct_link}"
+            f"https://{Vars.FQDN}/{random_url}"
             if Vars.ON_HEROKU or Vars.NO_PORT
-            else f"https://{Vars.FQDN}:{Vars.PORT}/{__direct_link}"
+            else f"https://{Vars.FQDN}:{Vars.PORT}/{random_url}"
         )
 
         # Only get file size if it's a file, different for photos

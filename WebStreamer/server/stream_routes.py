@@ -1,7 +1,7 @@
 from math import ceil, floor
 from mimetypes import guess_type
 from time import time
-from typing import Dict, Union
+from typing import Any, Dict, Union
 
 from aiohttp import web
 from aiohttp_jinja2 import template
@@ -42,6 +42,7 @@ async def index_handler(_) -> web.StreamResponse:
 
 
 # custom download page
+# TODO: Remove this function after 1 month (2021-08-01) because it's not used anywhere now
 @routes.get("/download-file-{random_link}")
 @template("download_page.html")
 async def stream_handler(request) -> Union[web.StreamResponse, Dict[str, str]]:
@@ -84,26 +85,43 @@ async def stream_handler(request) -> web.StreamResponse:
     """
     try:
         real_link = request.match_info["real_link"]
+
+        def json_response(
+            custom_repsonse: Dict[Union[str, Any], Union[str, Any]],
+            status_code: int = 200,
+        ) -> Dict[Union[str, Any], Union[str, Any]]:
+            """
+            Return a json response with appropriate data
+            :return: Dict with appropriate data
+            """
+            return web.json_response(
+                {
+                    "maintained_by": "@DivideProjects",
+                    "telegram_bot": "@GetPublicLink_Robot",
+                }
+                + custom_repsonse,
+                status=status_code,
+            )
+
+        # check if user is banned
+        # user_id is the second part of the random_link separated by '-'
+        # if user is banned, return 403
+        if await Users().is_banned(real_link.split("-")[1]):
+            return json_response({"status": "user_banned"}, 403)
+
         message_id, valid, valid_upto = await Downloads().get_msg_id(real_link)
         if not valid:
             if int(message_id) == 0:
-                return web.json_response(
-                    {
-                        "status": "not found",
-                        "maintained_by": "@DivideProjects",
-                        "telegram_bot": "@GetPublicLink_Robot",
-                    },
-                    status=404,
-                )
-            return web.json_response(
+                return json_response({"status": "not found"}, 404)
+
+            # response code 410 means that the resource is no longer available, expired
+            return json_response(
                 {
                     "status": "download_link_expired",
                     # NOTE: Only 'never' is allowed for owners
                     "expired_time": str(valid_upto) if valid_upto != -1 else "never",
-                    "maintained_by": "@DivideProjects",
-                    "telegram_bot": "@GetPublicLink_Robot",
                 },
-                status=410,
+                410,
             )
         return await media_streamer(request, message_id)
     except ValueError as ef:

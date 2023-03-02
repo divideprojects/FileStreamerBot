@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from secrets import token_urlsafe
 from typing import Tuple, Union
 
 from WebStreamer.db.mongo import MongoDB
@@ -34,11 +33,9 @@ class Downloads(MongoDB):
         :return: The random url
         """
         LOGGER.info(f"Added {random_url}: {message_id}")
-        random_gen_link = token_urlsafe(16)
         await self.insert_one(
             {
-                "random_link": random_url,
-                "link": random_gen_link,
+                "link": random_url,
                 "user_id": user_id,
                 "message_id": message_id,
                 # NOTE: Only 'never' is allowed for owners
@@ -47,8 +44,9 @@ class Downloads(MongoDB):
                 else -1,
             },
         )
-        return random_gen_link
+        return random_url
 
+    # TODO: Remove this function after 1 month (2021-08-01) because it's not used anywhere now
     async def get_actual_link(self, link: str) -> Union[str, None]:
         """
         Get the actual link from the database
