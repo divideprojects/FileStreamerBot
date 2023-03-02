@@ -1,6 +1,0 @@
-name = "publiclinkrobot"
-main = "src/index.ts"
-compatibility_date = "2022-08-07"
-
-[vars]
-FQDN = "https://public-link-bot-dp.herokuapp.com"
