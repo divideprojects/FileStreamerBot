@@ -1,4 +1,4 @@
-from asyncio import get_event_loop
+from asyncio import create_task, get_event_loop
 from glob import glob
 
 from aiohttp import web
@@ -8,6 +8,7 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.bot.client import initialize_clients
 from WebStreamer.logger import LOGGER
 from WebStreamer.server import web_server
+from WebStreamer.utils import ping_server
 from WebStreamer.vars import Vars
 
 files = glob("WebStreamer/bot/plugins/*.py")
@@ -27,6 +28,8 @@ async def start_services():
     if bot_info.dc_id:
         LOGGER.info(f"DC ID =>> {str(bot_info.dc_id)}")
     await initialize_clients()
+    if Vars.KEEP_ALIVE:
+        create_task(ping_server())
     await server.setup()
     await web.TCPSite(server, Vars.BIND_ADDRESS, Vars.PORT).start()
     LOGGER.info("Service Started")

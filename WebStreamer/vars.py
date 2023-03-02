@@ -17,8 +17,8 @@ class Vars:
 
     # Bot tokens
     BOT_TOKEN = str(config("BOT_TOKEN", default=None))
-    # Bot tokens end
-
+    PING_INTERVAL = int(config("PING_INTERVAL", default=0))  # should be in seconds
+    KEEP_ALIVE = PING_INTERVAL != 0
     SLEEP_THRESHOLD = int(config("SLEEP_THRESHOLD", default=60))
     WORKERS = int(config("WORKERS", default=8))
     LOG_CHANNEL = int(config("LOG_CHANNEL", default=-100))
