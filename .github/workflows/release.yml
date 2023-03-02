@@ -9,6 +9,9 @@ on:
       tag:
         description: "Tag to release"
         required: true
+      body:
+        description: "Release body"
+        required: false
 
 jobs:
   # only run this step when the tag is not already created
@@ -46,6 +49,8 @@ jobs:
       tag: ${{ needs.get-repo-info.outputs.tag }}
       body: |-
         ${{ github.event.repository.name }} ${{ needs.get-repo-info.outputs.tag }}
+
+        ${{ github.event.inputs.body }}
 
         Docker Images:
         `ghcr.io/${{ github.repository_owner }}/${{ needs.get-repo-info.outputs.repo_name }}:${{ needs.get-repo-info.outputs.tag }}`
