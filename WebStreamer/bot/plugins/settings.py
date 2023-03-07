@@ -3,6 +3,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from WebStreamer.bot import StreamBot
+from WebStreamer.db.downloads import Downloads
 from WebStreamer.db.users import Users
 from WebStreamer.vars import Vars
 
@@ -44,3 +45,41 @@ async def expire_settings(_, m: Message):
         case _:
             reply_text = "Invalid command usage. Send /expire to get your current expire time or send /expire <time> to set your expire time."
     await m.reply_text(reply_text)
+
+
+@StreamBot.on_message(
+    filters.command("mylinks") & filters.private,
+)
+async def my_links(_, m: Message):
+    """
+    Mylinks command handler
+    :param c: pyrogram.Client
+    :param m: pyrogram.types.Message
+    """
+    user_id = m.from_user.id
+    downloads_db = Downloads()
+    valid_links = await downloads_db.get_user_active_links(user_id)
+    if not valid_links:
+        await m.reply_text("You have no active links.")
+        return
+    reply_text = "Your active links:"
+    for link in valid_links:
+        reply_text += "\n - " + link + f" | /delete_link_{link}"
+    return
+
+
+@StreamBot.on_message(
+    filters.regex(r"^/delete_link_(.*)") & filters.private,
+)
+async def delete_link(_, m: Message):
+    """
+    Delete link command handler to delete a link
+    :param c: pyrogram.Client
+    :param m: pyrogram.types.Message
+    """
+    user_id = m.from_user.id
+    downloads_db = Downloads()
+    delete_success = await downloads_db.delete_download(m.matches[0].group(1), user_id)
+    if not delete_success:
+        return await m.reply_text("Unable to delete the link.")
+    return await m.reply_text("Link deleted successfully.")

@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import Tuple, Union
 
 from WebStreamer.db.mongo import MongoDB
 from WebStreamer.logger import LOGGER
@@ -47,7 +46,7 @@ class Downloads(MongoDB):
         return random_url
 
     # TODO: Remove this function after 1 month (2021-08-01) because it's not used anywhere now
-    async def get_actual_link(self, link: str) -> Union[str, None]:
+    async def get_actual_link(self, link: str) -> str | None:
         """
         Get the actual link from the database
         :param link: The link to be searched
@@ -58,7 +57,7 @@ class Downloads(MongoDB):
             return None
         return document["link"]
 
-    async def get_msg_id(self, link: str) -> Tuple[int, bool, datetime]:
+    async def get_msg_id(self, link: str) -> tuple[int, bool, datetime]:
         """
         Get the message id from the database
         :param link: The link to be searched
@@ -97,7 +96,7 @@ class Downloads(MongoDB):
             len(valid_count),
         )
 
-    async def delete_download(self, link: str, user_id: int) -> Union[int, None]:
+    async def delete_download(self, link: str, user_id: int) -> int | None:
         """
         Delete a download from the database
         :param link: The link to be deleted
@@ -105,3 +104,20 @@ class Downloads(MongoDB):
         :return: int or None
         """
         return await self.delete_one({"link": link, "user_id": user_id})
+
+    async def get_user_active_links(self, user_id: int) -> list[str]:
+        """Gets the links of a user
+
+        Args:
+            user_id (int): User ID to get links for
+
+        Returns:
+            List[str]: List of links
+        """
+        all_links = await self.find_all({"user_id": user_id})
+        return [
+            document["link"]
+            for document in all_links
+            # using -1 as a flag for never expiring links, and only show valid links to user
+            if (document["valid_upto"] == -1 or document["valid_upto"] > datetime.now())
+        ]
