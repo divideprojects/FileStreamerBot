@@ -82,7 +82,7 @@ Please wait while I process your file ...
     )
     try:
         log_msg = await m.forward(chat_id=Vars.LOG_CHANNEL)
-        random_url = token_urlsafe(20) + "-" + str(user_id)
+        random_url = token_urlsafe(2) + str(user_id) + token_urlsafe(3)
         # prepend '' at to identify download page
         stream_link = (
             f"https://{Vars.FQDN}/{random_url}"
