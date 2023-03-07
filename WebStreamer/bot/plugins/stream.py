@@ -9,7 +9,7 @@ from pyrogram.errors import FloodWait
 from pyrogram.types import CallbackQuery, Message
 
 from WebStreamer.bot import StreamBot
-from WebStreamer.db import Downloads
+from WebStreamer.db.downloads import Downloads
 from WebStreamer.db.users import Users
 from WebStreamer.logger import LOGGER
 from WebStreamer.utils.ikb import ikb

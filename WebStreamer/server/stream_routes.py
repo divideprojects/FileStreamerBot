@@ -9,7 +9,8 @@ from pypers.formatters import Formatters
 
 from WebStreamer import StartTime
 from WebStreamer.bot import multi_clients, work_loads
-from WebStreamer.db import Downloads, Users
+from WebStreamer.db.downloads import Downloads
+from WebStreamer.db.users import Users
 from WebStreamer.logger import LOGGER
 from WebStreamer.utils.custom_dl import ByteStreamer
 from WebStreamer.utils.file_properties import get_name

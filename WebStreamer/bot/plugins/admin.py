@@ -10,7 +10,8 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from WebStreamer.bot import StreamBot
-from WebStreamer.db import Downloads, Users
+from WebStreamer.db.downloads import Downloads
+from WebStreamer.db.users import Users
 from WebStreamer.utils.broadcast_helper import send_msg
 from WebStreamer.vars import Vars
 
