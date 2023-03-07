@@ -65,6 +65,7 @@ async def my_links(_, m: Message):
     reply_text = "Your active links:"
     for link in valid_links:
         reply_text += "\n - " + link + f" | /delete_link_{link}"
+    await m.reply_text(reply_text)
     return
 
 
