@@ -1,6 +1,5 @@
 from datetime import datetime
-from hashlib import sha256
-from typing import Any, Optional, Union
+from typing import Any
 
 from pyrogram import Client
 from pyrogram.file_id import FileId
@@ -10,13 +9,13 @@ from pyrogram.types import Message
 from WebStreamer.server.exceptions import FIleNotFound
 
 
-async def parse_file_id(message: "Message") -> Optional[FileId]:
+async def parse_file_id(message: "Message") -> FileId | None:
     media = get_media_from_message(message)
     if media:
         return FileId.decode(media.file_id)
 
 
-async def parse_file_unique_id(message: "Messages") -> Optional[str]:
+async def parse_file_unique_id(message: "Messages") -> str | None:
     media = get_media_from_message(message)
     if media:
         return media.file_unique_id
@@ -26,7 +25,7 @@ async def get_file_ids(
     client: Client,
     chat_id: int,
     message_id: int,
-) -> Optional[FileId]:
+) -> FileId | None:
     message = await client.get_messages(chat_id, message_id)
     if message.empty:
         raise FIleNotFound
@@ -57,7 +56,7 @@ def get_media_from_message(message: "Message") -> Any:
             return media
 
 
-def get_name(media_msg: Union[Message, FileId]) -> str:
+def get_name(media_msg: Message | FileId) -> str:
     if isinstance(media_msg, Message):
         media = get_media_from_message(media_msg)
         file_name = getattr(media, "file_name", "")

@@ -1,7 +1,7 @@
 from math import ceil, floor
 from mimetypes import guess_type
 from time import time
-from typing import Any, Dict, Union
+from typing import Any
 
 from aiohttp import web
 from aiohttp_jinja2 import template
@@ -45,7 +45,7 @@ async def index_handler(_) -> web.StreamResponse:
 # TODO: Remove this function after 1 month (2021-08-01) because it's not used anywhere now
 @routes.get("/download-file-{random_link}")
 @template("download_page.html")
-async def stream_handler(request) -> Union[web.StreamResponse, Dict[str, str]]:
+async def stream_handler(request) -> web.StreamResponse | dict[str, str]:
     """
     Stream Handler for WebStreamer, the '/download-file-*' route.
     :param request: Request object
@@ -87,9 +87,9 @@ async def stream_handler(request) -> web.StreamResponse:
         real_link = request.match_info["real_link"]
 
         def json_response(
-            custom_repsonse: Dict[Union[str, Any], Union[str, Any]],
+            custom_repsonse: dict[str | Any, str | Any],
             status_code: int = 200,
-        ) -> Dict[Union[str, Any], Union[str, Any]]:
+        ) -> dict[str | Any, str | Any]:
             """
             Return a json response with appropriate data
             :return: Dict with appropriate data

@@ -1,5 +1,4 @@
 from asyncio import create_task, sleep
-from typing import Dict, Union
 
 from pyrogram import Client, raw, utils
 from pyrogram.errors import AuthBytesInvalid
@@ -31,7 +30,7 @@ class ByteStreamer:
         """
         self.clean_timer = 30 * 60
         self.client: Client = client
-        self.cached_file_ids: Dict[int, FileId] = {}
+        self.cached_file_ids: dict[int, FileId] = {}
         create_task(self.clean_cache())
 
     async def get_file_properties(self, message_id: int) -> FileId:
@@ -123,11 +122,11 @@ class ByteStreamer:
     @staticmethod
     async def get_location(
         file_id: FileId,
-    ) -> Union[
-        raw.types.InputPhotoFileLocation,
-        raw.types.InputDocumentFileLocation,
-        raw.types.InputPeerPhotoFileLocation,
-    ]:
+    ) -> (
+        raw.types.InputPhotoFileLocation
+        | raw.types.InputDocumentFileLocation
+        | raw.types.InputPeerPhotoFileLocation
+    ):
         """
         Returns the file location for the media file.
         """
@@ -179,7 +178,7 @@ class ByteStreamer:
         last_part_cut: int,
         part_count: int,
         chunk_size: int,
-    ) -> Union[str, None]:
+    ) -> str | None:
         """
         Custom generator that yields the bytes of the media file.
         Modded from <https://github.com/eyaadh/megadlbot_oss/blob/master/mega/telegram/utils/custom_download.py#L20>

@@ -1,4 +1,4 @@
-from typing import Any, Tuple, Union
+from typing import Any
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -22,14 +22,14 @@ class MongoDB:
         return repr(result.inserted_id)
 
     # Find one entry from collection
-    async def find_one(self, query) -> Union[bool, None, Any]:
+    async def find_one(self, query) -> bool | None | Any:
         result = await self.collection.find_one(query)
         if result:
             return result
         return False
 
     # Find entries from collection
-    async def find_all(self, query=None) -> Union[bool, None, Any]:
+    async def find_all(self, query=None) -> bool | None | Any:
         if query is None:
             query = {}
         return [document async for document in self.collection.find(query)]
@@ -47,7 +47,7 @@ class MongoDB:
         return after_delete
 
     # Replace one entry in collection
-    async def replace(self, query, new_data) -> Tuple[int, int]:
+    async def replace(self, query, new_data) -> tuple[int, int]:
         old = await self.collection.find_one(query)
         _id = old["_id"]
         await self.collection.replace_one({"_id": _id}, new_data)
@@ -55,7 +55,7 @@ class MongoDB:
         return old, new
 
     # Update one entry from collection
-    async def update(self, query, update) -> Tuple[int, int]:
+    async def update(self, query, update) -> tuple[int, int]:
         result = await self.collection.update_one(query, {"$set": update})
         new_document = await self.collection.find_one(query)
         return result.modified_count, new_document

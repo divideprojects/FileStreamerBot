@@ -1,6 +1,4 @@
-from WebStreamer.db.downloads import Downloads
 from WebStreamer.db.mongo import MongoDB
-from WebStreamer.db.users import Users
 from WebStreamer.logger import LOGGER
 
 

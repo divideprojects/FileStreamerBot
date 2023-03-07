@@ -1,11 +1,10 @@
 from datetime import date
-from typing import Dict, List, Union
 
 from WebStreamer.db.mongo import MongoDB
 from WebStreamer.logger import LOGGER
 
 
-def new_user(uid: int) -> Dict[str, Union[str, int, date]]:
+def new_user(uid: int) -> dict[str, str | int | date]:
     """
     Creates a new user in the database
     :param uid: User ID
@@ -34,7 +33,7 @@ class Users(MongoDB):
         """
         return await self.count({})
 
-    async def get_all_users(self) -> List[int]:
+    async def get_all_users(self) -> list[int]:
         """
         Returns a list of all users in the database
         :return: List of user ids
@@ -56,7 +55,7 @@ class Users(MongoDB):
             await self.insert_one(user_data)
         return True
 
-    async def delete_user(self, user_id: int) -> Union[bool, int]:
+    async def delete_user(self, user_id: int) -> bool | int:
         """
         Deletes a user from the database
         :param user_id: User id to delete
@@ -83,7 +82,7 @@ class Users(MongoDB):
     async def set_expire_time(
         self,
         user_id: int,
-        expire_time: Union[int, bool],
+        expire_time: int | bool,
     ) -> bool:
         """
         Sets the expire time for a user (in seconds)

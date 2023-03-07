@@ -1,6 +1,5 @@
 from asyncio import sleep
 from traceback import format_exc
-from typing import Tuple, Union
 
 from pyrogram.errors import (
     FloodWait,
@@ -11,7 +10,7 @@ from pyrogram.errors import (
 from pyrogram.types import Message
 
 
-async def send_msg(user_id: int, m: Message) -> Tuple[int, Union[Message, None, str]]:
+async def send_msg(user_id: int, m: Message) -> tuple[int, Message | None | str]:
     """send_msg function to send message to user
 
     Args:

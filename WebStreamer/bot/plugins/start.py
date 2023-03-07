@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.enums import ParseMode
-from pyrogram.types import CallbackQuery, Message
+from pyrogram.types import Message
 
 from WebStreamer.bot import StreamBot
 from WebStreamer.db.users import Users
