@@ -58,13 +58,19 @@ async def my_links(_, m: Message):
     """
     user_id = m.from_user.id
     downloads_db = Downloads()
-    valid_links = await downloads_db.get_user_active_links(user_id)
+    valid_links: dict[str, str] = await downloads_db.get_user_active_links(user_id)
     if not valid_links:
         await m.reply_text("You have no active links.")
         return
     reply_text = "Your active links:"
-    for link in valid_links:
-        reply_text += "\n - " + link + f"\n/delete_link_{link}"
+    for link, date in valid_links:
+        reply_text += (
+            "\n - "
+            + link
+            + f"\n/delete_link_{link}"
+            # -1 means never expire else it will be a timestamp
+            + f"\nExpire: {Formatters.time_formatter(date) if date != -1 else 'Never'}"
+        )
     await m.reply_text(reply_text)
     return
 

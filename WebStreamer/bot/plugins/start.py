@@ -20,6 +20,7 @@ HELPTEXT = """
 /start: <i>Start the bot.</i>
 /help: <i>Show this message again.</i>
 /expire: <i>Set the expire time for your links. Available unites: m/h/d/w. Example: 5d for 5 days</i>
+/mylinks: <i>Get a list of your links and a command to delete them.</i>
 
 Just Send or Forward me any file or media, I'll give you a direct download link for it!
 """

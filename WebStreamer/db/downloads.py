@@ -108,7 +108,11 @@ class Downloads(MongoDB):
             {"$set": {"valid_upto": datetime.now()}},
         )
 
-    async def get_user_active_links(self, user_id: int) -> list[str]:
+    async def get_user_active_links(
+        self,
+        user_id: int,
+        with_date: bool,
+    ) -> dict[str, str]:
         """Gets the links of a user
 
         Args:
@@ -118,9 +122,18 @@ class Downloads(MongoDB):
             List[str]: List of links
         """
         all_links = await self.find_all({"user_id": user_id})
-        return [
-            document["link"]
+        if with_date:
+            return {
+                document["link"]: document["valid_upto"]
+                for document in all_links
+                # using -1 as a flag for never expiring links, and only show valid links to user
+                if (
+                    document["valid_upto"] == -1
+                    or document["valid_upto"] > datetime.now()
+                )
+            }
+        return {
+            document["link"]: ""
             for document in all_links
-            # using -1 as a flag for never expiring links, and only show valid links to user
             if (document["valid_upto"] == -1 or document["valid_upto"] > datetime.now())
-        ]
+        }
