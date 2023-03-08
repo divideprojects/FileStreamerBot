@@ -105,7 +105,7 @@ class Downloads(MongoDB):
         """
         return await self.update(
             {"link": link, "user_id": user_id},
-            {"$set": {"valid_upto": datetime.now()}},
+            {"valid_upto": datetime.now()},
         )
 
     async def get_user_active_links(
