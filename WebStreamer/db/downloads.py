@@ -98,12 +98,15 @@ class Downloads(MongoDB):
 
     async def delete_download(self, link: str, user_id: int) -> int | None:
         """
-        Delete a download from the database
+        Instead of deleting the document, we just set the valid_upto to current time which will make it invalid
         :param link: The link to be deleted
         :param user_id: The user id of the user
         :return: int or None
         """
-        return await self.delete_one({"link": link, "user_id": user_id})
+        return await self.update(
+            {"link": link, "user_id": user_id},
+            {"$set": {"valid_upto": datetime.now()}},
+        )
 
     async def get_user_active_links(self, user_id: int) -> list[str]:
         """Gets the links of a user
