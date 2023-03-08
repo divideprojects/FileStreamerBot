@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pypers.formatters import Formatters
 from pyrogram import filters
 from pyrogram.types import Message
@@ -58,18 +60,21 @@ async def my_links(_, m: Message):
     """
     user_id = m.from_user.id
     downloads_db = Downloads()
-    valid_links: dict[str, str] = await downloads_db.get_user_active_links(user_id)
+    valid_links: dict[str, datetime | str] = await downloads_db.get_user_active_links(
+        user_id,
+        True,
+    )
     if not valid_links:
         await m.reply_text("You have no active links.")
         return
     reply_text = "Your active links:"
-    for link, date in valid_links:
+    for link, date in valid_links.items():
         reply_text += (
             "\n - "
             + link
             + f"\n/delete_link_{link}"
             # -1 means never expire else it will be a timestamp
-            + f"\nExpire: {Formatters.time_formatter(date) if date != -1 else 'Never'}"
+            + f"\nExpire: {date.strftime('%m/%d/%Y, %H:%M:%S') if date != -1 else 'Never'}"
         )
     await m.reply_text(reply_text)
     return

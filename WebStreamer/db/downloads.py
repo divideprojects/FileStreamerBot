@@ -111,8 +111,8 @@ class Downloads(MongoDB):
     async def get_user_active_links(
         self,
         user_id: int,
-        with_date: bool,
-    ) -> dict[str, str]:
+        with_date: bool = False,
+    ) -> dict[str, datetime | str]:
         """Gets the links of a user
 
         Args:
