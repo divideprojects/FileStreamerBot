@@ -71,7 +71,7 @@ async def my_links(_, m: Message):
     for link, date in valid_links.items():
         reply_text += (
             "\n - "
-            + link
+            + f"[{link}]({Vars.FQDN+link})"
             + f"\n/delete_link_{link}"
             # -1 means never expire else it will be a timestamp
             + f"\nExpire: {date.strftime('%m/%d/%Y, %H:%M:%S') if date != -1 else 'Never'}"
