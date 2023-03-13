@@ -55,7 +55,7 @@ async def stream_handler(request) -> web.StreamResponse | dict[str, str]:
     try:
         random_link = request.match_info["random_link"]
         user_id = random_link[
-            2:-3
+            3:-4
         ]  # get user_id from random_link and split it by 2 letters from start and 3 letters from end
 
         # check if user is banned
