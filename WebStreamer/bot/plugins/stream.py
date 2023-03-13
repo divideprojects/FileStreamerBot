@@ -1,5 +1,4 @@
 from asyncio import sleep
-from secrets import token_urlsafe
 from time import time
 
 from cachetools import TTLCache
@@ -12,6 +11,7 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.db.downloads import Downloads
 from WebStreamer.db.users import Users
 from WebStreamer.logger import LOGGER
+from WebStreamer.utils.helpers import generate_random_url
 from WebStreamer.utils.ikb import ikb
 from WebStreamer.utils.joinCheck import joinCheck
 from WebStreamer.vars import Vars
@@ -82,7 +82,7 @@ Please wait while I process your file ...
     )
     try:
         log_msg = await m.forward(chat_id=Vars.LOG_CHANNEL)
-        random_url = token_urlsafe(2) + str(user_id) + token_urlsafe(3)
+        random_url = generate_random_url(user_id)
         stream_link = (
             f"https://{Vars.FQDN}/{random_url}"
             if Vars.ON_HEROKU or Vars.NO_PORT
