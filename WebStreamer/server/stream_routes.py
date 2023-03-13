@@ -14,6 +14,7 @@ from WebStreamer.db.users import Users
 from WebStreamer.logger import LOGGER
 from WebStreamer.utils.custom_dl import ByteStreamer
 from WebStreamer.utils.file_properties import get_name
+from WebStreamer.utils.helpers import extract_user_id_from_random_link
 from WebStreamer.vars import Vars
 
 routes = web.RouteTableDef()
@@ -54,9 +55,7 @@ async def stream_handler(request) -> web.StreamResponse | dict[str, str]:
     """
     try:
         random_link = request.match_info["random_link"]
-        user_id = random_link[
-            3:-4
-        ]  # get user_id from random_link and split it by 2 letters from start and 3 letters from end
+        user_id = extract_user_id_from_random_link(random_link)
 
         # check if user is banned
         if await Users().is_banned(user_id):
