@@ -43,41 +43,6 @@ async def index_handler(_) -> web.StreamResponse:
     )
 
 
-# custom download page
-# TODO: Remove this function after 1 month (2021-08-01) because it's not used anywhere now
-@routes.get("/download-file-{random_link}")
-@template("download_page.html")
-async def stream_handler(request) -> web.StreamResponse | dict[str, str]:
-    """
-    Stream Handler for WebStreamer, the '/download-file-*' route.
-    :param request: Request object
-    :return: StreamResponse object or a dict with appropriate data
-    """
-    try:
-        random_link = request.match_info["random_link"]
-        user_id = extract_user_id_from_random_link(random_link)
-
-        # check if user is banned
-        if await Users().is_banned(user_id):
-            # user_id is the second part of the random_link separated by '-'
-            # if user is banned, return 403
-            return web.json_response(
-                {
-                    "status": "user_banned",
-                    "maintained_by": "@DivideProjects",
-                    "telegram_bot": "@GetPublicLink_Robot",
-                },
-                status=403,
-            )
-
-        # get the actual link
-        real_link = await Downloads().get_actual_link(random_link)
-        return {"download_link": Vars.URL + real_link}
-    except ValueError as ef:
-        LOGGER.error(ef)
-        raise web.HTTPNotFound
-
-
 # actual download link
 @routes.get("/{real_link}")
 async def stream_handler(request) -> web.StreamResponse:

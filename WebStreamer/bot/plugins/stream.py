@@ -62,8 +62,6 @@ async def private_receive_handler(c: Client, m: Message):
     """
     user = m.from_user
     user_id = user.id
-    users_db = Users()
-    user_expire_time = await users_db.get_expire_time(user_id)
 
     if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
         # spam check
@@ -88,6 +86,10 @@ Please wait while I process your file ...
             if Vars.ON_HEROKU or Vars.NO_PORT
             else f"https://{Vars.FQDN}:{Vars.PORT}/{random_url}"
         )
+
+        # read from users database
+        users_db = Users()
+        user_expire_time = await users_db.get_expire_time(user_id)
 
         await Downloads().add_download(
             log_msg.id,

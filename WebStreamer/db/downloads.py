@@ -45,18 +45,6 @@ class Downloads(MongoDB):
         )
         return random_url
 
-    # TODO: Remove this function after 1 month (2021-08-01) because it's not used anywhere now
-    async def get_actual_link(self, link: str) -> str | None:
-        """
-        Get the actual link from the database
-        :param link: The link to be searched
-        :return: The actual link
-        """
-        document = await self.find_one({"random_link": link})
-        if not document:
-            return None
-        return document["link"]
-
     async def get_msg_id(self, link: str) -> tuple[int, bool, datetime]:
         """
         Get the message id from the database
