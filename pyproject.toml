@@ -6,7 +6,7 @@ authors = ["Divanshu Chauhan <divkix@divkix.me>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-Pyrogram = "^2.0.104"
+Pyrogram = "^2.0.106"
 aiohttp = "^3.8.4"
 TgCrypto = "^1.2.5"
 aiofiles = "^23.1.0"
