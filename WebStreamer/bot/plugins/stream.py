@@ -62,8 +62,9 @@ async def private_receive_handler(c: Client, m: Message):
     """
     user = m.from_user
     user_id = user.id
+    users_db = Users()
 
-    is_user_banned = Users().is_banned(user_id)
+    is_user_banned = await users_db.is_banned(user_id)
     if is_user_banned:
         await m.reply_text(
             "You are banned from using this bot, contact @DivideSupport for more details.",
@@ -95,7 +96,6 @@ Please wait while I process your file ...
         )
 
         # read from users database
-        users_db = Users()
         user_expire_time = await users_db.get_expire_time(user_id)
 
         await Downloads().add_download(
