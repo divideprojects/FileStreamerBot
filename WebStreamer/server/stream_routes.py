@@ -71,10 +71,13 @@ async def stream_handler(request) -> web.StreamResponse:
             )
 
         # check if user is banned
-        # user_id is the second part of the random_link separated by '-'
+        # user_id is the middle part of the random_link, there are 3 parts in total without any separators
+        # first 3 characters are random, last 3 are random and the middle is the user_id
+        # user_id is that extracted user_id from the random_link
+        user_id = real_link[3:-4]
         # if user is banned, return 403
         try:
-            if await Users().is_banned(real_link.split("-")[1]):
+            if await Users().is_banned(user_id):
                 return json_response({"status": "user_banned"}, 403)
         # NOTE: IndexError is raised when old link is used to validate
         except IndexError:
