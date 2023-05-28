@@ -63,6 +63,13 @@ async def private_receive_handler(c: Client, m: Message):
     user = m.from_user
     user_id = user.id
 
+    is_user_banned = Users().is_banned(user_id)
+    if is_user_banned:
+        await m.reply_text(
+            "You are banned from using this bot, contact @DivideSupport for more details.",
+        )
+        return
+
     if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
         # spam check
         if user_id in ttl_dict.keys():
