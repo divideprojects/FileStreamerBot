@@ -107,7 +107,7 @@ class Users(MongoDB):
         """
         try:
             user = await self.find_one({"_id": user_id})
-            return int(user["ban"])
+            return user["ban"]
         except:
             return False
 

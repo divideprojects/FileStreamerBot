@@ -71,10 +71,8 @@ async def stream_handler(request) -> web.StreamResponse:
             )
 
         # check if user is banned
-        # user_id is the middle part of the random_link, there are 3 parts in total without any separators
-        # first 3 characters are random, last 3 are random and the middle is the user_id
-        # user_id is that extracted user_id from the random_link
-        user_id = real_link[3:-4]
+        # saM837882203x6cX, extract user id from random link
+        user_id = int(real_link[3:-4])
         # if user is banned, return 403
         try:
             if await Users().is_banned(user_id):
@@ -86,14 +84,14 @@ async def stream_handler(request) -> web.StreamResponse:
         message_id, valid, valid_upto = await Downloads().get_msg_id(real_link)
         if not valid:
             if int(message_id) == 0:
-                return json_response({"status": "not found"}, 404)
+                return json_response({"status": "not_found"}, 404)
 
             # response code 410 means that the resource is no longer available, expired
             return json_response(
                 {
-                    "status": "download_link_expired",
+                    "status": "expired",
                     # NOTE: Only 'never' is allowed for owners
-                    "expired_time": str(valid_upto) if valid_upto != -1 else "never",
+                    "expired_time": str(valid_upto),
                 },
                 410,
             )
