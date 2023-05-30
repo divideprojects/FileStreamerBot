@@ -4,7 +4,6 @@ from time import time
 from typing import Any
 
 from aiohttp import web
-from aiohttp_jinja2 import template
 from pypers.formatters import Formatters
 
 from WebStreamer import StartTime
@@ -72,7 +71,7 @@ async def stream_handler(request) -> web.StreamResponse:
 
         # check if user is banned
         # saM837882203x6cX, extract user id from random link
-        user_id = int(real_link[3:-4])
+        user_id = extract_user_id_from_random_link(real_link)
         # if user is banned, return 403
         try:
             if await Users().is_banned(user_id):
