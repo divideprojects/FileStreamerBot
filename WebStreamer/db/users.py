@@ -14,6 +14,7 @@ def new_user(uid: int) -> dict[str, str | int | date]:
         "join_date": date.today().isoformat(),
         "expire_time": "86400",  # 24 hours in seconds
         "ban": False,  # no use is banned by default
+        "blocked_bot": False,  # no user has blocked bot by default
     }
 
 
@@ -53,6 +54,9 @@ class Users(MongoDB):
             user_data = new_user(user_id)
             LOGGER.info(f"New User: {user_id}")
             await self.insert_one(user_data)
+        if not user.get("blocked_bot"):
+            # if user has blocked the bot, return False
+            self.set_bot_blocked_status(user_id, False)
         return True
 
     async def delete_user(self, user_id: int) -> bool | int:
@@ -122,3 +126,30 @@ class Users(MongoDB):
             bool: True if the ban status was set, False otherwise
         """
         return await self.update({"_id": user_id}, {"ban": ban_status})
+
+    async def get_bot_blocked_status(self, user_id: int) -> bool:
+        """Gets the bot blocked status of a user
+
+        Args:
+            user_id (int): User ID to get bot blocked status for
+
+        Returns:
+            bool: True if the bot is blocked, False otherwise
+        """
+        try:
+            user = await self.find_one({"_id": user_id})
+            return user.get("blocked_bot", False)
+        except:
+            return False
+
+    async def set_bot_blocked_status(self, user_id: int, blocked_status: bool) -> bool:
+        """Sets the bot blocked status of a user
+
+        Args:
+            user_id (int): User ID to set bot blocked status for
+            blocked_status (bool): The bot blocked status for the user
+
+        Returns:
+            bool: True if the bot blocked status was set, False otherwise
+        """
+        return await self.update({"_id": user_id}, {"blocked_bot": blocked_status})
