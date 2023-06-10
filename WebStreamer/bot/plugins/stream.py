@@ -1,5 +1,6 @@
 from asyncio import sleep
-from time import time
+from threading import RLock
+from time import perf_counter, time
 
 from cachetools import TTLCache
 from pypers.formatters import Formatters
@@ -35,8 +36,21 @@ log_channel_msg = """
 <b>Expires in:</b> {}
 """
 
+# Lock
+lock = RLock()
+
 # Cache for storing how many times a user has used the bot, takes number of mimuted from Vars
-ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60))
+ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60), timer=perf_counter)
+
+
+def addtodick(user_id: int):
+    with lock:
+        ttl_dict[user_id] = int(time()) + Vars.FLOODCONTROL_TIME_MINUTES * 60
+
+
+def getfromdick(user_id: int):
+    with lock:
+        return ttl_dict[user_id] if user_id in ttl_dict else 0
 
 
 @StreamBot.on_message(
@@ -62,22 +76,22 @@ async def private_receive_handler(c: Client, m: Message):
     """
     user = m.from_user
     user_id = user.id
-    users_db = Users()
 
+    if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
+        # spam check
+        if lefttime := getfromdick(user_id):
+            await m.reply_text(
+                f"Flood control active, please wait {int(lefttime - time())} seconds!",
+            )
+            return
+
+    users_db = Users()
     is_user_banned = await users_db.is_banned(user_id)
     if is_user_banned:
         await m.reply_text(
             "You are banned from using this bot, contact @DivideSupport for more details.",
         )
         return
-
-    if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
-        # spam check
-        if user_id in ttl_dict.keys():
-            await m.reply_text(
-                f"Flood control active, please wait {int(ttl_dict[user_id] - time())} seconds!",
-            )
-            return
 
     wait_text = await m.reply_text(
         """
@@ -148,7 +162,7 @@ Please wait while I process your file ...
         )
 
         # user should wait for 5 minutes before sending another file
-        ttl_dict[user_id] = time() + int(5 * 60)
+        addtodick(user_id)
 
     except FloodWait as e:
         LOGGER.info(f"Sleeping for {str(e.value)}s")
