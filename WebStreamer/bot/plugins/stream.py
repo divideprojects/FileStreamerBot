@@ -40,7 +40,11 @@ log_channel_msg = """
 lock = RLock()
 
 # Cache for storing how many times a user has used the bot, takes number of mimuted from Vars
-ttl_dict = TTLCache(maxsize=512, ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60), timer=perf_counter)
+ttl_dict = TTLCache(
+    maxsize=512,
+    ttl=(Vars.FLOODCONTROL_TIME_MINUTES * 60),
+    timer=perf_counter,
+)
 
 
 def addtodick(user_id: int):
