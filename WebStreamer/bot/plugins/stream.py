@@ -37,7 +37,7 @@ log_channel_msg = """
 """
 
 # Lock
-lock = RLock()
+async_lock = RLock()
 
 # Cache for storing how many times a user has used the bot, takes number of mimuted from Vars
 ttl_dict = TTLCache(
@@ -47,13 +47,13 @@ ttl_dict = TTLCache(
 )
 
 
-def addtodick(user_id: int):
-    with lock:
+def add_to_dict(user_id: int) -> None:
+    with async_lock:
         ttl_dict[user_id] = int(time()) + Vars.FLOODCONTROL_TIME_MINUTES * 60
 
 
-def getfromdick(user_id: int):
-    with lock:
+def get_from_dict(user_id: int) -> int:
+    with async_lock:
         return ttl_dict[user_id] if user_id in ttl_dict else 0
 
 
@@ -83,9 +83,10 @@ async def private_receive_handler(c: Client, m: Message):
 
     if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
         # spam check
-        if lefttime := getfromdick(user_id):
+        if leftt_ime := get_from_dict(user_id):
             await m.reply_text(
-                f"Flood control active, please wait {int(lefttime - time())} seconds!",
+                f"Flood control active, please wait {int(leftt_ime - time())} seconds!",
+                quote=True,
             )
             return
 
@@ -166,7 +167,7 @@ Please wait while I process your file ...
         )
 
         # user should wait for 5 minutes before sending another file
-        addtodick(user_id)
+        add_to_dict(user_id)
 
     except FloodWait as e:
         LOGGER.info(f"Sleeping for {str(e.value)}s")
