@@ -1,10 +1,9 @@
 FROM ghcr.io/divkix/docker-python-base:latest
 WORKDIR /app
 COPY . .
-RUN poetry install --no-dev --no-interaction --no-ansi \
+RUN poetry install --only main --no-interaction --no-ansi \
     && rm -rf /root/.cache/pip /root/.cache/pypoetry
-ENTRYPOINT ["python3"]
-CMD ["-m", "WebStreamer"]
+CMD ["poetry", "run", "python3", "-m", "WebStreamer"]
 
 HEALTHCHECK --interval=60s --timeout=30s --start-period=180s --retries=5 CMD curl --fail http://localhost:$PORT || exit 1
 
