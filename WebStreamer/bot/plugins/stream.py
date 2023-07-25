@@ -83,9 +83,9 @@ async def private_receive_handler(c: Client, m: Message):
 
     if (user_id != Vars.OWNER_ID) or (Vars.FLOODCONTROL_TIME_MINUTES != 0):
         # spam check
-        if leftt_ime := get_from_dict(user_id):
+        if left_time := get_from_dict(user_id):
             await m.reply_text(
-                f"Flood control active, please wait {int(leftt_ime - time())} seconds!",
+                f"Flood control active, please wait {int(left_time - time())} seconds!",
                 quote=True,
             )
             return
