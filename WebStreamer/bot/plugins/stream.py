@@ -53,8 +53,7 @@ def add_to_dict(user_id: int) -> None:
 
 
 def get_from_dict(user_id: int) -> int:
-    with async_lock:
-        return ttl_dict[user_id] if user_id in ttl_dict else 0
+    return ttl_dict[user_id] if user_id in ttl_dict else 0
 
 
 @StreamBot.on_message(
