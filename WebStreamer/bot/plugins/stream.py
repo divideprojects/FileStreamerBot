@@ -1,5 +1,4 @@
 from asyncio import sleep
-from threading import RLock
 from time import perf_counter, time
 
 from cachetools import TTLCache
@@ -36,9 +35,6 @@ log_channel_msg = """
 <b>Expires in:</b> {}
 """
 
-# Lock
-async_lock = RLock()
-
 # Cache for storing how many times a user has used the bot, takes number of mimuted from Vars
 ttl_dict = TTLCache(
     maxsize=512,
@@ -48,8 +44,7 @@ ttl_dict = TTLCache(
 
 
 def add_to_dict(user_id: int) -> None:
-    with async_lock:
-        ttl_dict[user_id] = int(time()) + Vars.FLOODCONTROL_TIME_MINUTES * 60
+    ttl_dict[user_id] = int(time()) + Vars.FLOODCONTROL_TIME_MINUTES * 60
 
 
 def get_from_dict(user_id: int) -> int:
